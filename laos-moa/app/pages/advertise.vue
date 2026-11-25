@@ -34,10 +34,21 @@ const loading = ref(false)
 const error = ref('')
 const done = ref(false)
 
-const canSubmit = computed(() => form.company.trim() && form.contact.trim().length >= 2 && form.product)
+
+// 빈 칸이 있어도 버튼은 눌려요. 첫 번째 문제를 안내하고 그 칸으로 커서를 옮깁니다.
+function stop(selector: string, message: string) {
+  error.value = message
+  toast.add({ title: message, color: 'warning' })
+  const el = document.querySelector<HTMLElement>(selector)
+  el?.focus()
+  el?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+}
 
 async function submit() {
   error.value = ''
+  if (!form.company.trim()) return stop('#i-company', '업체명을 입력해 주세요.')
+  if (form.contact.trim().length < 2) return stop('#i-contact', '연락처를 입력해 주세요.')
+  if (!form.product) return stop('#i-product', '문의 종류를 골라 주세요.')
   loading.value = true
   try {
     await $fetch('/api/inquiry', { method: 'POST', body: { ...form } })
@@ -98,7 +109,7 @@ async function submit() {
         </button>
       </div>
 
-      <form v-else class="mt-4 space-y-4" @submit.prevent="submit">
+      <form v-else class="mt-4 space-y-4" novalidate @submit.prevent="submit">
         <div>
           <label for="i-company" class="text-[0.9375rem] font-bold text-ink">업체명 <span class="text-brand-600">*</span></label>
           <input id="i-company" v-model="form.company" class="field mt-1.5" required>
@@ -131,7 +142,7 @@ async function submit() {
           {{ error }}
         </p>
 
-        <button type="submit" class="btn btn-primary w-full" :disabled="loading || !canSubmit">
+        <button type="submit" class="btn btn-primary w-full" :disabled="loading">
           {{ loading ? '보내는 중…' : '문의 보내기' }}
         </button>
       </form>

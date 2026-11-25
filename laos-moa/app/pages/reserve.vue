@@ -53,10 +53,24 @@ const error = ref('')
 const doneCode = ref('')
 const doneDirect = ref(true)
 
-const canSubmit = computed(() => form.target && form.name.trim() && form.contact.trim().length >= 2 && form.date && form.people >= 1)
+
+// 빈 칸이 있어도 버튼은 눌려요. 첫 번째 문제를 안내하고 그 칸으로 커서를 옮깁니다.
+function stop(selector: string, message: string) {
+  error.value = message
+  toast.add({ title: message, color: 'warning' })
+  const el = document.querySelector<HTMLElement>(selector)
+  el?.focus()
+  el?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+}
 
 async function submit() {
   error.value = ''
+  if (!form.target) return stop('#r-partner', '예약할 업체를 골라 주세요.')
+  if (!form.date) return stop('#r-date', '예약 날짜를 골라 주세요.')
+  if (form.date < today) return stop('#r-date', '오늘 이후 날짜를 골라 주세요.')
+  if (!(form.people >= 1 && form.people <= 100)) return stop('#r-people', '인원은 1~100명으로 입력해 주세요.')
+  if (!form.name.trim()) return stop('#r-name', '이름을 입력해 주세요.')
+  if (form.contact.trim().length < 2) return stop('#r-contact', '연락처를 입력해 주세요.')
   loading.value = true
   try {
     const { target, ...rest } = form
@@ -139,7 +153,7 @@ function reset() {
       </div>
     </div>
 
-    <form v-else class="mt-4 space-y-4" @submit.prevent="submit">
+    <form v-else class="mt-4 space-y-4" novalidate @submit.prevent="submit">
       <div>
         <label for="r-partner" class="text-[0.9375rem] font-bold text-ink">예약할 업체 <span class="text-brand-600">*</span></label>
         <select id="r-partner" v-model="form.target" class="field mt-1.5" required>
@@ -195,7 +209,7 @@ function reset() {
         {{ error }}
       </p>
 
-      <button type="submit" class="btn btn-primary w-full" :disabled="loading || !canSubmit">
+      <button type="submit" class="btn btn-primary w-full" :disabled="loading">
         {{ loading ? '보내는 중…' : '예약 요청 보내기' }}
       </button>
       <p class="text-center text-[0.8125rem] leading-relaxed text-ink-2">

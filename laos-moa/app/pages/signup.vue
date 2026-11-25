@@ -35,17 +35,31 @@ const agreeAll = computed({
 })
 
 const pwMismatch = computed(() => form.password2.length > 0 && form.password !== form.password2)
-const canSubmit = computed(() =>
-  form.email && form.password.length >= 8 && form.password === form.password2 && form.nickname
-  && form.realName && form.phone && form.gender && form.agreeTerms && form.agreePrivacy
-)
+const toast = useToast()
+
+// 빈 칸이 있어도 버튼은 눌려요. 첫 번째 문제를 안내하고 그 칸으로 커서를 옮깁니다.
+function stop(selector: string, message: string) {
+  error.value = message
+  toast.add({ title: message, color: 'warning' })
+  const el = document.querySelector<HTMLElement>(selector)
+  el?.focus()
+  el?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+}
 
 async function submit() {
   error.value = ''
-  if (form.password !== form.password2) {
-    error.value = '비밀번호가 서로 달라요'
-    return
-  }
+  const email = form.email.trim()
+  if (!email) return stop('#s-email', '이메일을 입력해 주세요.')
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return stop('#s-email', '이메일 형식을 확인해 주세요.')
+  if (form.password.length < 8) return stop('#s-pw', '비밀번호는 8자 이상으로 입력해 주세요.')
+  if (form.password !== form.password2) return stop('#s-pw2', '비밀번호가 서로 달라요. 다시 확인해 주세요.')
+  const nick = form.nickname.trim()
+  if (nick.length < 2 || nick.length > 12) return stop('#s-nick', '닉네임은 2~12자로 입력해 주세요.')
+  if (!form.realName.trim()) return stop('#s-name', '실명을 입력해 주세요.')
+  if (!form.phone.trim()) return stop('#s-phone', '휴대폰 번호를 입력해 주세요.')
+  if (!form.gender) return stop('input[name=gender]', '성별을 골라 주세요.')
+  if (!form.agreeTerms) return stop('#s-terms', '이용약관에 동의해 주세요.')
+  if (!form.agreePrivacy) return stop('#s-privacy', '개인정보 수집·이용에 동의해 주세요.')
   loading.value = true
   try {
     const { password2: _unused, ...body } = form
@@ -70,7 +84,7 @@ async function submit() {
       예약과 문의를 보낼 때 필요한 정보예요. 업체 검색, 환율, 가이드는 가입 없이도 볼 수 있어요.
     </p>
 
-    <form class="mt-4 space-y-4" @submit.prevent="submit">
+    <form class="mt-4 space-y-4" novalidate @submit.prevent="submit">
       <div>
         <label for="s-email" class="text-[0.9375rem] font-bold text-ink">이메일 <span class="text-brand-600">*</span></label>
         <input id="s-email" v-model="form.email" type="email" inputmode="email" autocomplete="email" class="field mt-1.5" required>
@@ -139,7 +153,7 @@ async function submit() {
         <div class="mt-1 border-t border-line pt-1">
           <div class="flex items-center">
             <label class="flex min-h-11 flex-1 cursor-pointer items-center gap-3 text-[0.9375rem] text-ink">
-              <input v-model="form.agreeTerms" type="checkbox" class="size-6 shrink-0 accent-[#2F4B2C]" required>
+              <input id="s-terms" v-model="form.agreeTerms" type="checkbox" class="size-6 shrink-0 accent-[#2F4B2C]" required>
               (필수) 이용약관 동의
             </label>
             <NuxtLink to="/terms" target="_blank" class="inline-flex min-h-11 items-center px-2 text-[0.875rem] font-bold text-brand-600 underline">
@@ -148,7 +162,7 @@ async function submit() {
           </div>
           <div class="flex items-center">
             <label class="flex min-h-11 flex-1 cursor-pointer items-center gap-3 text-[0.9375rem] text-ink">
-              <input v-model="form.agreePrivacy" type="checkbox" class="size-6 shrink-0 accent-[#2F4B2C]" required>
+              <input id="s-privacy" v-model="form.agreePrivacy" type="checkbox" class="size-6 shrink-0 accent-[#2F4B2C]" required>
               (필수) 개인정보 수집·이용 동의
             </label>
             <NuxtLink to="/privacy" target="_blank" class="inline-flex min-h-11 items-center px-2 text-[0.875rem] font-bold text-brand-600 underline">
@@ -167,7 +181,7 @@ async function submit() {
         {{ error }}
       </p>
 
-      <button type="submit" class="btn btn-primary w-full" :disabled="loading || !canSubmit">
+      <button type="submit" class="btn btn-primary w-full" :disabled="loading">
         {{ loading ? '가입하는 중…' : '가입하기' }}
       </button>
     </form>
