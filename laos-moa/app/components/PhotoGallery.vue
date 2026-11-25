@@ -27,7 +27,7 @@ function go(delta: number) {
         :key="id"
         :src="`/api/photos/${id}`"
         :alt="`${name} 사진 ${i + 1}`"
-        class="aspect-[4/3] w-full shrink-0 snap-center object-cover"
+        class="aspect-video w-full shrink-0 snap-center object-cover"
         :loading="i === 0 ? 'eager' : 'lazy'"
         :fetchpriority="i === 0 ? 'high' : 'auto'"
         draggable="false"

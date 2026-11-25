@@ -82,7 +82,7 @@ async function uploadPhotos(b: Biz, e: Event) {
     }
     try {
       const full = await shrinkImage(f, FULL_MAX_SIDE, FULL_MAX_CHARS)
-      const thumb = await shrinkImage(f, THUMB_MAX_SIDE, THUMB_MAX_CHARS)
+      const thumb = await cropThumb(f)
       await api(`/businesses/${b.id}/photos`, { method: 'POST', body: { full, thumb } })
       done++
     } catch (err) {
@@ -261,7 +261,7 @@ async function create() {
           </p>
           <ul v-if="photosOf(b).length" class="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-4">
             <li v-for="(pid, i) in photosOf(b)" :key="pid" class="relative">
-              <img :src="`/api/photos/${pid}?size=thumb`" :alt="`${b.name} 사진 ${i + 1}`" class="aspect-square w-full border border-default object-cover">
+              <img :src="`/api/photos/${pid}?size=thumb`" :alt="`${b.name} 사진 ${i + 1}`" class="aspect-video w-full border border-default object-cover">
               <span v-if="i === 0" class="absolute left-1 top-1 bg-primary px-1.5 py-0.5 text-[10px] font-bold text-white">대표</span>
               <div class="mt-1 flex flex-wrap gap-1">
                 <UButton v-if="i > 0" label="대표로" size="xs" color="neutral" variant="outline" @click="setCover(pid)" />
@@ -282,7 +282,7 @@ async function create() {
               {{ uploadingId === b.id ? '올리는 중…' : '사진 올리기 (여러 장 가능)' }}
             </label>
             <p class="mt-1 text-xs text-muted">
-              가게 전경, 내부, 간판 사진을 올려 주세요. 사진은 자동으로 줄여서 저장됩니다.
+              가게 전경, 내부, 간판 사진을 올려 주세요. 목록 썸네일은 16:9로 가운데 부분이 보이니, 간판이 가운데 오는 사진이 좋습니다. 사진은 자동으로 줄여서 저장됩니다.
             </p>
           </div>
         </div>
