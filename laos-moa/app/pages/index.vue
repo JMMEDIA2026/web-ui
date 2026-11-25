@@ -32,6 +32,10 @@ const shortcuts = computed(() => [
   { label: '통신', emoji: '/emoji/phone.png', to: '/guides/telecom' }
 ])
 
+// 관리자가 등록한 메인 배너(노출 중인 것만)
+const { data: bannerData } = await useFetch<{ id: string, title: string, linkUrl: string, v: number }[]>('/api/banners', { key: 'banners', default: () => [] })
+const banners = computed(() => bannerData.value ?? [])
+
 // 환율은 실제 값을 불러온 경우에만 숫자를 보여 줍니다.
 const { data: rates } = await useFetch<{ krwLak: number }>('/api/rates', { key: 'rates', default: () => null })
 const fmtNum = (n: number) => n.toLocaleString('ko-KR', { maximumFractionDigits: 0 })
@@ -43,7 +47,9 @@ const firstGuides = ['visa', 'telecom', 'health', 'banking']
 
 <template>
   <div class="px-4 pt-5 sm:px-5">
-    <h1 data-page-title tabindex="-1" class="text-[1.6875rem] font-bold leading-[1.3] text-ink">
+    <!-- 메인 배너(광고). 배너가 없으면 기존 제목이 그대로 보입니다. -->
+    <HomeBanner v-if="banners.length" :banners="banners" />
+    <h1 data-page-title tabindex="-1" :class="banners.length ? 'sr-only' : 'text-[1.6875rem] font-bold leading-[1.3] text-ink'">
       오늘도 편하게,<br>라오스 생활.
     </h1>
 

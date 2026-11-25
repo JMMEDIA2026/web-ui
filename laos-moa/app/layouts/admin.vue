@@ -13,6 +13,7 @@ const adminLinks = [
   { label: '업체', to: '/admin/businesses', icon: 'i-lucide-store' },
   { label: '협력업체', to: '/admin/partners', icon: 'i-lucide-handshake' },
   { label: '회원', to: '/admin/members', icon: 'i-lucide-users' },
+  { label: '배너', to: '/admin/banners', icon: 'i-lucide-images' },
   { label: '광고 문의', to: '/admin/inquiries', icon: 'i-lucide-inbox' },
   { label: '설정', to: '/admin/settings', icon: 'i-lucide-settings' }
 ]

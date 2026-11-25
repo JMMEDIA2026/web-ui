@@ -68,3 +68,43 @@ export const FULL_MAX_SIDE = 1600
 export const THUMB_MAX_SIDE = 480
 export const FULL_MAX_CHARS = 1_250_000
 export const THUMB_MAX_CHARS = 150_000
+
+// ---- 메인 배너: 가운데를 2:1로 잘라 가로 1200px 이하로 줄입니다. ----
+export const BANNER_RATIO = 2
+export const BANNER_MAX_WIDTH = 1200
+export const BANNER_MAX_CHARS = 1_250_000
+
+export async function cropBanner(file: File): Promise<string> {
+  const bitmap = await loadBitmap(file)
+  const w = 'naturalWidth' in bitmap ? bitmap.naturalWidth : bitmap.width
+  const h = 'naturalHeight' in bitmap ? bitmap.naturalHeight : bitmap.height
+  if (!w || !h) throw new Error('이미지를 읽을 수 없습니다')
+
+  // 원본에서 2:1 영역을 가운데 기준으로 잘라 냅니다.
+  let sw = w
+  let sh = Math.round(w / BANNER_RATIO)
+  if (sh > h) {
+    sh = h
+    sw = Math.round(h * BANNER_RATIO)
+  }
+  const sx = Math.round((w - sw) / 2)
+  const sy = Math.round((h - sh) / 2)
+
+  let outW = Math.min(BANNER_MAX_WIDTH, sw)
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const canvas = document.createElement('canvas')
+    canvas.width = outW
+    canvas.height = Math.round(outW / BANNER_RATIO)
+    const ctx = canvas.getContext('2d')
+    if (!ctx) throw new Error('이미지를 처리할 수 없습니다')
+    ctx.fillStyle = '#fff'
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+    ctx.drawImage(bitmap, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height)
+    for (const q of [0.85, 0.75, 0.65, 0.5]) {
+      const b64 = await blobToBase64(await toBlob(canvas, q))
+      if (b64.length <= BANNER_MAX_CHARS) return b64
+    }
+    outW = Math.round(outW * 0.8)
+  }
+  throw new Error('이미지가 너무 커서 줄일 수 없습니다. 다른 이미지를 골라 주세요')
+}
