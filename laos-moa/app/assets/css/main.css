@@ -5,6 +5,11 @@
   --font-sans: 'Noto Sans KR', ui-sans-serif, system-ui, sans-serif;
 }
 
+/* Nuxt UI 전체 모서리 반경. 기본값은 0.25rem이며 값이 작을수록 각집니다. */
+:root {
+  --ui-radius: 0.0625rem;
+}
+
 body {
   word-break: keep-all;
 }
