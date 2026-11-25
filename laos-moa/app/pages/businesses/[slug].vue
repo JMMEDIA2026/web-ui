@@ -114,12 +114,13 @@ const actionCount = [!!directions, !!contact, true].filter(Boolean).length
               {{ business.address }}
             </dd>
           </div>
-          <div>
+          <!-- 영업시간은 확인된 업체만 보여 줍니다. 없으면 이 줄 자체를 생략합니다. -->
+          <div v-if="business.hours">
             <dt class="text-[0.8125rem] text-ink-2">
               영업시간
             </dt>
-            <dd :class="business.hours ? 'text-ink' : 'text-ink-2'">
-              {{ business.hours || '정보 확인 중이에요' }}
+            <dd class="text-ink">
+              {{ business.hours }}
             </dd>
           </div>
           <div>
