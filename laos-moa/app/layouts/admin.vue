@@ -37,7 +37,7 @@ async function logout() {
     <header class="border-b border-default bg-white">
       <UContainer class="flex h-16 items-center gap-3">
         <NuxtLink :to="isPartner ? '/partner' : '/admin'" class="flex items-center gap-2 font-extrabold">
-          <span class="text-[1.25rem] tracking-tight text-brand-600">라자</span>
+          <AppLogo :size="28" text-class="text-[1.25rem] text-brand-600" />
           <UBadge :label="isPartner ? '협력업체' : '관리자'" :color="isPartner ? 'secondary' : 'primary'" variant="solid" />
         </NuxtLink>
 

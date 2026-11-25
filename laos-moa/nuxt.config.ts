@@ -24,6 +24,8 @@ export default defineNuxtConfig({
       title: '라자',
       link: [
         { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32.png' },
+        { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
         { rel: 'preconnect', href: 'https://cdn.jsdelivr.net', crossorigin: '' },
         {
           rel: 'stylesheet',
@@ -36,6 +38,8 @@ export default defineNuxtConfig({
         { name: 'theme-color', content: '#635BFF' },
         { name: 'description', content: '라오스 한인을 위한 생활 정보와 한인 업체 디렉토리, 비엔티안 한인 커뮤니티.' },
         { property: 'og:title', content: '라자' },
+        { property: 'og:image', content: 'https://laja.joybox.day/og.png' },
+        { name: 'twitter:card', content: 'summary_large_image' },
         { property: 'og:description', content: '라오스 한인을 위한 생활 정보와 한인 업체 디렉토리.' }
       ]
     }
