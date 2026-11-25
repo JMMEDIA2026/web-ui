@@ -65,7 +65,11 @@ export default defineNuxtConfig({
       nodeCompat: true,
       wrangler: {
         name: 'laos-moa',
-        routes: [{ pattern: 'laos.joybox.day', custom_domain: true }],
+        routes: [
+          { pattern: 'laja.joybox.day', custom_domain: true },
+          // 이전 주소는 새 주소로 자동 이동합니다. (server/middleware/host-redirect.ts)
+          { pattern: 'laos.joybox.day', custom_domain: true }
+        ],
         // 예약·문의·협력업체 데이터를 저장하는 Cloudflare D1 데이터베이스
         d1_databases: [
           { binding: 'DB', database_name: 'laos-moa', database_id: 'a3f6d5fd-2a9f-4d7f-b4bf-2338df5f580f' }
