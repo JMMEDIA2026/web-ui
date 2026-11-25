@@ -1,69 +1,41 @@
 <script setup lang="ts">
-import { z } from 'zod'
-import type { FormSubmitEvent } from '@nuxt/ui'
-
 useSeoMeta({
-  title: '업체 등록·광고 안내 · 라오스모아',
+  title: '업체 등록·광고 문의 · 라오스모아',
   description: '한인 업체 무료 등록, 추천 업체, 배너 광고 안내와 문의.'
 })
 
+const toast = useToast()
+
 const tiers = [
-  {
-    level: '기본',
-    title: '무료 등록',
-    items: ['업체 기본 정보 등록', '지도·연락처 표시', '후기 받기'],
-    price: '무료'
-  },
-  {
-    level: '추천',
-    title: '프리미엄 업체',
-    items: ['목록 상단 노출과 추천 배지', '사진 여러 장과 메뉴 소개', '카카오톡 문의 버튼'],
-    price: '가격은 오픈 후 안내합니다.'
-  },
-  {
-    level: '프리미엄 플러스',
-    title: '배너 광고',
-    items: ['메인·게시판 배너 노출', '이벤트·할인 소식 게시', '노출·클릭 현황 보고'],
-    price: '가격은 오픈 후 안내합니다.'
-  }
+  { title: '무료 등록', items: ['업체 기본 정보 등록', '지도·연락처 표시'], price: '무료' },
+  { title: '추천 업체', items: ['목록 상단 노출(“광고” 표시)', '사진과 소개 보강'], price: '가격은 문의 후 안내해 드려요.' },
+  { title: '예약 연결', items: ['사이트에서 들어온 예약 요청 확인', '업체 전용 예약 확인 화면'], price: '조건은 협의 후 정해요.' }
 ]
 
 const productOptions = [
   { label: '무료 업체 등록', value: 'free' },
-  { label: '프리미엄 업체', value: 'premium' },
+  { label: '추천 업체', value: 'premium' },
   { label: '배너 광고', value: 'banner' },
-  { label: '제휴·기타', value: 'etc' }
+  { label: '제휴·정보 수정 제안·기타', value: 'etc' }
 ]
 
-const schema = z.object({
-  company: z.string().min(1, '업체명을 입력하세요'),
-  contact: z.string().min(2, '카카오톡 ID 또는 연락처를 입력하세요'),
-  product: z.string().min(1, '문의 종류를 선택하세요'),
-  message: z.string().optional(),
-  website: z.string().optional() // 스팸 방지용 숨김 필드
-})
-
-type Schema = z.output<typeof schema>
-
-const state = reactive<Partial<Schema>>({
-  company: '',
-  contact: '',
-  product: undefined,
-  message: '',
-  website: ''
-})
-
-const toast = useToast()
+const form = reactive({ company: '', contact: '', product: '', message: '', website: '' })
 const loading = ref(false)
+const error = ref('')
+const done = ref(false)
 
-async function onSubmit(event: FormSubmitEvent<Schema>) {
+const canSubmit = computed(() => form.company.trim() && form.contact.trim().length >= 2 && form.product)
+
+async function submit() {
+  error.value = ''
   loading.value = true
   try {
-    await $fetch('/api/inquiry', { method: 'POST', body: event.data })
-    toast.add({ title: '문의가 접수되었습니다', description: '확인 후 연락드리겠습니다.', color: 'success' })
-    Object.assign(state, { company: '', contact: '', product: undefined, message: '', website: '' })
-  } catch {
-    toast.add({ title: '접수에 실패했습니다', description: '잠시 후 다시 시도해 주세요.', color: 'error' })
+    await $fetch('/api/inquiry', { method: 'POST', body: { ...form } })
+    done.value = true
+    toast.add({ title: '문의가 접수되었어요', color: 'success' })
+    Object.assign(form, { company: '', contact: '', product: '', message: '', website: '' })
+  } catch (e) {
+    error.value = errorMessage(e)
   } finally {
     loading.value = false
   }
@@ -71,66 +43,88 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <div>
-    <UPageHero
-      headline="업체 등록·광고"
-      title="한인 고객에게 업체를 알리세요."
-      description="라오스 한인이 찾는 곳에 업체를 소개합니다. 등록은 무료로 시작할 수 있습니다."
-    />
+  <div class="px-4 pt-3 sm:px-5">
+    <div class="flex items-center gap-1">
+      <NuxtLink to="/me" class="-ml-2 grid size-11 place-items-center rounded-full text-ink" aria-label="내 정보로">
+        <UIcon name="i-lucide-chevron-left" class="size-7" />
+      </NuxtLink>
+      <h1 data-page-title tabindex="-1" class="text-[1.5rem] font-bold text-ink">
+        업체 등록·광고 문의
+      </h1>
+    </div>
+    <p class="mt-2 text-[0.9375rem] leading-relaxed text-ink-2">
+      라오스에서 사업장을 운영하신다면 무료로 등록해 보세요. 광고는 항상 “광고”로 표시해서 일반 정보와 구분해요.
+    </p>
 
-    <UPageSection title="이용 안내" description="상세 조건은 시안이며, 실제 운영 전에 확정합니다.">
-      <UPageGrid class="lg:grid-cols-3">
-        <UPageCard
-          v-for="t in tiers"
-          :key="t.title"
-          :title="t.title"
-          :description="t.level"
-          variant="outline"
-          :class="['box3d', t.level === '추천' ? 'ring-2 ring-primary' : '']"
-        >
-          <ul class="flex flex-col gap-2 text-sm">
-            <li v-for="i in t.items" :key="i" class="flex items-start gap-2">
-              <UIcon name="i-lucide-check" class="mt-0.5 shrink-0 text-primary" />
-              {{ i }}
-            </li>
-          </ul>
-          <p class="mt-4 text-sm text-muted">
-            {{ t.price }}
-          </p>
-        </UPageCard>
-      </UPageGrid>
-      <p class="mt-4 text-sm text-muted">
-        모든 광고에는 ‘광고’ 표시를 넣어 일반 정보와 구분합니다.
+    <ul class="mt-4 space-y-3">
+      <li v-for="t in tiers" :key="t.title" class="card p-4">
+        <h2 class="text-[1.125rem] font-bold text-ink">
+          {{ t.title }}
+        </h2>
+        <ul class="mt-2 space-y-1.5">
+          <li v-for="i in t.items" :key="i" class="flex items-start gap-2 text-[0.9375rem] text-ink">
+            <UIcon name="i-lucide-circle-check" class="mt-0.5 size-5 shrink-0 text-brand-500" />
+            {{ i }}
+          </li>
+        </ul>
+        <p class="mt-3 text-[0.875rem] font-semibold text-brand-600">
+          {{ t.price }}
+        </p>
+      </li>
+    </ul>
+
+    <section id="inquiry" class="card mt-6 scroll-mt-4 p-4" aria-labelledby="inq-title">
+      <h2 id="inq-title" class="text-[1.25rem] font-bold text-ink">
+        문의 남기기
+      </h2>
+      <p class="mt-1 text-[0.875rem] text-ink-2">
+        정보 수정 제안도 여기에 남겨 주세요.
       </p>
-    </UPageSection>
 
-    <UPageSection id="inquiry" title="광고·제휴 문의" description="업체명과 연락처를 남겨 주시면 확인 후 연락드립니다.">
-      <UCard class="box3d mx-auto w-full max-w-xl">
-        <UForm :schema="schema" :state="state" class="flex flex-col gap-4" @submit="onSubmit">
-          <UFormField label="업체명" name="company" required>
-            <UInput v-model="state.company" placeholder="예) 라오스 한식당" class="w-full" />
-          </UFormField>
+      <div v-if="done" class="mt-4 rounded-xl bg-brand-100 p-4 text-[0.9375rem] leading-relaxed text-brand-600" role="status">
+        문의가 접수되었어요. 확인 후 남겨 주신 연락처로 연락드릴게요.
+        <button type="button" class="mt-3 block min-h-11 font-bold underline" @click="done = false">
+          다른 문의 남기기
+        </button>
+      </div>
 
-          <UFormField label="카카오톡 ID 또는 연락처" name="contact" required>
-            <UInput v-model="state.contact" placeholder="카카오톡 ID 또는 전화번호" class="w-full" />
-          </UFormField>
+      <form v-else class="mt-4 space-y-4" @submit.prevent="submit">
+        <div>
+          <label for="i-company" class="text-[0.9375rem] font-bold text-ink">업체명 <span class="text-brand-600">*</span></label>
+          <input id="i-company" v-model="form.company" class="field mt-1.5" required>
+        </div>
+        <div>
+          <label for="i-contact" class="text-[0.9375rem] font-bold text-ink">카카오톡 ID 또는 연락처 <span class="text-brand-600">*</span></label>
+          <input id="i-contact" v-model="form.contact" class="field mt-1.5" required>
+        </div>
+        <div>
+          <label for="i-product" class="text-[0.9375rem] font-bold text-ink">문의 종류 <span class="text-brand-600">*</span></label>
+          <select id="i-product" v-model="form.product" class="field mt-1.5" required>
+            <option value="" disabled>
+              선택하세요
+            </option>
+            <option v-for="o in productOptions" :key="o.value" :value="o.value">
+              {{ o.label }}
+            </option>
+          </select>
+        </div>
+        <div>
+          <label for="i-message" class="text-[0.9375rem] font-bold text-ink">문의 내용 (선택)</label>
+          <textarea id="i-message" v-model="form.message" maxlength="2000" class="field mt-1.5" placeholder="업체 소개나 원하시는 내용을 적어 주세요." />
+        </div>
 
-          <UFormField label="문의 종류" name="product" required>
-            <USelect v-model="state.product" :items="productOptions" placeholder="선택하세요" class="w-full" />
-          </UFormField>
+        <div class="hidden" aria-hidden="true">
+          <input v-model="form.website" type="text" name="website" tabindex="-1" autocomplete="off">
+        </div>
 
-          <UFormField label="문의 내용" name="message">
-            <UTextarea v-model="state.message" :rows="4" placeholder="업체 소개나 원하시는 내용을 적어 주세요." class="w-full" />
-          </UFormField>
+        <p v-if="error" class="rounded-xl bg-red-50 p-3 text-[0.9375rem] font-bold text-red-700" role="alert">
+          {{ error }}
+        </p>
 
-          <!-- 스팸 방지용 숨김 필드: 사람은 채우지 않습니다. -->
-          <div class="hidden" aria-hidden="true">
-            <input v-model="state.website" type="text" name="website" tabindex="-1" autocomplete="off">
-          </div>
-
-          <UButton type="submit" label="문의 보내기" size="lg" :loading="loading" block />
-        </UForm>
-      </UCard>
-    </UPageSection>
+        <button type="submit" class="btn btn-primary w-full" :disabled="loading || !canSubmit">
+          {{ loading ? '보내는 중…' : '문의 보내기' }}
+        </button>
+      </form>
+    </section>
   </div>
 </template>

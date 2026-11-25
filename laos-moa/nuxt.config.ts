@@ -7,7 +7,11 @@ export default defineNuxtConfig({
     fonts: false
   },
 
-  css:['~/assets/css/main.css'],
+  css: [
+    '~/assets/css/main.css',
+    'leaflet/dist/leaflet.css',
+    'leaflet.markercluster/dist/MarkerCluster.css'
+  ],
 
   colorMode: {
     preference: 'light',
@@ -27,6 +31,9 @@ export default defineNuxtConfig({
         }
       ],
       meta: [
+        // 모바일 화면 전체(노치·하단 안전영역 포함)를 쓰고, 주소창 색을 브랜드 보라색으로 맞춥니다.
+        { name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' },
+        { name: 'theme-color', content: '#635BFF' },
         { name: 'description', content: '라오스 한인을 위한 생활 정보와 한인 업체 디렉토리, 비엔티안 한인 커뮤니티.' },
         { property: 'og:title', content: '라오스모아' },
         { property: 'og:description', content: '라오스 한인을 위한 생활 정보와 한인 업체 디렉토리.' }

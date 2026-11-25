@@ -8,6 +8,8 @@ export interface Category {
   description: string
   emoji: string
   tone: Tone
+  /** 얇은 선 아이콘(Lucide) 이름 */
+  icon: string
 }
 
 export interface Business {
@@ -22,6 +24,8 @@ export interface Business {
   lat?: number | null
   lng?: number | null
   mapUrl?: string
+  /** 정보를 마지막으로 확인·수정한 시각(ISO) */
+  updatedAt?: string
   /** 예약을 받을 수 있는(활성 협력업체와 연결된) 업체의 협력업체 ID */
   partnerId?: string | null
   sponsored?: boolean
@@ -30,14 +34,14 @@ export interface Business {
 }
 
 export const categories: Category[] = [
-  { key: 'food', label: '한식당', description: '한식당·카페·배달', emoji: '/emoji/food.png', tone: 'peach' },
-  { key: 'mart', label: '마트', description: '한인 마트·식료품', emoji: '/emoji/mart.png', tone: 'mint' },
-  { key: 'exchange', label: '환전', description: '환전소·환율', emoji: '/emoji/exchange.png', tone: 'sun' },
-  { key: 'massage', label: '마사지', description: '마사지·스파', emoji: '/emoji/massage.png', tone: 'lilac' },
-  { key: 'hospital', label: '병원·약국', description: '한국어 진료·약국', emoji: '/emoji/hospital.png', tone: 'pink' },
-  { key: 'school', label: '학교·학원', description: '국제학교·학원', emoji: '/emoji/school.png', tone: 'lilac' },
-  { key: 'rent', label: '렌트·부동산', description: '주거·사무실 임대', emoji: '/emoji/house.png', tone: 'sky' },
-  { key: 'job', label: '구인·구직', description: '일자리·인력', emoji: '/emoji/job.png', tone: 'peach' }
+  { key: 'food', icon: 'i-lucide-utensils', label: '한식당', description: '한식당·카페·배달', emoji: '/emoji/food.png', tone: 'peach' },
+  { key: 'mart', icon: 'i-lucide-shopping-basket', label: '마트', description: '한인 마트·식료품', emoji: '/emoji/mart.png', tone: 'mint' },
+  { key: 'exchange', icon: 'i-lucide-banknote', label: '환전', description: '환전소·환율', emoji: '/emoji/exchange.png', tone: 'sun' },
+  { key: 'massage', icon: 'i-lucide-flower-2', label: '마사지', description: '마사지·스파', emoji: '/emoji/massage.png', tone: 'lilac' },
+  { key: 'hospital', icon: 'i-lucide-stethoscope', label: '병원·약국', description: '한국어 진료·약국', emoji: '/emoji/hospital.png', tone: 'pink' },
+  { key: 'school', icon: 'i-lucide-book-open', label: '학교·학원', description: '국제학교·학원', emoji: '/emoji/school.png', tone: 'lilac' },
+  { key: 'rent', icon: 'i-lucide-house', label: '렌트·부동산', description: '주거·사무실 임대', emoji: '/emoji/house.png', tone: 'sky' },
+  { key: 'job', icon: 'i-lucide-briefcase-business', label: '구인·구직', description: '일자리·인력', emoji: '/emoji/job.png', tone: 'peach' }
 ]
 
 export const categoryMap = Object.fromEntries(categories.map(c => [c.key, c])) as Record<CategoryKey, Category>

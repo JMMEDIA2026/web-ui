@@ -6,6 +6,8 @@ export interface Guide {
   summary: string
   emoji: string
   tone: Tone
+  /** 얇은 선 아이콘(Lucide) 이름 */
+  icon: string
   /** 가이드에 담을 항목. 실제 내용은 확인된 정보로 채웁니다. */
   topics: string[]
 }
@@ -15,6 +17,7 @@ export interface Guide {
 export const guides: Guide[] = [
   {
     slug: 'visa',
+    icon: 'i-lucide-id-card',
     title: '비자·거주증',
     summary: '비자 종류와 신청 순서, 필요 서류를 정리합니다.',
     emoji: '/emoji/visa.png', tone: 'sky',
@@ -22,6 +25,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'driving',
+    icon: 'i-lucide-bike',
     title: '운전면허·오토바이',
     summary: '면허 전환과 차량·오토바이 등록 방법을 안내합니다.',
     emoji: '/emoji/scooter.png', tone: 'peach',
@@ -29,6 +33,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'telecom',
+    icon: 'i-lucide-smartphone',
     title: '심카드·인터넷',
     summary: '통신사별 요금과 개통 방법을 비교합니다.',
     emoji: '/emoji/phone.png', tone: 'lilac',
@@ -36,6 +41,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'health',
+    icon: 'i-lucide-heart-pulse',
     title: '병원·응급',
     summary: '응급 연락처와 진료받는 방법을 안내합니다.',
     emoji: '/emoji/pill.png', tone: 'pink',
@@ -43,6 +49,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'embassy',
+    icon: 'i-lucide-landmark',
     title: '대사관·영사 서비스',
     summary: '여권, 공증, 긴급 도움 요청 방법을 안내합니다.',
     emoji: '/emoji/embassy.png', tone: 'mint',
@@ -50,6 +57,7 @@ export const guides: Guide[] = [
   },
   {
     slug: 'banking',
+    icon: 'i-lucide-banknote',
     title: '은행·환전·송금',
     summary: '계좌 개설과 환전, 한국 송금 방법을 정리합니다.',
     emoji: '/emoji/money.png', tone: 'sun',

@@ -1,149 +1,188 @@
 <script setup lang="ts">
 import { categoryMap } from '~/data/businesses'
 
-const route = useRoute()
+// 상세 화면은 하단 메뉴 대신 하단 행동 바(길찾기·연락하기·예약)를 씁니다.
+definePageMeta({ header: false, nav: false })
 
-// 등록된 업체(DB)와 화면 구성용 예시 업체를 함께 찾습니다.
-const { all } = await useBusinessList()
-const business = all.value.find(b => b.slug === route.params.slug)
+const route = useRoute()
+const router = useRouter()
+const toast = useToast()
+
+const { real } = await useBusinessList()
+const business = real.value.find(b => b.slug === route.params.slug)
 
 if (!business) {
   throw createError({ statusCode: 404, statusMessage: '업체를 찾을 수 없습니다', fatal: true })
 }
 
 const category = categoryMap[business.category]
-const hasLocation = typeof business.lat === 'number' && typeof business.lng === 'number'
+const located = hasCoords(business)
+const directions = directionsUrl(business)
+const contact = contactAction(business.contact)
 
-// 지도(OpenStreetMap) 삽입 주소: 핀 주변을 보여 줍니다.
-const embedUrl = computed(() => {
-  if (!hasLocation) return ''
-  const lat = business.lat as number
-  const lng = business.lng as number
-  const bbox = [lng - 0.004, lat - 0.003, lng + 0.004, lat + 0.003].map(n => n.toFixed(5)).join('%2C')
-  return `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat}%2C${lng}`
-})
-const osmUrl = hasLocation
-  ? `https://www.openstreetmap.org/?mlat=${business.lat}&mlon=${business.lng}#map=18/${business.lat}/${business.lng}`
+const embedUrl = located
+  ? `https://www.openstreetmap.org/export/embed.html?bbox=${[business.lng! - 0.004, business.lat! - 0.003, business.lng! + 0.004, business.lat! + 0.003].map(n => n.toFixed(5)).join('%2C')}&layer=mapnik&marker=${business.lat}%2C${business.lng}`
   : ''
+
+const checkedOn = business.updatedAt
+  ? new Date(business.updatedAt).toLocaleDateString('ko-KR', { timeZone: 'Asia/Vientiane', year: 'numeric', month: 'long', day: 'numeric' })
+  : ''
+
+// 탐색 화면에서 왔으면 뒤로 가서 지도·목록 상태를 그대로 복원합니다.
+function back() {
+  if (router.options.history.state?.back) router.back()
+  else navigateTo('/businesses')
+}
+
+async function copy(text: string) {
+  try {
+    await navigator.clipboard.writeText(text)
+    toast.add({ title: '연락처를 복사했어요', color: 'success' })
+  } catch {
+    toast.add({ title: '복사하지 못했어요', description: text, color: 'warning' })
+  }
+}
 
 useSeoMeta({
   title: `${business.name} · 라오스모아`,
   description: business.description
 })
+
+const actionCount = [!!directions, !!contact, !!business.partnerId].filter(Boolean).length
 </script>
 
 <template>
-  <UContainer v-if="business">
-    <UPageHeader :title="business.name" :description="business.description">
-      <template #headline>
-        <UBreadcrumb
-          :items="[
-            { label: '한인 업체', to: '/businesses' },
-            { label: category.label, to: `/businesses?category=${category.key}` }
-          ]"
-        />
-      </template>
-      <template #links>
-        <UBadge v-if="business.sponsored" label="추천 업체 · 광고" color="secondary" variant="solid" />
-        <UBadge v-if="business.example" label="예시" color="neutral" variant="soft" />
-      </template>
-    </UPageHeader>
+  <div class="min-h-dvh bg-app-bg" :style="{ paddingBottom: actionCount ? 'calc(88px + env(safe-area-inset-bottom, 0px))' : '24px' }">
+    <!-- 상단: 뒤로가기와 업체명 -->
+    <header
+      class="sticky top-0 z-30 flex items-center gap-1 border-b border-line bg-white px-2"
+      style="height: calc(56px + env(safe-area-inset-top, 0px)); padding-top: env(safe-area-inset-top, 0px)"
+    >
+      <button type="button" class="grid size-11 shrink-0 place-items-center rounded-full text-ink" aria-label="뒤로가기" @click="back">
+        <UIcon name="i-lucide-chevron-left" class="size-7" />
+      </button>
+      <p class="min-w-0 flex-1 truncate text-[1.0625rem] font-bold text-ink">
+        {{ business.name }}
+      </p>
+    </header>
 
-    <UPageBody>
-      <div class="grid gap-8 lg:grid-cols-3">
-        <div class="lg:col-span-2 flex flex-col gap-6">
-          <UAlert
-            v-if="business.example"
-            color="warning"
-            variant="subtle"
-            icon="i-lucide-info"
-            title="예시 업체입니다"
-            description="실제 업체 정보를 등록하기 전까지 화면 구성을 보여주기 위한 예시 정보입니다."
-          />
+    <!-- 실제 업체 사진이 아직 없으면 업종 아이콘을 보여 줍니다. -->
+    <div class="grid h-44 place-items-center bg-brand-50 text-brand-600" role="img" :aria-label="`${category?.label} 업종`">
+      <UIcon :name="category?.icon ?? 'i-lucide-store'" class="size-14" />
+    </div>
 
-          <UCard class="box3d">
-            <template #header>
-              <div class="flex items-center gap-3">
-                <img :src="category.emoji" alt="" class="size-10">
-                <h2 class="font-semibold text-lg">
-                  업체 정보
-                </h2>
-              </div>
-            </template>
-
-            <dl class="grid gap-4 sm:grid-cols-[8rem_1fr]">
-              <dt class="text-muted">
-                분야
-              </dt>
-              <dd>{{ category.label }}</dd>
-              <dt class="text-muted">
-                지역
-              </dt>
-              <dd>{{ business.area || '비엔티안' }}</dd>
-              <template v-if="business.address">
-                <dt class="text-muted">
-                  주소
-                </dt>
-                <dd class="break-words">
-                  {{ business.address }}
-                </dd>
-              </template>
-              <dt class="text-muted">
-                영업시간
-              </dt>
-              <dd>{{ business.hours || '확인 후 추가될 예정입니다' }}</dd>
-              <dt class="text-muted">
-                연락처
-              </dt>
-              <dd>{{ business.contact || '확인 후 추가될 예정입니다' }}</dd>
-            </dl>
-          </UCard>
-
-          <UCard v-if="hasLocation" class="box3d">
-            <template #header>
-              <h2 class="font-semibold text-lg">
-                위치
-              </h2>
-            </template>
-            <iframe
-              :src="embedUrl"
-              :title="`${business.name} 위치 지도`"
-              class="h-72 w-full border border-default"
-              loading="lazy"
-              referrerpolicy="no-referrer"
-            />
-            <div class="mt-3 flex flex-wrap gap-2">
-              <UButton
-                v-if="business.mapUrl"
-                :to="business.mapUrl"
-                target="_blank"
-                label="Google 지도에서 열기"
-                icon="i-lucide-map-pin"
-                color="neutral"
-                variant="outline"
-              />
-              <UButton :to="osmUrl" target="_blank" label="OpenStreetMap에서 크게 보기" icon="i-lucide-map" color="neutral" variant="ghost" />
-            </div>
-            <p class="mt-2 text-xs text-muted">
-              지도 위치는 OpenStreetMap 기준이며 실제 위치와 조금 다를 수 있습니다. 방문 전 업체에 확인하세요.
-            </p>
-          </UCard>
-        </div>
-
-        <div class="flex flex-col gap-4">
-          <!-- 사장님 계정이 연결된(예약을 받을 수 있는) 업체에만 예약 버튼을 보여 줍니다. -->
-          <UButton
-            v-if="business.partnerId"
-            :to="`/reserve?partner=${business.partnerId}`"
-            label="예약 요청하기"
-            icon="i-lucide-calendar-check"
-            size="xl"
-            block
-          />
-          <AdSlot title="상세 페이지 광고 자리" size="300×250" />
-          <UButton to="/businesses" label="목록으로" color="neutral" variant="outline" icon="i-lucide-arrow-left" />
-        </div>
+    <div class="px-4 pt-5 sm:px-5">
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="rounded-md bg-brand-100 px-2 py-0.5 text-[0.8125rem] font-bold text-brand-600">{{ category?.label }}</span>
+        <span v-if="business.sponsored" class="rounded-md bg-brand-100 px-2 py-0.5 text-[0.8125rem] font-bold text-brand-600">광고</span>
       </div>
-    </UPageBody>
-  </UContainer>
+      <h1 data-page-title tabindex="-1" class="mt-2 text-[1.625rem] font-bold leading-tight text-ink">
+        {{ business.name }}
+      </h1>
+
+      <section class="card mt-5 p-4" aria-labelledby="info-title">
+        <h2 id="info-title" class="text-[1.125rem] font-bold text-ink">
+          업체 정보
+        </h2>
+        <dl class="mt-3 space-y-3 text-[1rem]">
+          <div>
+            <dt class="text-[0.8125rem] text-ink-2">
+              지역
+            </dt>
+            <dd class="text-ink">
+              {{ business.area || '비엔티안' }}
+            </dd>
+          </div>
+          <div v-if="business.address">
+            <dt class="text-[0.8125rem] text-ink-2">
+              주소
+            </dt>
+            <dd class="break-words text-ink">
+              {{ business.address }}
+            </dd>
+          </div>
+          <div>
+            <dt class="text-[0.8125rem] text-ink-2">
+              영업시간
+            </dt>
+            <dd :class="business.hours ? 'text-ink' : 'text-ink-2'">
+              {{ business.hours || '정보 확인 중이에요' }}
+            </dd>
+          </div>
+          <div>
+            <dt class="text-[0.8125rem] text-ink-2">
+              연락처
+            </dt>
+            <dd :class="business.contact ? 'text-ink' : 'text-ink-2'" class="break-words">
+              {{ business.contact || '정보 확인 중이에요' }}
+            </dd>
+          </div>
+        </dl>
+      </section>
+
+      <section v-if="business.description" class="card mt-3 p-4" aria-labelledby="intro-title">
+        <h2 id="intro-title" class="text-[1.125rem] font-bold text-ink">
+          소개
+        </h2>
+        <p class="mt-2 text-[1rem] leading-relaxed text-ink">
+          {{ business.description }}
+        </p>
+      </section>
+
+      <section v-if="located" class="card mt-3 overflow-hidden" aria-labelledby="loc-title">
+        <h2 id="loc-title" class="px-4 pt-4 text-[1.125rem] font-bold text-ink">
+          위치 안내
+        </h2>
+        <iframe
+          :src="embedUrl"
+          :title="`${business.name} 위치 지도`"
+          class="mt-3 h-64 w-full border-0"
+          loading="lazy"
+          referrerpolicy="no-referrer"
+        />
+        <p class="px-4 py-3 text-[0.8125rem] leading-snug text-ink-2">
+          지도 위치는 OpenStreetMap 기준이라 실제 위치와 조금 다를 수 있어요. 방문 전에 업체에 확인하세요.
+        </p>
+      </section>
+
+      <!-- 정보 확인일과 수정 제안 -->
+      <p class="mt-4 text-[0.8125rem] leading-relaxed text-ink-2">
+        <template v-if="checkedOn">정보 확인일 {{ checkedOn }}. </template>
+        정보가 다르거나 바뀌었나요?
+        <NuxtLink to="/advertise#inquiry" class="inline-flex min-h-11 items-center font-bold text-brand-600 underline underline-offset-2">수정 제안하기</NuxtLink>
+      </p>
+    </div>
+
+    <!-- 하단 고정 행동 바 -->
+    <div
+      v-if="actionCount"
+      class="fixed bottom-0 left-1/2 z-40 w-full max-w-[560px] -translate-x-1/2 border-t border-line bg-white px-4 pt-3"
+      style="padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px))"
+    >
+      <div class="grid gap-2" :style="{ gridTemplateColumns: `repeat(${actionCount}, minmax(0, 1fr))` }">
+        <a v-if="directions" :href="directions" target="_blank" rel="noopener" class="btn btn-outline">
+          <UIcon name="i-lucide-navigation" class="size-5" />
+          길찾기
+        </a>
+        <template v-if="contact">
+          <a v-if="contact.kind === 'tel'" :href="contact.href" class="btn btn-outline">
+            <UIcon name="i-lucide-phone" class="size-5" />
+            {{ contact.label }}
+          </a>
+          <a v-else-if="contact.kind === 'link'" :href="contact.href" target="_blank" rel="noopener" class="btn btn-outline">
+            <UIcon name="i-lucide-phone" class="size-5" />
+            {{ contact.label }}
+          </a>
+          <button v-else type="button" class="btn btn-outline" @click="copy(contact.text)">
+            <UIcon name="i-lucide-copy" class="size-5" />
+            {{ contact.label }}
+          </button>
+        </template>
+        <NuxtLink v-if="business.partnerId" :to="`/reserve?partner=${business.partnerId}`" class="btn btn-primary">
+          <UIcon name="i-lucide-calendar-check" class="size-5" />
+          예약 요청
+        </NuxtLink>
+      </div>
+    </div>
+  </div>
 </template>

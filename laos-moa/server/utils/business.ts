@@ -12,6 +12,7 @@ export interface PublicBusiness {
   contact: string
   mapUrl: string
   sponsored: boolean
+  updatedAt: string
   partnerId: string | null
   example: false
 }
@@ -30,6 +31,7 @@ export function toPublicBusiness(row: Record<string, unknown>): PublicBusiness {
     contact: String(row.contact ?? ''),
     mapUrl: String(row.map_url ?? ''),
     sponsored: row.sponsored === 1,
+    updatedAt: String(row.updated_at ?? ''),
     partnerId: row.partner_id ? String(row.partner_id) : null,
     example: false
   }

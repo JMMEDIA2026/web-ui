@@ -2,11 +2,21 @@
 import { guides } from '~/data/guides'
 
 const route = useRoute()
+const router = useRouter()
 
 const guide = guides.find(g => g.slug === route.params.slug)
 
 if (!guide) {
   throw createError({ statusCode: 404, statusMessage: '가이드를 찾을 수 없습니다', fatal: true })
+}
+
+// 관련 업체 찾기: 가이드와 이어지는 업종이 있을 때만 보여 줍니다.
+const relatedCategory: Record<string, string> = { health: 'hospital', banking: 'exchange' }
+const related = relatedCategory[guide.slug]
+
+function back() {
+  if (router.options.history.state?.back) router.back()
+  else navigateTo('/guides')
 }
 
 useSeoMeta({
@@ -16,48 +26,54 @@ useSeoMeta({
 </script>
 
 <template>
-  <UContainer v-if="guide">
-    <UPageHeader :title="guide.title" :description="guide.summary">
-      <template #headline>
-        <UBreadcrumb :items="[{ label: '생활 가이드', to: '/guides' }]" />
-      </template>
-    </UPageHeader>
+  <div class="px-4 pt-3 sm:px-5">
+    <div class="flex items-center gap-1">
+      <button type="button" class="-ml-2 grid size-11 place-items-center rounded-full text-ink" aria-label="뒤로가기" @click="back">
+        <UIcon name="i-lucide-chevron-left" class="size-7" />
+      </button>
+      <p class="text-[0.9375rem] font-semibold text-ink-2">
+        생활 가이드
+      </p>
+    </div>
 
-    <UPageBody>
-      <div class="grid gap-8 lg:grid-cols-3">
-        <div class="lg:col-span-2 flex flex-col gap-6">
-          <UAlert
-            color="warning"
-            variant="subtle"
-            icon="i-lucide-construction"
-            title="가이드를 준비하고 있습니다"
-            description="제도 정보는 관할 기관의 최신 안내를 확인한 뒤 게시합니다. 아래는 담을 항목입니다."
-          />
+    <div class="mt-2 flex items-center gap-3">
+      <span class="grid size-12 shrink-0 place-items-center rounded-2xl bg-brand-50 text-brand-600">
+        <UIcon :name="guide.icon" class="size-7" />
+      </span>
+      <h1 data-page-title tabindex="-1" class="text-[1.625rem] font-bold leading-tight text-ink">
+        {{ guide.title }}
+      </h1>
+    </div>
+    <p class="mt-2 text-[1rem] leading-relaxed text-ink-2">
+      {{ guide.summary }}
+    </p>
 
-          <UCard class="box3d">
-            <template #header>
-              <div class="flex items-center gap-3">
-                <img :src="guide.emoji" alt="" class="size-10">
-                <h2 class="font-semibold text-lg">
-                  이 가이드에서 다룰 내용
-                </h2>
-              </div>
-            </template>
+    <!-- 내용을 아직 확인해 싣지 못한 가이드는 솔직하게 알립니다. -->
+    <section class="card mt-5 p-4" aria-labelledby="status-title">
+      <h2 id="status-title" class="flex items-center gap-2 text-[1.0625rem] font-bold text-ink">
+        <UIcon name="i-lucide-info" class="size-5 text-brand-600" />
+        내용을 확인하고 있어요
+      </h2>
+      <p class="mt-1 text-[0.9375rem] leading-relaxed text-ink-2">
+        제도와 요금 정보는 관할 기관의 최신 안내를 확인한 뒤 올립니다. 아래 항목을 차례로 정리하고 있어요.
+      </p>
+    </section>
 
-            <ul class="flex flex-col gap-2">
-              <li v-for="t in guide.topics" :key="t" class="flex items-center gap-2">
-                <UIcon name="i-lucide-check" class="text-primary" />
-                {{ t }}
-              </li>
-            </ul>
-          </UCard>
-        </div>
+    <section class="card mt-3 p-4" aria-labelledby="topics-title">
+      <h2 id="topics-title" class="text-[1.125rem] font-bold text-ink">
+        이 가이드에서 다룰 내용
+      </h2>
+      <ul class="mt-3 space-y-3">
+        <li v-for="t in guide.topics" :key="t" class="flex items-center gap-3 text-[1rem] text-ink">
+          <UIcon name="i-lucide-circle-check" class="size-5 shrink-0 text-brand-500" />
+          {{ t }}
+        </li>
+      </ul>
+    </section>
 
-        <div class="flex flex-col gap-4">
-          <AdSlot title="가이드 광고 자리" size="300×250" />
-          <UButton to="/guides" label="목록으로" color="neutral" variant="outline" icon="i-lucide-arrow-left" />
-        </div>
-      </div>
-    </UPageBody>
-  </UContainer>
+    <NuxtLink v-if="related" :to="{ path: '/businesses', query: { category: related } }" class="btn btn-primary mt-4 w-full">
+      <UIcon name="i-lucide-map-pin" class="size-5" />
+      관련 업체 찾기
+    </NuxtLink>
+  </div>
 </template>

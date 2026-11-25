@@ -1,71 +1,98 @@
 <script setup lang="ts">
 useSeoMeta({
-  title: '환전·환율 · 라오스모아',
-  description: '오늘의 원·킵·달러 환율과 라오스 한인 환전업체 안내.'
+  title: '환율 · 라오스모아',
+  description: '원·킵·달러 기준 환율과 환율 계산기, 환전업체 안내.'
 })
 
-const { all: allBusinesses } = await useBusinessList()
-const exchangers = computed(() => allBusinesses.value.filter(b => b.category === 'exchange'))
+const route = useRoute()
+// 홈 계산기에서 입력한 금액을 그대로 이어받습니다.
+const amount = Number(route.query.amount) > 0 ? Math.round(Number(route.query.amount)) : 10000
 
-const tips = [
-  '방문 전에 환전소에 오늘의 환율을 먼저 물어보세요.',
-  '여러 곳의 환율과 수수료를 비교해 보세요.',
-  '받은 금액은 그 자리에서 직접 세어 확인하세요.',
-  '큰 금액은 영수증이나 환전 내역을 남겨 두세요.'
-]
+const { real } = await useBusinessList()
+const exchangers = computed(() => real.value.filter(b => b.category === 'exchange'))
+
+interface Rates { updatedAt: string, usdKrw: number, usdLak: number, krwLak: number }
+const { data: rates } = await useFetch<Rates>('/api/rates', { key: 'rates' })
+const fmt = (n: number) => n.toLocaleString('ko-KR', { maximumFractionDigits: 0 })
 </script>
 
 <template>
-  <div>
-    <section class="border-b border-default">
-      <UContainer class="py-12 sm:py-14">
-        <h1 class="section-title text-3xl font-extrabold tracking-tight text-highlighted sm:text-4xl">
-          환전·환율
-        </h1>
-        <p class="mt-2 text-muted">
-          오늘의 환율을 확인하고, 가까운 한인 환전업체를 찾아보세요.
-        </p>
-      </UContainer>
+  <div class="px-4 pt-3 sm:px-5">
+    <div class="flex items-center gap-1">
+      <NuxtLink to="/" class="-ml-2 grid size-11 place-items-center rounded-full text-ink" aria-label="홈으로">
+        <UIcon name="i-lucide-chevron-left" class="size-7" />
+      </NuxtLink>
+      <h1 data-page-title tabindex="-1" class="text-[1.5rem] font-bold text-ink">
+        환율
+      </h1>
+    </div>
+
+    <div class="mt-3">
+      <RateCalculator :initial-amount="amount" />
+    </div>
+
+    <!-- 기준 환율은 불러온 경우에만 표시합니다. -->
+    <section v-if="rates" class="card mt-4 p-4" aria-labelledby="ref-title">
+      <h2 id="ref-title" class="text-[1.125rem] font-bold text-ink">
+        기준 환율
+      </h2>
+      <dl class="rows mt-2">
+        <div class="flex items-baseline justify-between gap-3 py-3">
+          <dt class="text-[0.9375rem] text-ink-2">
+            1,000원
+          </dt>
+          <dd class="text-[1.25rem] font-bold tabular-nums text-ink">
+            ₭ {{ fmt(1000 * rates.krwLak) }}
+          </dd>
+        </div>
+        <div class="flex items-baseline justify-between gap-3 py-3">
+          <dt class="text-[0.9375rem] text-ink-2">
+            1달러
+          </dt>
+          <dd class="text-[1.25rem] font-bold tabular-nums text-ink">
+            ₭ {{ fmt(rates.usdLak) }}
+          </dd>
+        </div>
+        <div class="flex items-baseline justify-between gap-3 py-3">
+          <dt class="text-[0.9375rem] text-ink-2">
+            1달러
+          </dt>
+          <dd class="text-[1.25rem] font-bold tabular-nums text-ink">
+            ₩ {{ fmt(rates.usdKrw) }}
+          </dd>
+        </div>
+      </dl>
     </section>
 
-    <UContainer class="py-10">
-      <div class="grid gap-6 lg:grid-cols-12">
-        <RateWidget class="lg:col-span-5" />
-
-        <div class="flex flex-col gap-6 lg:col-span-7">
-          <div>
-            <h2 class="text-xl font-extrabold text-highlighted">
-              한인 환전업체
-            </h2>
-            <div v-if="exchangers.length" class="mt-4 grid gap-5 sm:grid-cols-2">
-              <BusinessCard v-for="b in exchangers" :key="b.slug" :business="b" />
-            </div>
-            <UEmpty
-              v-else
-              class="mt-4"
-              icon="i-lucide-store"
-              title="환전업체를 준비하고 있습니다"
-              description="곧 환전소 위치와 영업시간을 알려 드리겠습니다."
-            />
-          </div>
-
-          <div class="box3d border border-default bg-white p-6">
-            <h2 class="text-lg font-extrabold text-highlighted">
-              환전할 때 알아 두세요
-            </h2>
-            <ul class="mt-3 flex flex-col gap-2 text-sm text-muted">
-              <li v-for="t in tips" :key="t" class="flex items-start gap-2">
-                <UIcon name="i-lucide-check" class="mt-0.5 shrink-0 text-primary" />
-                {{ t }}
-              </li>
-            </ul>
-          </div>
-        </div>
+    <section class="mt-6" aria-labelledby="ex-title">
+      <h2 id="ex-title" class="text-[1.25rem] font-bold text-ink">
+        환전업체
+      </h2>
+      <ul v-if="exchangers.length" class="rows card mt-2 overflow-hidden">
+        <li v-for="b in exchangers" :key="b.slug">
+          <NuxtLink :to="`/businesses/${b.slug}`" class="flex min-h-[68px] items-center gap-3 px-4 py-3 active:bg-brand-100">
+            <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600">
+              <UIcon name="i-lucide-banknote" class="size-6" />
+            </span>
+            <span class="min-w-0 flex-1">
+              <span class="block font-bold text-ink">{{ b.name }}</span>
+              <span class="block truncate text-[0.875rem] text-ink-2">{{ b.address || b.area }}</span>
+            </span>
+            <UIcon name="i-lucide-chevron-right" class="size-5 shrink-0 text-ink-2" />
+          </NuxtLink>
+        </li>
+      </ul>
+      <div v-else class="card mt-2 p-5 text-center">
+        <p class="font-bold text-ink">
+          아직 등록된 환전업체가 없어요
+        </p>
+        <p class="mt-1 text-[0.875rem] text-ink-2">
+          환전업체가 등록되면 여기에서 위치와 연락처를 확인할 수 있어요.
+        </p>
+        <NuxtLink :to="{ path: '/businesses', query: { category: 'exchange' } }" class="btn btn-quiet mt-3">
+          지도에서 환전 찾기
+        </NuxtLink>
       </div>
-
-      <div class="mt-10">
-        <AdSlot title="환전 페이지 배너 광고 자리" size="PC 728×90 · 모바일 320×100" />
-      </div>
-    </UContainer>
+    </section>
   </div>
 </template>

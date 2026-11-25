@@ -1,83 +1,279 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
+/* 라오스모아 모바일 디자인 토큰 (laosmoa_mobile_design.md 6장 기준) */
 @theme static {
-  /* Pretendard는 head의 CDN 스타일시트로 불러옵니다. 실패하면 기기 한글 폰트로 대체됩니다. */
-  --font-sans: 'Pretendard Variable', Pretendard, system-ui, -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', 'Noto Sans CJK KR', sans-serif;
+  --font-sans: 'Pretendard Variable', Pretendard, 'Noto Sans KR', system-ui, -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 
-  /* 파스텔 패널 색: 3D 이모티콘 뒤에 깔리는 배경입니다. */
-  --color-tone-pink: #FFE3EC;
-  --color-tone-lilac: #ECE6FF;
-  --color-tone-peach: #FFE8D6;
-  --color-tone-mint: #DAF5E8;
-  --color-tone-sky: #DCEEFF;
-  --color-tone-sun: #FFF0BF;
-  --color-tone-cream: #FFF9EE;
+  /* 브랜드 보라색: 500 = #635BFF(주요 버튼·선택·핀), 600 = #5146D8(누름 상태·작은 강조 글자), 100 = #EEECFF(선택 배경) */
+  --color-brand-50: #F7F6FF;
+  --color-brand-100: #EEECFF;
+  --color-brand-200: #DEDAFF;
+  --color-brand-300: #C5BFFF;
+  --color-brand-400: #A39AFF;
+  --color-brand-500: #635BFF;
+  --color-brand-600: #5146D8;
+  --color-brand-700: #4339B8;
+  --color-brand-800: #372F96;
+  --color-brand-900: #2C2677;
+  --color-brand-950: #1A1650;
+
+  --color-app-bg: #F5F6F8;
+  --color-line: #E5E7ED;
+  --color-ink: #1F2430;
+  --color-ink-2: #606775;
 }
 
-/* Nuxt UI 전체 모서리 반경. 기본값은 0.25rem이며 값이 작을수록 각집니다. */
+/* Nuxt UI 기본 모서리: 입력·버튼 12px */
 :root {
-  --ui-radius: 0.0625rem;
+  --ui-radius: 0.5rem;
+  --nav-h: 64px;
+  --header-h: 56px;
+  --shell-max: 560px;
+}
+
+html {
+  background: #F5F6F8;
 }
 
 body {
+  background: #F5F6F8;
+  color: #1F2430;
+  font-size: 1rem;
+  line-height: 1.5;
   word-break: keep-all;
-  letter-spacing: -0.01em;
+  -webkit-text-size-adjust: 100%;
 }
 
-/* 카드가 떠오르는 효과 */
-/* 입체감 있는 박스: 윗면 하이라이트 + 아랫면 안쪽 그림자 + 겹친 바깥 그림자 */
+/* ---------- 공통 컴포넌트 ---------- */
+
+/* 버튼: 높이 48px, 모서리 12px, 누름 상태 #5146D8 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:disabled,
+.btn[aria-disabled='true'] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.btn-primary {
+  background: #635BFF;
+  color: #fff;
+}
+.btn-primary:active:not(:disabled) {
+  background: #5146D8;
+}
+.btn-outline {
+  background: #fff;
+  color: #5146D8;
+  border: 1px solid #C5BFFF;
+}
+.btn-outline:active:not(:disabled) {
+  background: #EEECFF;
+}
+.btn-quiet {
+  background: #EEECFF;
+  color: #5146D8;
+}
+.btn-quiet:active:not(:disabled) {
+  background: #DEDAFF;
+}
+/* 보조 버튼: 최소 터치 영역 44px */
+.btn-sm {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 14px;
+  font-size: 0.875rem;
+}
+
+/* 검색창·입력: 높이 52px, 모서리 12px */
+.field {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 16px;
+  border: 1px solid #E5E7ED;
+  border-radius: 12px;
+  background: #fff;
+  color: #1F2430;
+  font-size: 1rem;
+}
+.field::placeholder {
+  color: #606775;
+}
+textarea.field {
+  padding: 12px 16px;
+  min-height: 112px;
+}
+.field:focus-visible,
+.btn:focus-visible,
+.focus-ring:focus-visible,
+a:focus-visible,
+button:focus-visible,
+select:focus-visible,
+summary:focus-visible {
+  outline: 3px solid #635BFF;
+  outline-offset: 2px;
+}
+
+/* 주요 모듈: 모서리 16px, 얇은 선 */
+.card {
+  background: #fff;
+  border: 1px solid #E5E7ED;
+  border-radius: 16px;
+}
+
+/* 목록 행 구분선 */
+.rows > * + * {
+  border-top: 1px solid #E5E7ED;
+}
+
+/* 필터 칩 */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid #E5E7ED;
+  background: #fff;
+  color: #1F2430;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.chip[aria-pressed='true'] {
+  background: #635BFF;
+  border-color: #635BFF;
+  color: #fff;
+}
+
+.sr-only-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* 제목으로 포커스를 옮길 때 윤곽선은 보이지 않게 합니다. */
+[data-page-title]:focus {
+  outline: none;
+}
+
+/* 가로 스크롤 영역의 스크롤바 숨김 */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ---------- 지도(Leaflet) ---------- */
+.leaflet-container {
+  font-family: inherit;
+  background: #E9EAF0;
+}
+.lm-pin {
+  background: transparent;
+  border: 0;
+}
+.lm-pin svg {
+  display: block;
+  margin: 0 auto;
+  filter: drop-shadow(0 1px 2px rgb(31 36 48 / 0.35));
+  transition: transform 0.15s ease;
+  transform-origin: 50% 100%;
+}
+.lm-pin.is-selected svg {
+  transform: scale(1.3);
+}
+.lm-pin .lm-label {
+  position: absolute;
+  left: 50%;
+  bottom: 56px;
+  transform: translateX(-50%);
+  max-width: 180px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 2px solid #635BFF;
+  background: #fff;
+  color: #1F2430;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lm-cluster {
+  background: transparent;
+  border: 0;
+}
+.lm-cluster div {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #635BFF;
+  border: 3px solid #fff;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgb(31 36 48 / 0.35);
+}
+.lm-me {
+  background: transparent;
+  border: 0;
+}
+.lm-me div {
+  width: 18px;
+  height: 18px;
+  margin: 13px;
+  border-radius: 50%;
+  background: #1F2430;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 2px #1F2430;
+}
+/* 확대·축소 버튼도 44px */
+.leaflet-touch .leaflet-bar a {
+  width: 44px;
+  height: 44px;
+  line-height: 44px;
+  font-size: 1.375rem;
+}
+.leaflet-control-attribution {
+  font-size: 0.6875rem;
+}
+
+/* ---------- 관리자 화면에서 쓰는 상자(그림자 최소화) ---------- */
 .box3d {
-  box-shadow:
-    inset 0 2px 0 rgb(255 255 255 / 0.9),
-    inset 0 -4px 0 rgb(15 23 42 / 0.08),
-    0 1px 2px rgb(15 23 42 / 0.12),
-    0 12px 24px -10px rgb(15 23 42 / 0.3);
-}
-
-/* 눌렀다 떼는 느낌: 올라오고, 누르면 가라앉습니다 */
-.lift {
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
-}
-.lift:hover {
-  transform: translateY(-5px);
-  box-shadow:
-    inset 0 2px 0 rgb(255 255 255 / 0.9),
-    inset 0 -4px 0 rgb(15 23 42 / 0.08),
-    0 2px 3px rgb(15 23 42 / 0.12),
-    0 22px 34px -12px rgb(30 64 175 / 0.4);
-}
-.lift:active {
-  transform: translateY(0);
-  box-shadow:
-    inset 0 2px 0 rgb(255 255 255 / 0.9),
-    inset 0 -2px 0 rgb(15 23 42 / 0.08),
-    0 1px 2px rgb(15 23 42 / 0.12),
-    0 6px 12px -8px rgb(15 23 42 / 0.3);
+  box-shadow: 0 1px 2px rgb(31 36 48 / 0.06);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .lift { transition: none; }
-  .lift:hover, .lift:active { transform: none; }
-}
-
-/* 라오스 직물 무늬를 단순화한 띠: 빨강 마름모 + 금색 점 + 파랑 삼각 */
-.lao-band {
-  background-color: #FFF9EE;
-  background-repeat: repeat-x;
-  background-size: 24px 12px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12' viewBox='0 0 24 12'%3E%3Cpath d='M12 0.5 21 6 12 11.5 3 6Z' fill='%23D6192F'/%3E%3Cpath d='M12 3.4 15.2 6 12 8.6 8.8 6Z' fill='%23F5A800'/%3E%3Cpath d='M0 0 3 0 0 6Z M0 12 3 12 0 6Z M24 0 21 0 24 6Z M24 12 21 12 24 6Z' fill='%230B3A8C'/%3E%3C/svg%3E");
-}
-
-/* 라오스 국기(빨강-파랑-빨강)를 닮은 제목 밑줄 */
-.section-title::after {
-  content: '';
-  display: block;
-  width: 56px;
-  height: 8px;
-  margin-top: 12px;
-  background: linear-gradient(#D6192F 0 25%, #0B3A8C 25% 75%, #D6192F 75%);
-}
-.section-title.text-center::after {
-  margin-inline: auto;
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

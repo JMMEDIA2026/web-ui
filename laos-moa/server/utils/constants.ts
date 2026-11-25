@@ -14,6 +14,6 @@ export const BUSINESS_CATEGORIES = ['food', 'mart', 'exchange', 'massage', 'hosp
 // 공개 API가 돌려주는 업체 필드 (협력업체 로그인 정보는 포함하지 않습니다)
 export const BUSINESS_SELECT = `
   b.id, b.name, b.category, b.area, b.address, b.lat, b.lng, b.description, b.hours, b.contact,
-  b.map_url, b.sponsored,
+  b.map_url, b.sponsored, b.updated_at,
   CASE WHEN p.id IS NOT NULL THEN p.id ELSE NULL END AS partner_id
 `

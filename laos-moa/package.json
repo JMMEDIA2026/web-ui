@@ -12,6 +12,8 @@
   "dependencies": {
     "@iconify-json/lucide": "^1.2.0",
     "@nuxt/ui": "^4.13.1",
+    "leaflet": "^1.9.4",
+    "leaflet.markercluster": "^1.5.3",
     "nuxt": "^4.1.0",
     "tailwindcss": "^4.1.0",
     "typescript": "^5.9.0",
