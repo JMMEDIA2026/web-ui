@@ -3,7 +3,7 @@ withDefaults(defineProps<{
   title?: string
   size?: string
 }>(), {
-  title: '배너 광고 자리',
+  title: '여기에 업체 광고를 게재하세요',
   size: 'PC 970×250 · 모바일 320×100'
 })
 </script>
@@ -11,17 +11,22 @@ withDefaults(defineProps<{
 <template>
   <aside
     aria-label="광고 영역"
-    class="flex flex-col sm:flex-row sm:items-center gap-3 rounded-lg border-2 border-dashed border-default bg-default p-4"
+    class="flex flex-col gap-4 rounded-lg border-2 border-dashed border-accented bg-white/70 p-5 sm:flex-row sm:items-center"
   >
-    <UBadge label="광고" color="neutral" variant="subtle" class="self-start" />
-    <div class="flex-1 min-w-0">
-      <p class="font-semibold text-highlighted">
-        {{ title }}
-      </p>
-      <p class="text-sm text-muted">
+    <div class="flex size-12 shrink-0 items-center justify-center bg-tone-sun text-amber-700">
+      <UIcon name="i-lucide-megaphone" class="size-6" />
+    </div>
+    <div class="min-w-0 flex-1">
+      <div class="flex items-center gap-2">
+        <UBadge label="광고" color="neutral" variant="subtle" />
+        <p class="font-bold text-highlighted">
+          {{ title }}
+        </p>
+      </div>
+      <p class="mt-1 text-sm text-muted">
         {{ size }}
       </p>
     </div>
-    <UButton to="/advertise#inquiry" label="광고 문의" color="neutral" variant="outline" size="sm" />
+    <UButton to="/advertise#inquiry" label="광고 문의하기" color="neutral" variant="outline" trailing-icon="i-lucide-arrow-right" />
   </aside>
 </template>

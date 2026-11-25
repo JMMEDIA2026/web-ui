@@ -18,6 +18,13 @@ export default defineNuxtConfig({
     head: {
       htmlAttrs: { lang: 'ko' },
       title: '라오스모아',
+      link: [
+        { rel: 'preconnect', href: 'https://cdn.jsdelivr.net', crossorigin: '' },
+        {
+          rel: 'stylesheet',
+          href: 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css'
+        }
+      ],
       meta: [
         { name: 'description', content: '라오스 한인을 위한 생활 정보와 한인 업체 디렉토리, 비엔티안 한인 커뮤니티.' },
         { property: 'og:title', content: '라오스모아' },

@@ -2,15 +2,40 @@
 @import "@nuxt/ui";
 
 @theme static {
-  /* 웹폰트 대신 기기에 설치된 한글 폰트를 씁니다. (배포 용량 절감) */
-  --font-sans: system-ui, -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', 'Noto Sans CJK KR', sans-serif;
+  /* Pretendard는 head의 CDN 스타일시트로 불러옵니다. 실패하면 기기 한글 폰트로 대체됩니다. */
+  --font-sans: 'Pretendard Variable', Pretendard, system-ui, -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', 'Noto Sans CJK KR', sans-serif;
+
+  /* 파스텔 패널 색: 3D 이모티콘 뒤에 깔리는 배경입니다. */
+  --color-tone-pink: #FFE3EC;
+  --color-tone-lilac: #ECE6FF;
+  --color-tone-peach: #FFE8D6;
+  --color-tone-mint: #DAF5E8;
+  --color-tone-sky: #DCEEFF;
+  --color-tone-sun: #FFF0BF;
+  --color-tone-cream: #FFF9EE;
 }
 
 /* Nuxt UI 전체 모서리 반경. 기본값은 0.25rem이며 값이 작을수록 각집니다. */
 :root {
   --ui-radius: 0.0625rem;
+  --ui-bg: #FFFCF6;
 }
 
 body {
   word-break: keep-all;
+  letter-spacing: -0.01em;
+}
+
+/* 카드가 떠오르는 효과 */
+.lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px -12px rgb(30 64 175 / 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lift { transition: none; }
+  .lift:hover { transform: none; }
 }
