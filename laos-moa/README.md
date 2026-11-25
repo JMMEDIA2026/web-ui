@@ -23,3 +23,15 @@ npm run build    # 빌드
 
 - 사진: Jakub Hałun(메콩 석양, 탓루앙), Gerd Eichmann(빠뚜싸이), Wikimedia Commons, CC BY-SA 4.0
 - 3D 이모티콘: Microsoft Fluent Emoji, MIT 라이선스
+
+## 배포 (Cloudflare Workers)
+
+```bash
+npm run build
+# .output/server/wrangler.json 에서 "assets" 항목을 뺀 배포용 설정을 만들어 배포합니다.
+# (정적 파일은 serveStatic: 'inline' 으로 Worker 안에 포함됩니다.)
+npx wrangler deploy --config .output/server/wrangler.deploy.json
+```
+
+- 운영 주소: https://laos.joybox.day
+- 한글 웹폰트는 용량 때문에 끄고 시스템 폰트를 씁니다. (`ui.fonts: false`)

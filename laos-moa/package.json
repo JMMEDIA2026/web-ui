@@ -16,5 +16,8 @@
     "tailwindcss": "^4.1.0",
     "typescript": "^5.9.0",
     "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.168.0"
   }
 }

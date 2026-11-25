@@ -2,7 +2,8 @@
 @import "@nuxt/ui";
 
 @theme static {
-  --font-sans: 'Noto Sans KR', ui-sans-serif, system-ui, sans-serif;
+  /* 웹폰트 대신 기기에 설치된 한글 폰트를 씁니다. (배포 용량 절감) */
+  --font-sans: system-ui, -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', 'Noto Sans CJK KR', sans-serif;
 }
 
 /* Nuxt UI 전체 모서리 반경. 기본값은 0.25rem이며 값이 작을수록 각집니다. */
