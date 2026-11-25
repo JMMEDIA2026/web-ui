@@ -11,7 +11,7 @@ const bodySchema = z.object({
   realName: z.string().trim().min(2, '실명을 입력해 주세요').max(30, '실명이 너무 길어요')
     .regex(/^[가-힣A-Za-z][가-힣A-Za-z .'-]*$/, '실명은 글자만 입력해 주세요'),
   phone: z.string().trim().transform(v => v.replace(/[\s\-().]/g, ''))
-    .refine(v => /^\+?\d{8,15}$/.test(v), '휴대폰 번호를 확인해 주세요 (예: 010-1234-5678, +85620…)'),
+    .refine(v => /^\+?\d{8,15}$/.test(v), '휴대폰 번호 형식이 맞지 않아요. 예) 010-1234-5678 또는 +856 20 …'),
   gender: z.enum(['M', 'F', 'N'], { message: '성별을 선택해 주세요' }),
   agreeTerms: z.literal(true, { message: '이용약관에 동의해 주세요' }),
   agreePrivacy: z.literal(true, { message: '개인정보 수집·이용에 동의해 주세요' }),

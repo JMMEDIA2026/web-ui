@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
   if (!row || !valid) {
     await rateAdd(db, ip, RATE_KIND)
     // 이메일이 있는지 없는지 알려 주지 않습니다.
-    throw createError({ statusCode: 401, statusMessage: '이메일 또는 비밀번호가 맞지 않아요' })
+    throw createError({ statusCode: 401, statusMessage: '이메일 또는 비밀번호가 맞지 않아요. 다시 확인해 주세요' })
   }
 
   await rateClear(db, ip, RATE_KIND)

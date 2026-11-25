@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     .first()
 
   if (!row) {
-    throw createError({ statusCode: 404, statusMessage: '업체를 찾을 수 없습니다' })
+    throw createError({ statusCode: 404, statusMessage: '업체를 찾을 수 없어요' })
   }
   return toPublicBusiness(row)
 })

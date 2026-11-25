@@ -85,8 +85,7 @@ async function copy(text: string) {
         </button>
       </template>
       <NuxtLink :to="{ path: '/reserve', query: { business: business.slug } }" class="btn btn-primary btn-row">
-        <AppIcon name="calendar" class="size-4 shrink-0" />
-        예약
+        예약 요청
       </NuxtLink>
     </div>
   </li>

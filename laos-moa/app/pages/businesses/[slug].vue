@@ -12,7 +12,7 @@ const { real } = await useBusinessList()
 const business = real.value.find(b => b.slug === route.params.slug)
 
 if (!business) {
-  throw createError({ statusCode: 404, statusMessage: '업체를 찾을 수 없습니다', fatal: true })
+  throw createError({ statusCode: 404, statusMessage: '업체를 찾을 수 없어요', fatal: true })
 }
 
 const category = categoryMap[business.category]
@@ -128,7 +128,7 @@ const actionCount = [!!directions, !!contact, true].filter(Boolean).length
               연락처
             </dt>
             <dd :class="business.contact ? 'text-ink' : 'text-ink-2'" class="break-words">
-              {{ business.contact || '정보 확인 중이에요' }}
+              {{ business.contact || '등록된 연락처가 없어요' }}
             </dd>
           </div>
         </dl>
@@ -160,7 +160,7 @@ const actionCount = [!!directions, !!contact, true].filter(Boolean).length
             구글 지도에서 열기
           </a>
           <p class="text-[0.8125rem] leading-snug text-ink-2">
-            지도 위치는 실제와 조금 다를 수 있어요. 방문 전에 업체에 확인하세요.
+            지도 위치는 실제와 조금 다를 수 있어요. 방문 전에 업체에 확인해 주세요.
           </p>
         </div>
       </section>

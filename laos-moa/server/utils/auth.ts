@@ -52,7 +52,7 @@ async function sign(secret: string, data: string): Promise<string> {
 function secretOf(event: H3Event): string {
   const secret = cfEnv(event).SESSION_SECRET
   if (!secret) {
-    throw createError({ statusCode: 503, statusMessage: '서버 보안 설정이 완료되지 않았습니다' })
+    throw createError({ statusCode: 503, statusMessage: '지금은 이용할 수 없어요. 잠시 후 다시 시도해 주세요' })
   }
   return secret
 }
@@ -137,7 +137,7 @@ export function assertSameOrigin(event: H3Event): void {
     host = ''
   }
   if (host !== getRequestHost(event)) {
-    throw createError({ statusCode: 403, statusMessage: '허용되지 않은 요청입니다' })
+    throw createError({ statusCode: 403, statusMessage: '요청을 처리할 수 없어요. 페이지를 새로고침한 뒤 다시 시도해 주세요' })
   }
 }
 
@@ -156,7 +156,7 @@ export async function requireAdmin(event: H3Event): Promise<void> {
     const recent = row?.last_login_at ? Date.now() - Date.parse(row.last_login_at) < 12 * 3600 * 1000 : false
     if (row?.role === 'admin' && recent) return
   }
-  throw createError({ statusCode: 401, statusMessage: '로그인이 필요합니다' })
+  throw createError({ statusCode: 401, statusMessage: '로그인이 필요해요' })
 }
 
 export interface PartnerRow {
@@ -171,7 +171,7 @@ export async function requirePartner(event: H3Event): Promise<PartnerRow> {
   if (event.method !== 'GET') assertSameOrigin(event)
   const session = await readSession(event)
   if (session?.role !== 'partner' || !session.pid) {
-    throw createError({ statusCode: 401, statusMessage: '로그인이 필요합니다' })
+    throw createError({ statusCode: 401, statusMessage: '로그인이 필요해요' })
   }
   // 비활성화된 업체는 즉시 접근을 막습니다.
   const partner = await useDB(event)
@@ -179,7 +179,7 @@ export async function requirePartner(event: H3Event): Promise<PartnerRow> {
     .bind(session.pid)
     .first<PartnerRow>()
   if (!partner || !partner.active) {
-    throw createError({ statusCode: 401, statusMessage: '로그인이 필요합니다' })
+    throw createError({ statusCode: 401, statusMessage: '로그인이 필요해요' })
   }
   return partner
 }
@@ -192,7 +192,7 @@ export async function parseBody<T extends z.ZodTypeAny>(event: H3Event, schema: 
   const raw = await readBody(event).catch(() => undefined)
   const result = schema.safeParse(raw)
   if (!result.success) {
-    throw createError({ statusCode: 400, statusMessage: result.error.issues[0]?.message || '입력값이 올바르지 않습니다' })
+    throw createError({ statusCode: 400, statusMessage: result.error.issues[0]?.message || '입력한 내용을 다시 확인해 주세요' })
   }
   return result.data
 }

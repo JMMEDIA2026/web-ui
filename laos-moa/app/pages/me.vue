@@ -133,7 +133,7 @@ const items = computed(() => [
       </div>
       <form v-if="leaving" class="mt-3 space-y-2 border-t border-line pt-3" @submit.prevent="leave">
         <p class="text-[0.875rem] leading-relaxed text-ink-2">
-          탈퇴하면 회원 정보가 삭제되고 되돌릴 수 없어요. 비밀번호를 입력해 주세요.
+          탈퇴하면 회원 정보가 삭제되고 되돌릴 수 없어요. 예약·문의 기록은 1년간 보관된 뒤 삭제돼요. 비밀번호를 입력해 주세요.
         </p>
         <label for="leave-pw" class="sr-only">비밀번호</label>
         <input id="leave-pw" v-model="leavePw" type="password" autocomplete="current-password" class="field" required>

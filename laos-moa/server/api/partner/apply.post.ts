@@ -3,10 +3,10 @@ import { z } from 'zod'
 const RATE_KIND = 'partner-apply'
 
 const bodySchema = z.object({
-  company: z.string().trim().min(1, '업체명을 입력하세요').max(100),
-  contactName: z.string().trim().min(1, '담당자 이름을 입력하세요').max(50),
-  contact: z.string().trim().min(2, '연락처를 입력하세요').max(100),
-  category: z.enum(PARTNER_CATEGORIES, { message: '업종을 선택하세요' }),
+  company: z.string().trim().min(1, '업체명을 입력해 주세요').max(100),
+  contactName: z.string().trim().min(1, '담당자 이름을 입력해 주세요').max(50),
+  contact: z.string().trim().min(2, '연락처를 입력해 주세요').max(100),
+  category: z.enum(PARTNER_CATEGORIES, { message: '업종을 골라 주세요' }),
   address: z.string().trim().max(200).default(''),
   message: z.string().trim().max(1500).default(''),
   website: z.string().optional() // 스팸 방지용 숨김 필드

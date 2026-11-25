@@ -118,7 +118,7 @@ const asOf = computed(() => {
         지금은 환율을 확인할 수 없어요.
       </p>
       <p class="mt-1 text-[0.875rem] leading-snug text-ink-2">
-        숫자를 임의로 보여 드리지 않아요. 잠시 후 다시 시도해 주세요.
+        확인되지 않은 환율은 보여 드리지 않아요. 잠시 후 다시 시도해 주세요.
       </p>
       <button type="button" class="btn btn-primary btn-sm mt-3" @click="refresh()">
         <AppIcon name="refresh" class="size-4" />
@@ -192,7 +192,7 @@ const asOf = computed(() => {
       <p class="mt-3 text-[0.8125rem] leading-snug">
         {{ asOf }} 기준 · 출처 ExchangeRate-API
         <br>
-        국제 기준 환율이며 환전소의 실제 환율과 다를 수 있어요. 환전 전에 업체에 확인하세요.
+        국제 기준 환율이며 환전소의 실제 환율과 다를 수 있어요. 환전 전에 업체에 확인해 주세요.
       </p>
     </template>
   </section>

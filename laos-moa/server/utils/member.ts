@@ -24,7 +24,7 @@ export async function readMember(event: H3Event): Promise<MemberRow | null> {
 export async function requireMember(event: H3Event): Promise<MemberRow> {
   const member = await readMember(event)
   if (!member) {
-    throw createError({ statusCode: 401, statusMessage: '로그인이 필요합니다. 회원가입 또는 로그인 후 이용해 주세요' })
+    throw createError({ statusCode: 401, statusMessage: '로그인이 필요해요. 로그인하거나 회원가입한 뒤 이용해 주세요' })
   }
   return member
 }

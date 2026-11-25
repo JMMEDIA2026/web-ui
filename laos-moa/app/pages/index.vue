@@ -5,7 +5,7 @@ import { guides } from '~/data/guides'
 definePageMeta({ region: true })
 
 useSeoMeta({
-  title: '라자 · 라오스 자유 여행 생활정보와 한인 업체',
+  title: '라자 · 라오스 자유 여행 생활 정보와 한인 업체',
   description: '라오스 한인과 방문자를 위한 생활 가이드, 환율 계산기, 주변 업체 찾기.'
 })
 
@@ -62,7 +62,7 @@ const firstGuides = ['visa', 'telecom', 'health', 'banking']
         type="search"
         enterkeyhint="search"
         autocomplete="off"
-        placeholder="업체명이나 업종을 검색하세요"
+        placeholder="한식당, 마사지, 환전… 찾아보세요"
         class="field pr-14 shadow-sm"
       >
       <button type="submit" class="absolute right-1 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-lg text-brand-600" aria-label="검색">
@@ -103,7 +103,7 @@ const firstGuides = ['visa', 'telecom', 'health', 'banking']
           처음 오셨나요?
         </h2>
         <NuxtLink to="/guides" class="inline-flex min-h-11 items-center text-[0.875rem] font-bold text-brand-600">
-          가이드 전체
+          가이드 모두 보기
           <AppIcon name="next" class="size-4" />
         </NuxtLink>
       </div>

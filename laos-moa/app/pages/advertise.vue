@@ -97,7 +97,7 @@ async function submit() {
           <input id="i-company" v-model="form.company" class="field mt-1.5" required>
         </div>
         <div>
-          <label for="i-contact" class="text-[0.9375rem] font-bold text-ink">카카오톡 ID 또는 연락처 <span class="text-brand-600">*</span></label>
+          <label for="i-contact" class="text-[0.9375rem] font-bold text-ink">카카오톡 ID, WhatsApp 또는 전화번호 <span class="text-brand-600">*</span></label>
           <input id="i-contact" v-model="form.contact" class="field mt-1.5" required>
         </div>
         <div>

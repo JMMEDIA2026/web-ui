@@ -52,7 +52,7 @@ async function submit() {
       <label for="pa-name" class="mt-4 block text-sm font-bold text-highlighted">담당자 이름 <span class="text-primary">*</span></label>
       <UInput id="pa-name" v-model="form.contactName" size="lg" class="mt-2 w-full" />
 
-      <label for="pa-contact" class="mt-4 block text-sm font-bold text-highlighted">연락처 (전화·카카오톡 ID) <span class="text-primary">*</span></label>
+      <label for="pa-contact" class="mt-4 block text-sm font-bold text-highlighted">연락처 (전화·카카오톡 ID·WhatsApp) <span class="text-primary">*</span></label>
       <UInput id="pa-contact" v-model="form.contact" size="lg" class="mt-2 w-full" />
 
       <label for="pa-cat" class="mt-4 block text-sm font-bold text-highlighted">업종 <span class="text-primary">*</span></label>

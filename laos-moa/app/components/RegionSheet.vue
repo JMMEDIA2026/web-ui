@@ -95,7 +95,7 @@ function onKey(e: KeyboardEvent) {
           </li>
         </ul>
         <p class="mt-3 px-1 text-[0.8125rem] leading-snug text-ink-2">
-          위치 권한 없이 직접 지역을 고르면 됩니다. 아직 등록된 업체가 없는 지역은 결과가 비어 있을 수 있어요.
+          위치 권한 없이 지역을 직접 고르면 돼요. 아직 등록된 업체가 없는 지역은 결과가 비어 있을 수 있어요.
         </p>
       </div>
     </div>

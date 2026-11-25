@@ -7,7 +7,7 @@ const router = useRouter()
 const guide = guides.find(g => g.slug === route.params.slug)
 
 if (!guide) {
-  throw createError({ statusCode: 404, statusMessage: '가이드를 찾을 수 없습니다', fatal: true })
+  throw createError({ statusCode: 404, statusMessage: '가이드를 찾을 수 없어요', fatal: true })
 }
 
 // 관련 업체 찾기: 가이드와 이어지는 업종이 있을 때만 보여 줍니다.
@@ -55,7 +55,7 @@ useSeoMeta({
         내용을 확인하고 있어요
       </h2>
       <p class="mt-1 text-[0.9375rem] leading-relaxed text-ink-2">
-        제도와 요금 정보는 관할 기관의 최신 안내를 확인한 뒤 올립니다. 아래 항목을 차례로 정리하고 있어요.
+        제도와 요금 정보는 관할 기관의 최신 안내를 확인한 뒤 올려요. 아래 항목을 차례로 정리하고 있어요.
       </p>
     </section>
 

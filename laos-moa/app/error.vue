@@ -9,6 +9,7 @@ useHead({ title: '라자' })
 
 // 이전 주소로 들어온 사람도 길을 잃지 않도록 업체 탐색이나 홈으로 안내합니다.
 const go = (to: string) => clearError({ redirect: to })
+const retry = () => window.location.reload()
 </script>
 
 <template>
@@ -21,7 +22,10 @@ const go = (to: string) => clearError({ redirect: to })
       {{ notFound ? '주소가 바뀌었거나 없어진 업체·가이드일 수 있어요.' : '잠시 후 다시 시도해 주세요.' }}
     </p>
     <div class="mt-6 flex w-full max-w-xs flex-col gap-2">
-      <button type="button" class="btn btn-primary" @click="go('/businesses')">
+      <button v-if="!notFound" type="button" class="btn btn-primary" @click="retry">
+        다시 시도
+      </button>
+      <button type="button" class="btn" :class="notFound ? 'btn-primary' : 'btn-outline'" @click="go('/businesses')">
         업체 탐색으로
       </button>
       <button type="button" class="btn btn-outline" @click="go('/')">

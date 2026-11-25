@@ -3,9 +3,9 @@ import { z } from 'zod'
 const RATE_KIND = 'inquiry'
 
 const bodySchema = z.object({
-  company: z.string().trim().min(1, '업체명을 입력하세요').max(100),
-  contact: z.string().trim().min(2, '연락처를 입력하세요').max(100),
-  product: z.enum(['free', 'premium', 'banner', 'etc'], { message: '문의 종류를 선택하세요' }),
+  company: z.string().trim().min(1, '업체명을 입력해 주세요').max(100),
+  contact: z.string().trim().min(2, '연락처를 입력해 주세요').max(100),
+  product: z.enum(['free', 'premium', 'banner', 'etc'], { message: '문의 종류를 골라 주세요' }),
   message: z.string().trim().max(2000).optional(),
   website: z.string().optional() // 스팸 방지용 숨김 필드
 })
@@ -32,7 +32,7 @@ export default defineEventHandler(async (event) => {
 
   // 같은 곳에서 1시간에 5건까지만 받습니다.
   if (await rateCount(db, ip, RATE_KIND, 3600 * 1000) >= 5) {
-    throw createError({ statusCode: 429, statusMessage: '문의가 너무 많습니다. 잠시 후 다시 시도해 주세요' })
+    throw createError({ statusCode: 429, statusMessage: '문의가 너무 많아요. 잠시 후 다시 시도해 주세요' })
   }
 
   // 관리자 페이지의 "광고 문의" 목록에서 볼 수 있도록 저장합니다.

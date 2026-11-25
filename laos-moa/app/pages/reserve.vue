@@ -90,7 +90,7 @@ function reset() {
     </div>
 
     <p v-if="member && !doneCode" class="mt-3 text-[0.9375rem] text-ink-2">
-      <strong class="text-ink">{{ member.nickname }}</strong>님의 정보로 예약을 요청해요. 연락처는 필요하면 카카오톡 ID로 바꿀 수 있어요.
+      <strong class="text-ink">{{ member.nickname }}</strong>님의 정보로 예약을 요청해요. 연락처는 필요하면 카카오톡 ID나 WhatsApp으로 바꿀 수 있어요.
     </p>
 
     <!-- 접수 완료 -->
@@ -177,7 +177,7 @@ function reset() {
       </div>
 
       <div>
-        <label for="r-contact" class="text-[0.9375rem] font-bold text-ink">카카오톡 ID 또는 연락처 <span class="text-brand-600">*</span></label>
+        <label for="r-contact" class="text-[0.9375rem] font-bold text-ink">카카오톡 ID, WhatsApp 또는 전화번호 <span class="text-brand-600">*</span></label>
         <input id="r-contact" v-model="form.contact" autocomplete="tel" class="field mt-1.5" required>
       </div>
 

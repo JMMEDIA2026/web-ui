@@ -435,7 +435,7 @@ onBeforeUnmount(() => {
             지역 변경
           </button>
           <NuxtLink to="/advertise" class="btn btn-quiet">
-            우리 업체 등록 문의
+            사장님이세요? 업체 등록 문의
           </NuxtLink>
         </div>
       </div>
