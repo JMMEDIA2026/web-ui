@@ -1,8 +1,11 @@
 <script setup lang="ts">
-// 내 정보: 회원 정보와, 지금 실제로 제공하는 기능만 모았습니다.
+// 내 정보: 로그인한 회원만 볼 수 있습니다. 비회원은 로그인 화면으로 이동합니다.
+definePageMeta({ middleware: 'member' })
+
 useSeoMeta({
+  robots: 'noindex',
   title: '내 정보 · 라자',
-  description: '예약 요청, 협력업체 로그인, 광고·제휴 문의.'
+  description: '내 회원 정보, 예약 요청, 광고·제휴 문의.'
 })
 
 const { member, refresh } = useMember()
@@ -20,6 +23,7 @@ async function logout() {
     await refresh()
     await refreshNuxtData('member')
     toast.add({ title: '로그아웃했어요', color: 'neutral' })
+    await navigateTo('/')
   } finally {
     busy.value = false
   }
@@ -35,6 +39,7 @@ async function leave() {
     leaving.value = false
     leavePw.value = ''
     toast.add({ title: '탈퇴가 완료됐어요', color: 'neutral' })
+    await navigateTo('/')
   } catch (e) {
     leaveError.value = errorMessage(e)
   } finally {
@@ -44,7 +49,6 @@ async function leave() {
 
 const items = [
   { label: '예약 요청하기', desc: '협력업체에 예약을 요청해요', icon: 'calendar', to: '/reserve' },
-  { label: '협력업체 로그인', desc: '받은 예약을 확인하는 업체용', icon: 'biz', to: '/partner/login' },
   { label: '업체 등록·광고 문의', desc: '무료 등록과 광고 안내', icon: 'megaphone', to: '/advertise' }
 ]
 </script>
@@ -55,7 +59,7 @@ const items = [
       내 정보
     </h1>
     <p class="mt-1 text-[0.9375rem] leading-relaxed text-ink-2">
-      업체 검색·환율·가이드는 가입 없이 쓸 수 있고, 예약과 문의는 회원만 보낼 수 있어요.
+      내 정보를 확인하고 예약과 문의를 보낼 수 있어요.
     </p>
 
     <!-- 회원 상태 -->
@@ -98,22 +102,6 @@ const items = [
           탈퇴하기
         </button>
       </form>
-    </section>
-    <section v-else class="card mt-4 p-4" aria-labelledby="guest-title">
-      <h2 id="guest-title" class="text-[1.125rem] font-bold text-ink">
-        로그인이 필요해요
-      </h2>
-      <p class="mt-1 text-[0.9375rem] text-ink-2">
-        예약과 문의를 보내려면 회원가입 후 로그인해 주세요.
-      </p>
-      <div class="mt-3 grid grid-cols-2 gap-2">
-        <NuxtLink to="/login" class="btn btn-outline">
-          로그인
-        </NuxtLink>
-        <NuxtLink to="/signup" class="btn btn-primary">
-          회원가입
-        </NuxtLink>
-      </div>
     </section>
 
     <ul class="rows card mt-4 overflow-hidden">

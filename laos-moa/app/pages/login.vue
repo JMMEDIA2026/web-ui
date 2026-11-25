@@ -6,6 +6,7 @@ const { member, refresh } = useMember()
 
 const next = safeNext(route.query.next, '/me')
 const needLogin = route.query.need === '1'
+const needText = next.startsWith('/me') ? '내 정보는 로그인한 뒤에 볼 수 있어요.' : '예약·문의는 로그인한 회원만 이용할 수 있어요.'
 
 // 이미 로그인했다면 바로 이동합니다.
 if (member.value) await navigateTo(next, { replace: true })
@@ -36,7 +37,7 @@ async function submit() {
       로그인
     </h1>
     <p v-if="needLogin" class="mt-2 rounded-lg bg-brand-100 p-3 text-[0.9375rem] font-semibold text-brand-700" role="status">
-      예약·문의는 로그인한 회원만 이용할 수 있어요.
+      {{ needText }}
     </p>
 
     <form class="mt-4 space-y-4" @submit.prevent="submit">
@@ -64,5 +65,23 @@ async function submit() {
     <NuxtLink :to="{ path: '/signup', query: route.query.next ? { next: route.query.next } : {} }" class="btn btn-outline mt-2 w-full">
       회원가입
     </NuxtLink>
+
+    <!-- 협력업체는 회원과 별도로 관리합니다. -->
+    <div class="mt-8 border-t border-line pt-4">
+      <p class="text-[0.875rem] text-ink-2">
+        업체 관계자이신가요? 협력업체는 회원과 별도로 로그인해요.
+      </p>
+      <NuxtLink to="/partner/login" class="inline-flex min-h-11 items-center text-[0.9375rem] font-bold text-brand-600 underline underline-offset-2">
+        협력업체 로그인
+      </NuxtLink>
+      <nav class="flex gap-4" aria-label="약관">
+        <NuxtLink to="/terms" class="inline-flex min-h-11 items-center text-[0.8125rem] font-bold text-ink-2 underline">
+          이용약관
+        </NuxtLink>
+        <NuxtLink to="/privacy" class="inline-flex min-h-11 items-center text-[0.8125rem] font-bold text-ink-2 underline">
+          개인정보 처리 안내
+        </NuxtLink>
+      </nav>
+    </div>
   </div>
 </template>

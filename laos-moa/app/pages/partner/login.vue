@@ -39,6 +39,10 @@ async function submit() {
       <UAlert v-if="error" class="mt-4" color="error" variant="subtle" icon="i-lucide-circle-alert" :title="error" />
 
       <UButton type="submit" label="로그인" size="lg" block class="mt-5" :loading="loading" :disabled="!form.id || !form.code" />
+      <p class="mt-5 text-center text-sm text-muted">
+        아직 협력업체가 아니신가요?
+        <NuxtLink to="/partner/apply" class="font-bold text-primary underline">가입 신청</NuxtLink>
+      </p>
     </form>
   </UContainer>
 </template>

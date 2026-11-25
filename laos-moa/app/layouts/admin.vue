@@ -2,7 +2,7 @@
 const route = useRoute()
 
 const isPartner = computed(() => route.path.startsWith('/partner'))
-const isLogin = computed(() => route.path.endsWith('/login'))
+const isLogin = computed(() => route.path.endsWith('/login') || route.path === '/partner/apply')
 
 // 검색 엔진에 노출되지 않도록 합니다.
 useHead({ meta: [{ name: 'robots', content: 'noindex, nofollow' }] })
@@ -12,6 +12,7 @@ const adminLinks = [
   { label: '예약', to: '/admin/reservations', icon: 'i-lucide-calendar-check' },
   { label: '업체', to: '/admin/businesses', icon: 'i-lucide-store' },
   { label: '협력업체', to: '/admin/partners', icon: 'i-lucide-handshake' },
+  { label: '회원', to: '/admin/members', icon: 'i-lucide-users' },
   { label: '광고 문의', to: '/admin/inquiries', icon: 'i-lucide-inbox' },
   { label: '설정', to: '/admin/settings', icon: 'i-lucide-settings' }
 ]
