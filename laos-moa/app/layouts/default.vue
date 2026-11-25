@@ -6,6 +6,7 @@ const route = useRoute()
 const items = computed<NavigationMenuItem[]>(() => [
   { label: '한인 업체', to: '/businesses', active: route.path.startsWith('/businesses') },
   { label: '환전·환율', to: '/exchange', active: route.path.startsWith('/exchange') },
+  { label: '예약', to: '/reserve', active: route.path.startsWith('/reserve') },
   { label: '생활 가이드', to: '/guides', active: route.path.startsWith('/guides') },
   { label: '광고 안내', to: '/advertise', active: route.path.startsWith('/advertise') }
 ])
@@ -60,8 +61,10 @@ const items = computed<NavigationMenuItem[]>(() => [
         <ul class="mt-3 flex flex-col gap-2 text-sm text-muted">
           <li><NuxtLink to="/businesses" class="hover:text-primary">한인 업체</NuxtLink></li>
           <li><NuxtLink to="/exchange" class="hover:text-primary">환전·환율</NuxtLink></li>
+          <li><NuxtLink to="/reserve" class="hover:text-primary">예약하기</NuxtLink></li>
           <li><NuxtLink to="/guides" class="hover:text-primary">생활 가이드</NuxtLink></li>
           <li><NuxtLink to="/advertise" class="hover:text-primary">업체 등록·광고 안내</NuxtLink></li>
+          <li><NuxtLink to="/partner/login" class="hover:text-primary">협력업체 로그인</NuxtLink></li>
         </ul>
       </div>
 

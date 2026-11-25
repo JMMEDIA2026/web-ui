@@ -64,7 +64,7 @@ const filtered = computed(() => {
             size="sm"
             :color="selected === c.key ? 'primary' : 'neutral'"
             :variant="selected === c.key ? 'solid' : 'outline'"
-            class="bg-white"
+            :class="selected === c.key ? '' : 'bg-white'"
             @click="pick(c.key)"
           />
         </div>

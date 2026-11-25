@@ -35,3 +35,13 @@ npx wrangler deploy --config .output/server/wrangler.deploy.json
 
 - 운영 주소: https://laos.joybox.day
 - 한글 웹폰트는 용량 때문에 끄고 시스템 폰트를 씁니다. (`ui.fonts: false`)
+
+## 관리자·협력업체·예약 (Cloudflare D1)
+
+- 관리자: `/admin/login` (비밀번호 로그인) — 대시보드, 예약, 협력업체, 광고 문의, 설정
+- 협력업체: `/partner/login` (로그인 ID + 접속 코드) — 자기 예약만 확인·확정·거절·완료 처리
+- 고객 예약: `/reserve` — 예약 요청을 보내면 해당 협력업체와 관리자 화면에 표시
+- 저장소: Cloudflare D1 `laos-moa` (테이블은 `db/schema.sql`)
+- 보안: 비밀번호·접속 코드는 PBKDF2로 해시 저장, 세션은 서명된 HttpOnly 쿠키, 로그인 횟수 제한, 다른 사이트 요청(CSRF) 차단
+- Worker 비밀 값 `SESSION_SECRET`(세션 서명 키)이 필요합니다. 코드나 저장소에 넣지 마세요.
+- 관리자 비밀번호는 DB의 `settings.admin_password`에 해시로 들어 있습니다. 처음 받은 비밀번호는 `/admin/settings`에서 바꾸세요.

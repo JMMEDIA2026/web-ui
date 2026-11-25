@@ -34,6 +34,15 @@ export default defineNuxtConfig({
     }
   },
 
+  // 관리자·협력업체 화면은 서버에서 미리 그리지 않고(브라우저에서만 렌더),
+  // 검색 엔진과 캐시에 남지 않도록 합니다.
+  routeRules: {
+    '/admin/**': { ssr: false, headers: { 'X-Robots-Tag': 'noindex, nofollow', 'Cache-Control': 'no-store' } },
+    '/partner/**': { ssr: false, headers: { 'X-Robots-Tag': 'noindex, nofollow', 'Cache-Control': 'no-store' } },
+    '/api/admin/**': { headers: { 'Cache-Control': 'no-store' } },
+    '/api/partner/**': { headers: { 'Cache-Control': 'no-store' } }
+  },
+
   runtimeConfig: {
     // 환경변수 NUXT_INQUIRY_WEBHOOK_URL 로 덮어씁니다. 비어 있으면 문의는 로그에만 남습니다.
     inquiryWebhookUrl: ''
@@ -49,7 +58,11 @@ export default defineNuxtConfig({
       nodeCompat: true,
       wrangler: {
         name: 'laos-moa',
-        routes: [{ pattern: 'laos.joybox.day', custom_domain: true }]
+        routes: [{ pattern: 'laos.joybox.day', custom_domain: true }],
+        // 예약·문의·협력업체 데이터를 저장하는 Cloudflare D1 데이터베이스
+        d1_databases: [
+          { binding: 'DB', database_name: 'laos-moa', database_id: 'a3f6d5fd-2a9f-4d7f-b4bf-2338df5f580f' }
+        ]
       }
     }
   },
