@@ -37,10 +37,10 @@ function go(delta: number) {
       {{ index + 1 }} / {{ photos.length }}
     </p>
     <template v-if="photos.length > 1">
-      <button v-if="index > 0" type="button" class="absolute left-2 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-white/85" aria-label="이전 사진" @click="go(-1)">
+      <button v-if="index > 0" type="button" class="absolute left-2 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-white/85 text-ink" aria-label="이전 사진" @click="go(-1)">
         <AppIcon name="back" class="size-6" />
       </button>
-      <button v-if="index < photos.length - 1" type="button" class="absolute right-2 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-white/85" aria-label="다음 사진" @click="go(1)">
+      <button v-if="index < photos.length - 1" type="button" class="absolute right-2 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-white/85 text-ink" aria-label="다음 사진" @click="go(1)">
         <AppIcon name="next" class="size-6" />
       </button>
     </template>
