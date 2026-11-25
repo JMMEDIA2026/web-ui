@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
-/* 라오스모아 모바일 디자인 토큰 (laosmoa_mobile_design.md 6장 기준) */
+/* 라자 모바일 디자인 토큰 (laosmoa_mobile_design.md 6장 기준) */
 @theme static {
   --font-sans: 'Pretendard Variable', Pretendard, 'Noto Sans KR', system-ui, -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 

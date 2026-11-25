@@ -1,6 +1,6 @@
 <script setup lang="ts">
 useSeoMeta({
-  title: '환율 · 라오스모아',
+  title: '환율 · 라자',
   description: '원·킵·달러 기준 환율과 환율 계산기, 환전업체 안내.'
 })
 

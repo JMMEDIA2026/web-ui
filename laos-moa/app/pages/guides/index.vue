@@ -2,7 +2,7 @@
 import { guides } from '~/data/guides'
 
 useSeoMeta({
-  title: '생활 가이드 · 라오스모아',
+  title: '생활 가이드 · 라자',
   description: '비자, 면허, 통신, 병원, 대사관, 은행까지 라오스 생활 가이드.'
 })
 

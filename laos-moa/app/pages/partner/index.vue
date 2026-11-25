@@ -3,7 +3,7 @@ import type { Reservation, StatusKey } from '~/data/status'
 import { statusMeta } from '~/data/status'
 
 definePageMeta({ layout: 'admin', middleware: 'partner-auth' })
-useSeoMeta({ title: '예약 확인 · 라오스모아 협력업체' })
+useSeoMeta({ title: '예약 확인 · 라자 협력업체' })
 
 const api = useApi('partner')
 const toast = useToast()

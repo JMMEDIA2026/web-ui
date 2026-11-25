@@ -36,8 +36,8 @@ onBeforeUnmount(() => stop?.())
       class="sticky top-0 z-30 flex items-center justify-between border-b border-line bg-white px-4"
       style="height: calc(56px + env(safe-area-inset-top, 0px)); padding-top: env(safe-area-inset-top, 0px)"
     >
-      <NuxtLink to="/" class="-ml-1 inline-flex min-h-11 items-center px-1 text-[1.375rem] font-extrabold tracking-tight text-brand-600" aria-label="라오스모아 홈">
-        라오스모아
+      <NuxtLink to="/" class="-ml-1 inline-flex min-h-11 items-center px-1 text-[1.375rem] font-extrabold tracking-tight text-brand-600" aria-label="라자 홈">
+        라자
       </NuxtLink>
 
       <button

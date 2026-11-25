@@ -1,7 +1,7 @@
 <script setup lang="ts">
 useSeoMeta({
-  title: '예약 요청 · 라오스모아',
-  description: '라오스모아 협력업체(골프, 마사지, 오토바이 렌트 등)에 예약을 요청하세요.'
+  title: '예약 요청 · 라자',
+  description: '라자 협력업체(골프, 마사지, 오토바이 렌트 등)에 예약을 요청하세요.'
 })
 
 interface PartnerOption {

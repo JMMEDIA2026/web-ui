@@ -44,7 +44,7 @@ async function copy(text: string) {
 }
 
 useSeoMeta({
-  title: `${business.name} · 라오스모아`,
+  title: `${business.name} · 라자`,
   description: business.description
 })
 

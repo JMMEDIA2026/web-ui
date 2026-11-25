@@ -2,7 +2,7 @@
 import { categories } from '~/data/businesses'
 
 definePageMeta({ layout: 'admin', middleware: 'admin-auth' })
-useSeoMeta({ title: '업체 · 라오스모아 관리자' })
+useSeoMeta({ title: '업체 · 라자 관리자' })
 
 interface Biz {
   id: string

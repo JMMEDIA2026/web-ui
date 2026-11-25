@@ -1,6 +1,6 @@
 <script setup lang="ts">
 useSeoMeta({
-  title: '업체 등록·광고 문의 · 라오스모아',
+  title: '업체 등록·광고 문의 · 라자',
   description: '한인 업체 무료 등록, 추천 업체, 배너 광고 안내와 문의.'
 })
 

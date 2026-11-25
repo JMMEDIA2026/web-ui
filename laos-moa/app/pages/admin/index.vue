@@ -3,7 +3,7 @@ import type { StatusKey } from '~/data/status'
 import { statusMeta } from '~/data/status'
 
 definePageMeta({ layout: 'admin', middleware: 'admin-auth' })
-useSeoMeta({ title: '대시보드 · 라오스모아 관리자' })
+useSeoMeta({ title: '대시보드 · 라자 관리자' })
 
 interface Summary {
   pending: number

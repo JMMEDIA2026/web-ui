@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'admin' })
-useSeoMeta({ title: '관리자 로그인 · 라오스모아' })
+useSeoMeta({ title: '관리자 로그인 · 라자' })
 
 const password = ref('')
 const loading = ref(false)

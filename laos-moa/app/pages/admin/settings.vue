@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'admin', middleware: 'admin-auth' })
-useSeoMeta({ title: '설정 · 라오스모아 관리자' })
+useSeoMeta({ title: '설정 · 라자 관리자' })
 
 const api = useApi('admin')
 const toast = useToast()

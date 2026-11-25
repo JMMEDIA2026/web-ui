@@ -7,7 +7,7 @@ import type { ExplorerState } from '~/composables/useExplorerState'
 definePageMeta({ region: true, explorer: true })
 
 useSeoMeta({
-  title: '업체 탐색 · 라오스모아',
+  title: '업체 탐색 · 라자',
   description: '지도를 보며 라오스 한인 업체와 주변 업체를 찾아보세요.'
 })
 

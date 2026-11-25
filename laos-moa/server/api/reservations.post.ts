@@ -60,7 +60,7 @@ export default defineEventHandler(async (event) => {
   await notify(
     event,
     [
-      `[라오스모아] 새 예약 요청 ${code}`,
+      `[라자] 새 예약 요청 ${code}`,
       `업체: ${partner.name}`,
       `고객: ${body.name} (${body.contact})`,
       `날짜: ${body.date} / ${body.people}명`,

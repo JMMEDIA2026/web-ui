@@ -3,7 +3,7 @@ import type { Reservation, StatusKey } from '~/data/status'
 import { statusMeta } from '~/data/status'
 
 definePageMeta({ layout: 'admin', middleware: 'admin-auth' })
-useSeoMeta({ title: '예약 · 라오스모아 관리자' })
+useSeoMeta({ title: '예약 · 라자 관리자' })
 
 const api = useApi('admin')
 const route = useRoute()

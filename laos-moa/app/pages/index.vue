@@ -5,7 +5,7 @@ import { guides } from '~/data/guides'
 definePageMeta({ region: true })
 
 useSeoMeta({
-  title: '라오스모아 · 라오스 생활정보와 한인 업체',
+  title: '라자 · 라오스 자유 여행 생활정보와 한인 업체',
   description: '라오스 한인과 방문자를 위한 생활 가이드, 환율 계산기, 주변 업체 찾기.'
 })
 

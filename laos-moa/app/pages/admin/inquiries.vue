@@ -2,7 +2,7 @@
 import { formatDateTime } from '~/data/status'
 
 definePageMeta({ layout: 'admin', middleware: 'admin-auth' })
-useSeoMeta({ title: '광고 문의 · 라오스모아 관리자' })
+useSeoMeta({ title: '광고 문의 · 라자 관리자' })
 
 interface Inquiry {
   id: string

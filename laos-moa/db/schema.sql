@@ -1,4 +1,4 @@
--- 라오스모아 D1 스키마
+-- 라자 D1 스키마
 CREATE TABLE IF NOT EXISTS settings (
   key TEXT PRIMARY KEY,
   value TEXT NOT NULL

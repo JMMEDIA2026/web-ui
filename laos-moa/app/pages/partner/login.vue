@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'admin' })
-useSeoMeta({ title: '협력업체 로그인 · 라오스모아' })
+useSeoMeta({ title: '협력업체 로그인 · 라자' })
 
 const form = reactive({ id: '', code: '' })
 const loading = ref(false)
@@ -27,7 +27,7 @@ async function submit() {
         협력업체 로그인
       </h1>
       <p class="mt-1 text-sm text-muted">
-        라오스모아에서 받은 로그인 ID와 접속 코드를 입력하세요.
+        라자에서 받은 로그인 ID와 접속 코드를 입력하세요.
       </p>
 
       <label for="partner-id" class="mt-6 block text-sm font-bold text-highlighted">로그인 ID</label>

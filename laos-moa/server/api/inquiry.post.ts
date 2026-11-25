@@ -44,7 +44,7 @@ export default defineEventHandler(async (event) => {
   await notify(
     event,
     [
-      '[라오스모아] 새 광고·제휴 문의',
+      '[라자] 새 광고·제휴 문의',
       `업체명: ${data.company}`,
       `연락처: ${data.contact}`,
       `종류: ${productLabel[data.product]}`,

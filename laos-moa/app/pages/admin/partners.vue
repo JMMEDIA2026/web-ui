@@ -2,7 +2,7 @@
 import { partnerCategories } from '~/data/status'
 
 definePageMeta({ layout: 'admin', middleware: 'admin-auth' })
-useSeoMeta({ title: '협력업체 · 라오스모아 관리자' })
+useSeoMeta({ title: '협력업체 · 라자 관리자' })
 
 interface Partner {
   id: string
@@ -38,7 +38,7 @@ onMounted(load)
 
 const guide = computed(() =>
   created.value
-    ? `[라오스모아 협력업체 로그인]\n주소: ${origin}/partner/login\n로그인 ID: ${created.value.id}\n접속 코드: ${created.value.code}`
+    ? `[라자 협력업체 로그인]\n주소: ${origin}/partner/login\n로그인 ID: ${created.value.id}\n접속 코드: ${created.value.code}`
     : ''
 )
 

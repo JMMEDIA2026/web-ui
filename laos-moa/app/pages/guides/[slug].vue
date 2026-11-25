@@ -20,7 +20,7 @@ function back() {
 }
 
 useSeoMeta({
-  title: `${guide.title} · 라오스모아`,
+  title: `${guide.title} · 라자`,
   description: guide.summary
 })
 </script>
