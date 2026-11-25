@@ -71,8 +71,8 @@ const fmt = (n: number) => n.toLocaleString('ko-KR', { maximumFractionDigits: 0 
       <ul v-if="exchangers.length" class="rows card mt-2 overflow-hidden">
         <li v-for="b in exchangers" :key="b.slug">
           <NuxtLink :to="`/businesses/${b.slug}`" class="flex min-h-[68px] items-center gap-3 px-4 py-3 active:bg-brand-100">
-            <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600">
-              <UIcon name="i-lucide-banknote" class="size-6" />
+            <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-brand-50">
+              <img src="/emoji/exchange.png" alt="" width="32" height="32" class="size-8 object-contain" loading="lazy">
             </span>
             <span class="min-w-0 flex-1">
               <span class="block font-bold text-ink">{{ b.name }}</span>

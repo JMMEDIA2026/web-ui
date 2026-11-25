@@ -22,14 +22,14 @@ const toBusinesses = (category: string) => ({ path: '/businesses', query: { cate
 
 // 4열 × 2행. 구인·구직은 아직 해당 목록 기능이 없어서, 실제로 등록된 업종인 마사지로 대신했습니다.
 const shortcuts = computed(() => [
-  { label: '한식당', icon: 'i-lucide-utensils', to: toBusinesses('food') },
-  { label: '마트', icon: 'i-lucide-shopping-basket', to: toBusinesses('mart') },
-  { label: '병원·약국', icon: 'i-lucide-stethoscope', to: toBusinesses('hospital') },
-  { label: '환전', icon: 'i-lucide-banknote', to: toBusinesses('exchange') },
-  { label: '렌트', icon: 'i-lucide-house', to: toBusinesses('rent') },
-  { label: '마사지', icon: 'i-lucide-flower-2', to: toBusinesses('massage') },
-  { label: '비자', icon: 'i-lucide-id-card', to: '/guides/visa' },
-  { label: '통신', icon: 'i-lucide-smartphone', to: '/guides/telecom' }
+  { label: '한식당', emoji: '/emoji/food.png', to: toBusinesses('food') },
+  { label: '마트', emoji: '/emoji/mart.png', to: toBusinesses('mart') },
+  { label: '병원·약국', emoji: '/emoji/hospital.png', to: toBusinesses('hospital') },
+  { label: '환전', emoji: '/emoji/exchange.png', to: toBusinesses('exchange') },
+  { label: '렌트', emoji: '/emoji/house.png', to: toBusinesses('rent') },
+  { label: '마사지', emoji: '/emoji/massage.png', to: toBusinesses('massage') },
+  { label: '비자', emoji: '/emoji/visa.png', to: '/guides/visa' },
+  { label: '통신', emoji: '/emoji/phone.png', to: '/guides/telecom' }
 ])
 
 const firstGuides = ['visa', 'telecom', 'health', 'banking']
@@ -65,7 +65,7 @@ const firstGuides = ['visa', 'telecom', 'health', 'banking']
       <ul class="grid grid-cols-4 gap-2">
         <li v-for="s in shortcuts" :key="s.label">
           <NuxtLink :to="s.to" class="card flex min-h-[88px] flex-col items-center justify-center gap-1.5 px-1 py-3 text-center active:bg-brand-100">
-            <UIcon :name="s.icon" class="size-7 text-brand-600" />
+            <img :src="s.emoji" alt="" width="40" height="40" class="size-10 object-contain" loading="lazy">
             <span class="text-[0.875rem] font-semibold leading-tight text-ink">{{ s.label }}</span>
           </NuxtLink>
         </li>
@@ -91,8 +91,8 @@ const firstGuides = ['visa', 'telecom', 'health', 'banking']
       <ul class="rows card mt-2 overflow-hidden">
         <li v-for="g in firstGuides" :key="g.slug">
           <NuxtLink :to="`/guides/${g.slug}`" class="flex min-h-[68px] items-center gap-3 px-4 py-3 active:bg-brand-100">
-            <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600">
-              <UIcon :name="g.icon" class="size-6" />
+            <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-brand-50">
+              <img :src="g.emoji" alt="" width="32" height="32" class="size-8 object-contain" loading="lazy">
             </span>
             <span class="min-w-0 flex-1">
               <span class="block text-[1rem] font-bold text-ink">{{ g.title }}</span>

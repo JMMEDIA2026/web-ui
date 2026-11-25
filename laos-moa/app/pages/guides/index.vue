@@ -40,8 +40,8 @@ const shown = computed(() => {
     <ul v-if="shown.length" class="rows card mt-2 overflow-hidden">
       <li v-for="g in shown" :key="g.slug">
         <NuxtLink :to="`/guides/${g.slug}`" class="flex min-h-[72px] items-center gap-3 px-4 py-3 active:bg-brand-100">
-          <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600">
-            <UIcon :name="g.icon" class="size-6" />
+          <span class="grid size-12 shrink-0 place-items-center rounded-xl bg-brand-50">
+            <img :src="g.emoji" alt="" width="36" height="36" class="size-9 object-contain" loading="lazy">
           </span>
           <span class="min-w-0 flex-1">
             <span class="block text-[1rem] font-bold text-ink">{{ g.title }}</span>

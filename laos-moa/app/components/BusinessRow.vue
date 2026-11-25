@@ -42,7 +42,8 @@ async function copy(text: string) {
     >
       <!-- 실제 업체 사진이 없으면 업종 아이콘만 보여 줍니다. 다른 업체 사진으로 대체하지 않습니다. -->
       <span class="grid size-[88px] shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600">
-        <UIcon :name="category?.icon ?? 'i-lucide-store'" class="size-9" />
+        <img v-if="category?.emoji" :src="category.emoji" alt="" width="56" height="56" class="size-14 object-contain" loading="lazy">
+        <UIcon v-else name="i-lucide-store" class="size-9" />
       </span>
       <span class="min-w-0 flex-1">
         <span class="flex flex-wrap items-center gap-x-2 gap-y-1">

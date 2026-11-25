@@ -68,7 +68,8 @@ const actionCount = [!!directions, !!contact, !!business.partnerId].filter(Boole
 
     <!-- 실제 업체 사진이 아직 없으면 업종 아이콘을 보여 줍니다. -->
     <div class="grid h-44 place-items-center bg-brand-50 text-brand-600" role="img" :aria-label="`${category?.label} 업종`">
-      <UIcon :name="category?.icon ?? 'i-lucide-store'" class="size-14" />
+      <img v-if="category?.emoji" :src="category.emoji" alt="" width="96" height="96" class="size-24 object-contain">
+      <UIcon v-else name="i-lucide-store" class="size-14" />
     </div>
 
     <div class="px-4 pt-5 sm:px-5">
