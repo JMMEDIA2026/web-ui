@@ -159,7 +159,7 @@ function reset() {
         <input v-model="form.website" type="text" name="website" tabindex="-1" autocomplete="off">
       </div>
 
-      <p v-if="error" class="rounded-xl bg-red-50 p-3 text-[0.9375rem] font-bold text-red-700" role="alert">
+      <p v-if="error" class="rounded-lg bg-red-50 p-3 text-[0.9375rem] font-bold text-red-700" role="alert">
         {{ error }}
       </p>
 

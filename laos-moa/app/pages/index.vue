@@ -32,6 +32,10 @@ const shortcuts = computed(() => [
   { label: '통신', emoji: '/emoji/phone.png', to: '/guides/telecom' }
 ])
 
+// 환율은 실제 값을 불러온 경우에만 숫자를 보여 줍니다.
+const { data: rates } = await useFetch<{ krwLak: number }>('/api/rates', { key: 'rates', default: () => null })
+const fmtNum = (n: number) => n.toLocaleString('ko-KR', { maximumFractionDigits: 0 })
+
 const firstGuides = ['visa', 'telecom', 'health', 'banking']
   .map(slug => guides.find(g => g.slug === slug))
   .filter((g): g is NonNullable<typeof g> => !!g)
@@ -55,7 +59,7 @@ const firstGuides = ['visa', 'telecom', 'health', 'banking']
         placeholder="업체명이나 업종을 검색하세요"
         class="field pr-14 shadow-sm"
       >
-      <button type="submit" class="absolute right-1 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-xl text-brand-600" aria-label="검색">
+      <button type="submit" class="absolute right-1 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-lg text-brand-600" aria-label="검색">
         <UIcon name="i-lucide-search" class="size-6" />
       </button>
     </form>
@@ -72,10 +76,19 @@ const firstGuides = ['visa', 'telecom', 'health', 'banking']
       </ul>
     </nav>
 
-    <!-- 환율 계산기 -->
-    <div class="mt-6">
-      <RateCalculator show-detail-link />
-    </div>
+    <!-- 오늘의 환율: 작게 보여 주고, 변환은 환율 화면에서 합니다. -->
+    <NuxtLink to="/exchange" class="card mt-5 flex min-h-[64px] items-center gap-3 px-4 py-3 active:bg-brand-100" aria-label="환율 변환 화면으로 이동">
+      <img src="/emoji/exchange.png" alt="" width="32" height="32" class="size-8 shrink-0 object-contain">
+      <span class="min-w-0 flex-1">
+        <span class="block text-[0.8125rem] text-ink-2">오늘의 환율</span>
+        <span v-if="rates" class="block text-[1rem] font-bold text-ink">1,000원 = {{ fmtNum(1000 * rates.krwLak) }}킵</span>
+        <span v-else class="block text-[1rem] font-bold text-ink">환율 변환·환전업체 보기</span>
+      </span>
+      <span class="inline-flex shrink-0 items-center text-[0.875rem] font-bold text-brand-600">
+        변환하기
+        <UIcon name="i-lucide-chevron-right" class="size-4" />
+      </span>
+    </NuxtLink>
 
     <!-- 생활 가이드 -->
     <section class="mt-8" aria-labelledby="guide-title">
@@ -91,7 +104,7 @@ const firstGuides = ['visa', 'telecom', 'health', 'banking']
       <ul class="rows card mt-2 overflow-hidden">
         <li v-for="g in firstGuides" :key="g.slug">
           <NuxtLink :to="`/guides/${g.slug}`" class="flex min-h-[68px] items-center gap-3 px-4 py-3 active:bg-brand-100">
-            <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-brand-50">
+            <span class="grid size-11 shrink-0 place-items-center rounded-lg bg-brand-50">
               <img :src="g.emoji" alt="" width="32" height="32" class="size-8 object-contain" loading="lazy">
             </span>
             <span class="min-w-0 flex-1">

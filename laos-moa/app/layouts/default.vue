@@ -43,7 +43,7 @@ onBeforeUnmount(() => stop?.())
       <button
         v-if="showRegion"
         type="button"
-        class="inline-flex min-h-11 items-center gap-1 rounded-full bg-brand-100 pl-3 pr-2 text-[0.9375rem] font-bold text-brand-600"
+        class="inline-flex min-h-11 items-center gap-1 rounded-lg bg-brand-100 pl-3 pr-2 text-[0.9375rem] font-bold text-brand-600"
         aria-haspopup="dialog"
         :aria-label="`지역 선택. 현재 ${region.label}`"
         @click="sheetOpen = true"

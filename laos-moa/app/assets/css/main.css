@@ -55,7 +55,7 @@ body {
   gap: 8px;
   min-height: 48px;
   padding: 0 20px;
-  border-radius: 12px;
+  border-radius: 8px;
   font-size: 1rem;
   font-weight: 700;
   line-height: 1.2;
@@ -105,7 +105,7 @@ body {
   min-height: 52px;
   padding: 0 16px;
   border: 1px solid #E5E7ED;
-  border-radius: 12px;
+  border-radius: 8px;
   background: #fff;
   color: #1F2430;
   font-size: 1rem;
@@ -132,7 +132,7 @@ summary:focus-visible {
 .card {
   background: #fff;
   border: 1px solid #E5E7ED;
-  border-radius: 16px;
+  border-radius: 10px;
 }
 
 /* 목록 행 구분선 */
@@ -147,7 +147,7 @@ summary:focus-visible {
   flex: none;
   min-height: 44px;
   padding: 0 16px;
-  border-radius: 999px;
+  border-radius: 8px;
   border: 1px solid #E5E7ED;
   background: #fff;
   color: #1F2430;

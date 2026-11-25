@@ -1,10 +1,12 @@
 <script setup lang="ts">
-// 환율 계산기. 실제 기준 환율(외부 API)로만 계산하고, 불러오지 못하면 숫자를 표시하지 않습니다.
+// 환율 변환기. 실제 기준 환율(외부 API)로만 계산하고, 불러오지 못하면 숫자를 표시하지 않습니다.
+type Cur = 'KRW' | 'LAK' | 'USD'
+
 const props = withDefaults(defineProps<{
   initialAmount?: number
-  /** 홈에서는 "환율 상세" 링크를 보여 줍니다. */
-  showDetailLink?: boolean
-}>(), { initialAmount: 10000, showDetailLink: false })
+  initialFrom?: Cur
+  initialTo?: Cur
+}>(), { initialAmount: 10000, initialFrom: 'KRW', initialTo: 'LAK' })
 
 interface Rates {
   updatedAt: string
@@ -15,15 +17,76 @@ interface Rates {
 
 const { data, error, pending, refresh } = await useFetch<Rates>('/api/rates', { key: 'rates' })
 
+const CUR: Record<Cur, { name: string, unit: string, symbol: string }> = {
+  KRW: { name: '원화', unit: '원', symbol: '₩' },
+  LAK: { name: '킵', unit: '킵', symbol: '₭' },
+  USD: { name: '달러', unit: '달러', symbol: '$' }
+}
+const options = (Object.keys(CUR) as Cur[]).map(k => ({ value: k, label: `${CUR[k].name} ${CUR[k].symbol}` }))
+
+// 자주 쓰는 방향을 한 번에 바꾸는 버튼
+const presets: { from: Cur, to: Cur, label: string }[] = [
+  { from: 'KRW', to: 'LAK', label: '원 → 킵' },
+  { from: 'LAK', to: 'KRW', label: '킵 → 원' },
+  { from: 'USD', to: 'LAK', label: '달러 → 킵' },
+  { from: 'LAK', to: 'USD', label: '킵 → 달러' },
+  { from: 'USD', to: 'KRW', label: '달러 → 원' },
+  { from: 'KRW', to: 'USD', label: '원 → 달러' }
+]
+
+const from = ref<Cur>(props.initialFrom)
+const to = ref<Cur>(props.initialTo)
 const input = ref<string>(String(props.initialAmount))
-const applied = ref<number>(props.initialAmount)
-const live = ref('')
 
-const fmt = (n: number) => n.toLocaleString('ko-KR', { maximumFractionDigits: 0 })
+const amount = computed(() => {
+  const n = parseFloat(input.value.replace(/,/g, ''))
+  return Number.isFinite(n) && n >= 0 ? n : 0
+})
 
-const inputNumber = computed(() => Number(input.value.replace(/[^\d]/g, '')) || 0)
-const dirty = computed(() => inputNumber.value !== applied.value)
-const kip = computed(() => (data.value ? Math.round(applied.value * data.value.krwLak) : null))
+// 달러 1을 기준으로 각 통화의 값
+const perUsd = computed(() => (data.value ? { USD: 1, KRW: data.value.usdKrw, LAK: data.value.usdLak } as Record<Cur, number> : null))
+
+function convert(value: number, a: Cur, b: Cur) {
+  if (!perUsd.value) return null
+  return value / perUsd.value[a] * perUsd.value[b]
+}
+
+function fmt(n: number, cur: Cur) {
+  const digits = cur === 'USD' && n < 1000 ? 2 : 0
+  return n.toLocaleString('ko-KR', { maximumFractionDigits: digits, minimumFractionDigits: digits })
+}
+
+const result = computed(() => convert(amount.value, from.value, to.value))
+
+// 1단위(원·킵은 1,000단위) 기준 환율 안내
+const unitBase = computed(() => (from.value === 'USD' ? 1 : 1000))
+const unitLine = computed(() => {
+  const r = convert(unitBase.value, from.value, to.value)
+  if (r === null) return ''
+  return `${fmt(unitBase.value, from.value)}${CUR[from.value].unit} = ${fmt(r, to.value)}${CUR[to.value].unit}`
+})
+
+const isPreset = (p: { from: Cur, to: Cur }) => p.from === from.value && p.to === to.value
+
+function setPair(a: Cur, b: Cur) {
+  from.value = a
+  to.value = b
+}
+
+function swap() {
+  const a = from.value
+  from.value = to.value
+  to.value = a
+}
+
+// 같은 통화를 양쪽에 고르면 반대쪽을 자동으로 바꿔 줍니다.
+watch(from, (v, old) => { if (v === to.value) to.value = old })
+watch(to, (v, old) => { if (v === from.value) from.value = old })
+
+function onInput(e: Event) {
+  const el = e.target as HTMLInputElement
+  input.value = el.value.replace(/[^\d.,]/g, '')
+}
 
 const asOf = computed(() => {
   if (!data.value) return ''
@@ -34,37 +97,23 @@ const asOf = computed(() => {
     day: 'numeric'
   })
 })
-
-function calculate() {
-  applied.value = inputNumber.value
-  input.value = String(inputNumber.value)
-  if (data.value) live.value = `${fmt(applied.value)}원은 약 ${fmt(Math.round(applied.value * data.value.krwLak))}킵입니다.`
-}
-
-const detailLink = computed(() => `/exchange?amount=${applied.value}`)
 </script>
 
 <template>
-  <section class="rounded-2xl bg-brand-500 p-5 text-white" aria-labelledby="rate-title">
-    <div class="flex items-center justify-between gap-3">
-      <h2 id="rate-title" class="text-[1.25rem] font-bold">
-        환율 계산기
-      </h2>
-      <NuxtLink v-if="showDetailLink" :to="detailLink" class="inline-flex min-h-11 items-center gap-1 rounded-lg px-2 text-[0.875rem] font-bold underline-offset-2 hover:underline">
-        환율 상세
-        <UIcon name="i-lucide-chevron-right" class="size-4" />
-      </NuxtLink>
-    </div>
+  <section class="rounded-lg bg-brand-500 p-4 text-white" aria-labelledby="rate-title">
+    <h2 id="rate-title" class="text-[1.125rem] font-bold">
+      환율 변환
+    </h2>
 
     <!-- 불러오는 중 -->
-    <div v-if="pending && !data" class="mt-4 space-y-3" aria-busy="true">
-      <div class="h-[52px] animate-pulse rounded-xl bg-white/25" />
-      <div class="h-[84px] animate-pulse rounded-xl bg-white/25" />
+    <div v-if="pending && !data" class="mt-3 space-y-3" aria-busy="true">
+      <div class="h-[52px] animate-pulse rounded-lg bg-white/25" />
+      <div class="h-[84px] animate-pulse rounded-lg bg-white/25" />
       <span class="sr-only">환율을 불러오는 중입니다.</span>
     </div>
 
     <!-- 불러오기 실패: 임의의 숫자를 채우지 않습니다. -->
-    <div v-else-if="error || !data" class="mt-4 rounded-xl bg-white p-4 text-ink" role="alert">
+    <div v-else-if="error || !data" class="mt-3 rounded-lg bg-white p-4 text-ink" role="alert">
       <p class="font-bold">
         지금은 환율을 확인할 수 없어요.
       </p>
@@ -78,35 +127,67 @@ const detailLink = computed(() => `/exchange?amount=${applied.value}`)
     </div>
 
     <template v-else>
-      <form class="mt-4" @submit.prevent="calculate">
-        <label for="rate-amount" class="text-[0.875rem] font-bold">원화 금액 (원)</label>
+      <!-- 방향 바로 바꾸기 -->
+      <div class="-mx-1 mt-3 flex flex-wrap gap-1.5" role="group" aria-label="자주 쓰는 변환">
+        <button
+          v-for="p in presets"
+          :key="p.label"
+          type="button"
+          class="min-h-11 rounded-lg px-3 text-[0.9375rem] font-bold"
+          :class="isPreset(p) ? 'bg-white text-brand-600' : 'bg-white/20 text-white active:bg-white/30'"
+          :aria-pressed="isPreset(p)"
+          @click="setPair(p.from, p.to)"
+        >
+          {{ p.label }}
+        </button>
+      </div>
+
+      <!-- 금액 입력: 입력하면 바로 계산됩니다. -->
+      <div class="mt-3">
+        <label for="rate-amount" class="text-[0.875rem] font-bold">{{ CUR[from].name }} 금액</label>
         <div class="mt-1.5 flex gap-2">
           <input
             id="rate-amount"
-            v-model="input"
+            :value="input"
             type="text"
-            inputmode="numeric"
+            inputmode="decimal"
             autocomplete="off"
-            class="min-h-[52px] min-w-0 flex-1 rounded-xl border-0 bg-white px-4 text-[1.125rem] font-bold text-ink"
+            class="min-h-[52px] min-w-0 flex-1 rounded-lg border-0 bg-white px-4 text-[1.125rem] font-bold text-ink"
+            @input="onInput"
           >
-          <button type="submit" class="btn shrink-0 bg-white text-brand-600 active:bg-brand-100">
-            계산하기
-          </button>
+          <select v-model="from" aria-label="바꿀 통화" class="min-h-[52px] w-[112px] shrink-0 rounded-lg border-0 bg-white px-3 text-[1rem] font-bold text-ink">
+            <option v-for="o in options" :key="o.value" :value="o.value">
+              {{ o.label }}
+            </option>
+          </select>
         </div>
-        <p v-if="dirty" class="mt-1.5 text-[0.8125rem] font-bold">
-          금액을 바꿨어요. 계산하기를 눌러 주세요.
-        </p>
-      </form>
+      </div>
 
-      <div class="mt-4 rounded-xl bg-white p-4 text-ink" aria-live="polite">
-        <p class="text-[0.875rem] text-ink-2">
-          {{ fmt(applied) }}원은
-        </p>
+      <div class="my-2 flex items-center justify-center">
+        <button type="button" class="grid size-11 place-items-center rounded-lg bg-white/20 active:bg-white/30" aria-label="통화 위치 바꾸기" @click="swap">
+          <UIcon name="i-lucide-arrow-up-down" class="size-5" />
+        </button>
+      </div>
+
+      <!-- 결과 -->
+      <div class="rounded-lg bg-white p-4 text-ink" aria-live="polite">
+        <div class="flex items-center justify-between gap-2">
+          <p class="text-[0.875rem] text-ink-2">
+            {{ fmt(amount, from) }}{{ CUR[from].unit }} =
+          </p>
+          <select v-model="to" aria-label="받을 통화" class="min-h-11 rounded-lg border border-line bg-white px-2 text-[0.9375rem] font-bold text-ink">
+            <option v-for="o in options" :key="o.value" :value="o.value">
+              {{ o.label }}
+            </option>
+          </select>
+        </div>
         <p class="mt-0.5 break-words text-[1.75rem] font-extrabold leading-tight text-brand-600">
-          약 {{ fmt(kip ?? 0) }}<span class="ml-1 text-[1.125rem] font-bold text-ink">킵</span>
+          약 {{ fmt(result ?? 0, to) }}<span class="ml-1 text-[1.125rem] font-bold text-ink">{{ CUR[to].unit }}</span>
+        </p>
+        <p class="mt-1 text-[0.8125rem] text-ink-2">
+          {{ unitLine }}
         </p>
       </div>
-      <p class="sr-only" role="status">{{ live }}</p>
 
       <p class="mt-3 text-[0.8125rem] leading-snug">
         {{ asOf }} 기준 · 출처 ExchangeRate-API

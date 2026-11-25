@@ -40,7 +40,7 @@ function onKey(e: KeyboardEvent) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="region-sheet-title"
-        class="relative w-full max-w-[560px] rounded-t-2xl bg-white px-4 pt-5"
+        class="relative w-full max-w-[560px] rounded-t-xl bg-white px-4 pt-5"
         style="padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px))"
       >
         <div class="flex items-center justify-between">
@@ -55,7 +55,7 @@ function onKey(e: KeyboardEvent) {
           <li v-for="r in regions" :key="r.key">
             <button
               type="button"
-              class="flex min-h-14 w-full items-center justify-between rounded-xl px-3 text-left text-[1.0625rem]"
+              class="flex min-h-14 w-full items-center justify-between rounded-lg px-3 text-left text-[1.0625rem]"
               :class="regionKey === r.key ? 'bg-brand-100 font-bold text-brand-600' : 'text-ink'"
               :aria-pressed="regionKey === r.key"
               @click="pick(r.key)"

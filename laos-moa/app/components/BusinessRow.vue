@@ -35,13 +35,13 @@ async function copy(text: string) {
   >
     <button
       type="button"
-      class="flex min-h-[88px] w-full gap-3 rounded-xl text-left"
+      class="flex min-h-[88px] w-full gap-3 rounded-lg text-left"
       :aria-pressed="selected"
       :aria-label="`${business.name} 선택`"
       @click="emit('select', business.slug)"
     >
       <!-- 실제 업체 사진이 없으면 업종 아이콘만 보여 줍니다. 다른 업체 사진으로 대체하지 않습니다. -->
-      <span class="grid size-[88px] shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600">
+      <span class="grid size-[88px] shrink-0 place-items-center rounded-lg bg-brand-50 text-brand-600">
         <img v-if="category?.emoji" :src="category.emoji" alt="" width="56" height="56" class="size-14 object-contain" loading="lazy">
         <UIcon v-else name="i-lucide-store" class="size-9" />
       </span>

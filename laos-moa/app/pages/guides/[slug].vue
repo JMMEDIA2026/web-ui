@@ -37,7 +37,7 @@ useSeoMeta({
     </div>
 
     <div class="mt-2 flex items-center gap-3">
-      <span class="grid size-14 shrink-0 place-items-center rounded-2xl bg-brand-50">
+      <span class="grid size-14 shrink-0 place-items-center rounded-lg bg-brand-50">
         <img :src="guide.emoji" alt="" width="40" height="40" class="size-10 object-contain">
       </span>
       <h1 data-page-title tabindex="-1" class="text-[1.625rem] font-bold leading-tight text-ink">

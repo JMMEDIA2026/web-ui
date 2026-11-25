@@ -7,6 +7,11 @@ useSeoMeta({
 const route = useRoute()
 // 홈 계산기에서 입력한 금액을 그대로 이어받습니다.
 const amount = Number(route.query.amount) > 0 ? Math.round(Number(route.query.amount)) : 10000
+const curs = ['KRW', 'LAK', 'USD'] as const
+type Cur = typeof curs[number]
+const pick = (v: unknown, d: Cur): Cur => (curs.includes(v as Cur) ? (v as Cur) : d)
+const from = pick(route.query.from, 'KRW')
+const to = pick(route.query.to, 'LAK')
 
 const { real } = await useBusinessList()
 const exchangers = computed(() => real.value.filter(b => b.category === 'exchange'))
@@ -28,11 +33,42 @@ const fmt = (n: number) => n.toLocaleString('ko-KR', { maximumFractionDigits: 0 
     </div>
 
     <div class="mt-3">
-      <RateCalculator :initial-amount="amount" />
+      <RateCalculator :initial-amount="amount" :initial-from="from" :initial-to="to === from ? 'LAK' : to" />
     </div>
 
+    <section class="mt-5" aria-labelledby="ex-title">
+      <h2 id="ex-title" class="text-[1.25rem] font-bold text-ink">
+        환전업체
+      </h2>
+      <ul v-if="exchangers.length" class="rows card mt-2 overflow-hidden">
+        <li v-for="b in exchangers" :key="b.slug">
+          <NuxtLink :to="`/businesses/${b.slug}`" class="flex min-h-[68px] items-center gap-3 px-4 py-3 active:bg-brand-100">
+            <span class="grid size-11 shrink-0 place-items-center rounded-lg bg-brand-50">
+              <img src="/emoji/exchange.png" alt="" width="32" height="32" class="size-8 object-contain" loading="lazy">
+            </span>
+            <span class="min-w-0 flex-1">
+              <span class="block font-bold text-ink">{{ b.name }}</span>
+              <span class="block truncate text-[0.875rem] text-ink-2">{{ b.address || b.area }}</span>
+            </span>
+            <UIcon name="i-lucide-chevron-right" class="size-5 shrink-0 text-ink-2" />
+          </NuxtLink>
+        </li>
+      </ul>
+      <div v-else class="card mt-2 p-5 text-center">
+        <p class="font-bold text-ink">
+          아직 등록된 환전업체가 없어요
+        </p>
+        <p class="mt-1 text-[0.875rem] text-ink-2">
+          환전업체가 등록되면 여기에서 위치와 연락처를 확인할 수 있어요.
+        </p>
+        <NuxtLink :to="{ path: '/businesses', query: { category: 'exchange' } }" class="btn btn-quiet mt-3">
+          지도에서 환전 찾기
+        </NuxtLink>
+      </div>
+    </section>
+
     <!-- 기준 환율은 불러온 경우에만 표시합니다. -->
-    <section v-if="rates" class="card mt-4 p-4" aria-labelledby="ref-title">
+    <section v-if="rates" class="card mt-5 p-4" aria-labelledby="ref-title">
       <h2 id="ref-title" class="text-[1.125rem] font-bold text-ink">
         기준 환율
       </h2>
@@ -62,37 +98,6 @@ const fmt = (n: number) => n.toLocaleString('ko-KR', { maximumFractionDigits: 0 
           </dd>
         </div>
       </dl>
-    </section>
-
-    <section class="mt-6" aria-labelledby="ex-title">
-      <h2 id="ex-title" class="text-[1.25rem] font-bold text-ink">
-        환전업체
-      </h2>
-      <ul v-if="exchangers.length" class="rows card mt-2 overflow-hidden">
-        <li v-for="b in exchangers" :key="b.slug">
-          <NuxtLink :to="`/businesses/${b.slug}`" class="flex min-h-[68px] items-center gap-3 px-4 py-3 active:bg-brand-100">
-            <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-brand-50">
-              <img src="/emoji/exchange.png" alt="" width="32" height="32" class="size-8 object-contain" loading="lazy">
-            </span>
-            <span class="min-w-0 flex-1">
-              <span class="block font-bold text-ink">{{ b.name }}</span>
-              <span class="block truncate text-[0.875rem] text-ink-2">{{ b.address || b.area }}</span>
-            </span>
-            <UIcon name="i-lucide-chevron-right" class="size-5 shrink-0 text-ink-2" />
-          </NuxtLink>
-        </li>
-      </ul>
-      <div v-else class="card mt-2 p-5 text-center">
-        <p class="font-bold text-ink">
-          아직 등록된 환전업체가 없어요
-        </p>
-        <p class="mt-1 text-[0.875rem] text-ink-2">
-          환전업체가 등록되면 여기에서 위치와 연락처를 확인할 수 있어요.
-        </p>
-        <NuxtLink :to="{ path: '/businesses', query: { category: 'exchange' } }" class="btn btn-quiet mt-3">
-          지도에서 환전 찾기
-        </NuxtLink>
-      </div>
     </section>
   </div>
 </template>

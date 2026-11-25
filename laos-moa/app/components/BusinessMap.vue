@@ -258,7 +258,7 @@ defineExpose({ invalidate, getBounds, locate, retry })
     <p
       v-if="notice"
       role="status"
-      class="absolute inset-x-3 bottom-12 z-[500] rounded-xl bg-ink px-4 py-3 text-[0.875rem] leading-snug text-white"
+      class="absolute inset-x-3 bottom-12 z-[500] rounded-lg bg-ink px-4 py-3 text-[0.875rem] leading-snug text-white"
     >
       {{ notice }}
     </p>

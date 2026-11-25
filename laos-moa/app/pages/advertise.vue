@@ -81,7 +81,7 @@ async function submit() {
         정보 수정 제안도 여기에 남겨 주세요.
       </p>
 
-      <div v-if="done" class="mt-4 rounded-xl bg-brand-100 p-4 text-[0.9375rem] leading-relaxed text-brand-600" role="status">
+      <div v-if="done" class="mt-4 rounded-lg bg-brand-100 p-4 text-[0.9375rem] leading-relaxed text-brand-600" role="status">
         문의가 접수되었어요. 확인 후 남겨 주신 연락처로 연락드릴게요.
         <button type="button" class="mt-3 block min-h-11 font-bold underline" @click="done = false">
           다른 문의 남기기
@@ -117,7 +117,7 @@ async function submit() {
           <input v-model="form.website" type="text" name="website" tabindex="-1" autocomplete="off">
         </div>
 
-        <p v-if="error" class="rounded-xl bg-red-50 p-3 text-[0.9375rem] font-bold text-red-700" role="alert">
+        <p v-if="error" class="rounded-lg bg-red-50 p-3 text-[0.9375rem] font-bold text-red-700" role="alert">
           {{ error }}
         </p>
 

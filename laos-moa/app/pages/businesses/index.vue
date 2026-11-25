@@ -267,7 +267,7 @@ onBeforeUnmount(() => {
         >
           <UIcon name="i-lucide-x" class="size-5" />
         </button>
-        <button type="submit" class="absolute right-1 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-xl text-brand-600" aria-label="검색">
+        <button type="submit" class="absolute right-1 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-lg text-brand-600" aria-label="검색">
           <UIcon name="i-lucide-search" class="size-6" />
         </button>
       </form>
@@ -327,7 +327,7 @@ onBeforeUnmount(() => {
       <!-- 선택한 업체 요약 -->
       <div
         v-if="selectedBusiness"
-        class="absolute inset-x-3 bottom-7 z-[500] flex items-center gap-2 rounded-2xl bg-white p-3 shadow-md"
+        class="absolute inset-x-3 bottom-7 z-[500] flex items-center gap-2 rounded-lg bg-white p-3 shadow-md"
         role="region"
         aria-label="선택한 업체"
       >
@@ -385,7 +385,7 @@ onBeforeUnmount(() => {
       <!-- 불러오는 중 -->
       <ul v-if="pending && !real.length" class="rows" aria-busy="true">
         <li v-for="n in 3" :key="n" class="flex gap-3 px-4 py-3">
-          <span class="size-[88px] shrink-0 animate-pulse rounded-xl bg-line" />
+          <span class="size-[88px] shrink-0 animate-pulse rounded-lg bg-line" />
           <span class="flex-1 space-y-2 pt-1">
             <span class="block h-5 w-2/3 animate-pulse rounded bg-line" />
             <span class="block h-4 w-1/2 animate-pulse rounded bg-line" />
@@ -414,16 +414,16 @@ onBeforeUnmount(() => {
           {{ !real.length ? '아직 등록된 업체가 없어요' : !inRegion.length ? `${region.label}에는 아직 등록된 업체가 없어요` : '검색 결과가 없어요' }}
         </p>
         <ul class="mx-auto mt-3 flex max-w-xs flex-wrap justify-center gap-2 text-[0.875rem]">
-          <li class="rounded-full bg-app-bg px-3 py-1 text-ink-2">
+          <li class="rounded-md bg-app-bg px-3 py-1 text-ink-2">
             지역 {{ region.label }}
           </li>
-          <li v-if="category" class="rounded-full bg-app-bg px-3 py-1 text-ink-2">
+          <li v-if="category" class="rounded-md bg-app-bg px-3 py-1 text-ink-2">
             업종 {{ categoryMap[category]?.label }}
           </li>
-          <li v-if="q.trim()" class="rounded-full bg-app-bg px-3 py-1 text-ink-2">
+          <li v-if="q.trim()" class="rounded-md bg-app-bg px-3 py-1 text-ink-2">
             검색어 “{{ q.trim() }}”
           </li>
-          <li v-if="bounds" class="rounded-full bg-app-bg px-3 py-1 text-ink-2">
+          <li v-if="bounds" class="rounded-md bg-app-bg px-3 py-1 text-ink-2">
             지도 영역
           </li>
         </ul>

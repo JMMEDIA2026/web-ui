@@ -24,7 +24,7 @@ const items = [
     <ul class="rows card mt-4 overflow-hidden">
       <li v-for="i in items" :key="i.to">
         <NuxtLink :to="i.to" class="flex min-h-[72px] items-center gap-3 px-4 py-3 active:bg-brand-100">
-          <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600">
+          <span class="grid size-11 shrink-0 place-items-center rounded-lg bg-brand-50 text-brand-600">
             <UIcon :name="i.icon" class="size-6" />
           </span>
           <span class="min-w-0 flex-1">
