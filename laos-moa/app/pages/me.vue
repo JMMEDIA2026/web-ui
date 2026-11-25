@@ -9,6 +9,15 @@ useSeoMeta({
 })
 
 const { member, refresh } = useMember()
+
+// 등급표는 안내를 펼칠 때만 불러옵니다.
+interface GradeRow { level: number, name: string, min: number | null }
+const gradeInfo = ref<{ rules: { perWeek: number, perReservation: number, perInquiry: number }, grades: GradeRow[] } | null>(null)
+async function loadGrades(e: Event) {
+  if ((e.target as HTMLDetailsElement).open && !gradeInfo.value) {
+    gradeInfo.value = await $fetch('/api/members/grades').catch(() => null)
+  }
+}
 const toast = useToast()
 
 const leaving = ref(false)
@@ -64,9 +73,19 @@ const items = [
 
     <!-- 회원 상태 -->
     <section v-if="member" class="card mt-4 p-4" aria-labelledby="member-title">
-      <h2 id="member-title" class="text-[1.125rem] font-bold text-ink">
+      <h2 id="member-title" class="flex flex-wrap items-center gap-2 text-[1.125rem] font-bold text-ink">
         {{ member.nickname }}님
+        <span v-if="member.grade" class="rounded-md bg-brand-100 px-2 py-0.5 text-[0.8125rem] font-bold text-brand-600">
+          {{ member.grade.level }}등급 · {{ member.grade.name }}
+        </span>
       </h2>
+      <p v-if="member.grade?.next" class="mt-1 text-[0.8125rem] text-ink-2">
+        다음 등급 {{ member.grade.next.level }}등급 {{ member.grade.next.name }}까지 {{ member.grade.next.remaining }}점
+        (현재 {{ member.grade.score }}점)
+      </p>
+      <p v-else-if="member.grade" class="mt-1 text-[0.8125rem] text-ink-2">
+        회원 최고 등급이에요. (현재 {{ member.grade.score }}점)
+      </p>
       <dl class="mt-2 space-y-1 text-[0.9375rem]">
         <div class="flex gap-2">
           <dt class="w-16 shrink-0 text-ink-2">이메일</dt>
@@ -81,7 +100,26 @@ const items = [
           <dd class="text-ink">{{ member.phone }}</dd>
         </div>
       </dl>
-      <div class="mt-3 flex flex-wrap gap-2">
+      <details class="mt-3 border-t border-line pt-1" @toggle="loadGrades">
+        <summary class="flex min-h-11 cursor-pointer items-center text-[0.9375rem] font-bold text-brand-600">
+          등급 안내
+        </summary>
+        <div v-if="gradeInfo" class="pb-2 text-[0.875rem] text-ink">
+          <p class="leading-relaxed text-ink-2">
+            점수는 가입 후 7일마다 {{ gradeInfo.rules.perWeek }}점, 예약 요청 1건당 {{ gradeInfo.rules.perReservation }}점, 문의 1건당 {{ gradeInfo.rules.perInquiry }}점이에요. 취소·거절된 예약은 빠져요. 등급은 자동으로 올라가요.
+          </p>
+          <ul class="mt-2 divide-y divide-line rounded-lg border border-line">
+            <li v-for="g in gradeInfo.grades" :key="g.level" class="flex items-center justify-between px-3 py-2" :class="member.grade?.level === g.level ? 'bg-brand-100 font-bold' : ''">
+              <span>{{ g.level }}등급 · {{ g.name }}</span>
+              <span class="text-ink-2">{{ g.min === null ? '운영진' : `${g.min}점~` }}</span>
+            </li>
+          </ul>
+        </div>
+        <p v-else class="pb-2 text-[0.875rem] text-ink-2">
+          불러오는 중…
+        </p>
+      </details>
+      <div class="mt-1 flex flex-wrap gap-2">
         <button type="button" class="btn btn-outline btn-sm" :disabled="busy" @click="logout">
           로그아웃
         </button>

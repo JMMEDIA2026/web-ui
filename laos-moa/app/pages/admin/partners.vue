@@ -19,6 +19,15 @@ const toast = useToast()
 const origin = useRequestURL().origin
 
 const partners = ref<Partner[]>([])
+const categoryFilter = ref('')
+
+// 업종별 협력업체 수 (비어 있는 업종은 보여 주지 않습니다)
+const categoryCounts = computed(() => {
+  const map = new Map<string, number>()
+  for (const p of partners.value) map.set(p.category, (map.get(p.category) ?? 0) + 1)
+  return [...map.entries()].sort((a, b) => a[0].localeCompare(b[0], 'ko'))
+})
+const shownPartners = computed(() => categoryFilter.value ? partners.value.filter(p => p.category === categoryFilter.value) : partners.value)
 const loading = ref(true)
 const saving = ref(false)
 
@@ -141,8 +150,21 @@ async function resetCode(p: Partner) {
       <UButton type="submit" label="협력업체 등록" icon="i-lucide-plus" :loading="saving" :disabled="!form.id || !form.name || !form.category" />
     </form>
 
-    <div v-if="partners.length" class="mt-6 grid gap-4 md:grid-cols-2">
-      <article v-for="p in partners" :key="p.id" class="border border-default bg-white p-5" :class="p.active ? '' : 'opacity-60'">
+    <div v-if="partners.length" class="mt-6 flex flex-wrap gap-2" role="group" aria-label="업종별 보기">
+      <UButton :label="`전체 ${partners.length}`" size="sm" :variant="categoryFilter === '' ? 'solid' : 'outline'" :color="categoryFilter === '' ? 'primary' : 'neutral'" @click="categoryFilter = ''" />
+      <UButton
+        v-for="[cat, n] in categoryCounts"
+        :key="cat"
+        :label="`${cat} ${n}`"
+        size="sm"
+        :variant="categoryFilter === cat ? 'solid' : 'outline'"
+        :color="categoryFilter === cat ? 'primary' : 'neutral'"
+        @click="categoryFilter = cat"
+      />
+    </div>
+
+    <div v-if="partners.length" class="mt-4 grid gap-4 md:grid-cols-2">
+      <article v-for="p in shownPartners" :key="p.id" class="border border-default bg-white p-5" :class="p.active ? '' : 'opacity-60'">
         <div class="flex items-start justify-between gap-3">
           <div>
             <h2 class="font-bold text-highlighted">

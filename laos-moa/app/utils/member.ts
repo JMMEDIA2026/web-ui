@@ -13,6 +13,7 @@ export interface Member {
   phone: string
   gender: 'M' | 'F' | 'N'
   createdAt: string
+  grade?: { level: number, name: string, score: number, next: { level: number, name: string, min: number, remaining: number } | null }
 }
 
 export const genderLabel: Record<string, string> = { M: '남성', F: '여성', N: '선택 안 함' }

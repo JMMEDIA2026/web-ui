@@ -15,6 +15,9 @@ interface MemberRow {
   last_login_at: string
   reservation_count: number
   inquiry_count: number
+  grade_level: number
+  grade_name: string
+  grade_score: number
 }
 
 const api = useApi('admin')
@@ -25,13 +28,15 @@ const total = ref(0)
 const last7 = ref(0)
 const loading = ref(true)
 const q = ref('')
+const gradeFilter = ref('all')
+const gradeItems = [{ label: '전체 등급', value: 'all' }, ...Array.from({ length: 9 }, (_, i) => ({ label: `${i + 1}등급`, value: String(i + 1) }))]
 
 const genderText: Record<string, string> = { M: '남성', F: '여성', N: '선택 안 함' }
 
 async function load() {
   loading.value = true
   try {
-    const res = await api<{ total: number, last7: number, members: MemberRow[] }>('/members', { query: q.value.trim() ? { q: q.value.trim() } : {} })
+    const res = await api<{ total: number, last7: number, members: MemberRow[] }>('/members', { query: { ...(q.value.trim() ? { q: q.value.trim() } : {}), ...(gradeFilter.value !== 'all' ? { grade: gradeFilter.value } : {}) } })
     rows.value = res.members
     total.value = res.total
     last7.value = res.last7
@@ -42,6 +47,7 @@ async function load() {
 onMounted(load)
 
 let timer: ReturnType<typeof setTimeout> | undefined
+watch(gradeFilter, load)
 watch(q, () => {
   clearTimeout(timer)
   timer = setTimeout(load, 300)
@@ -85,13 +91,22 @@ async function copy(text: string, label: string) {
       </div>
     </div>
 
-    <div class="mt-5 max-w-md">
-      <label for="member-search" class="sr-only">회원 검색</label>
-      <UInput id="member-search" v-model="q" icon="i-lucide-search" placeholder="닉네임, 이름, 이메일, 휴대폰 번호로 검색" class="w-full" />
+    <div class="mt-5 flex max-w-xl flex-wrap gap-3">
+      <div class="min-w-[240px] flex-1">
+        <label for="member-search" class="sr-only">회원 검색</label>
+        <UInput id="member-search" v-model="q" icon="i-lucide-search" placeholder="닉네임, 이름, 이메일, 휴대폰 번호로 검색" class="w-full" />
+      </div>
+      <div>
+        <label for="member-grade" class="sr-only">등급 필터</label>
+        <USelect id="member-grade" v-model="gradeFilter" :items="gradeItems" class="w-36" />
+      </div>
     </div>
+    <p class="mt-2 text-xs text-muted">
+      등급은 활동 점수로 자동 계산돼요. (가입 후 7일마다 1점, 예약 요청 10점, 문의 5점) 10등급은 관리자 전용이에요.
+    </p>
 
     <p class="mt-3 text-sm text-muted" aria-live="polite">
-      <template v-if="q.trim()">
+      <template v-if="q.trim() || gradeFilter !== 'all'">
         검색 결과 {{ rows.length }}명
       </template>
       <template v-else-if="rows.length < total">
@@ -100,9 +115,10 @@ async function copy(text: string, label: string) {
     </p>
 
     <div v-if="rows.length" class="mt-3 overflow-x-auto border border-default bg-white">
-      <table class="w-full min-w-[860px] text-left text-sm">
+      <table class="w-full min-w-[960px] text-left text-sm">
         <thead class="bg-slate-50 text-xs text-muted">
           <tr>
+            <th scope="col" class="px-3 py-2 font-bold">등급</th>
             <th scope="col" class="px-3 py-2 font-bold">닉네임</th>
             <th scope="col" class="px-3 py-2 font-bold">실명</th>
             <th scope="col" class="px-3 py-2 font-bold">이메일</th>
@@ -116,6 +132,9 @@ async function copy(text: string, label: string) {
         </thead>
         <tbody class="divide-y divide-default">
           <tr v-for="m in rows" :key="m.id">
+            <td class="whitespace-nowrap px-3 py-2">
+              <UBadge :label="`${m.grade_level}등급 ${m.grade_name}`" color="primary" variant="subtle" :title="`${m.grade_score}점`" />
+            </td>
             <td class="px-3 py-2 font-bold text-highlighted">{{ m.nickname }}</td>
             <td class="px-3 py-2">{{ m.real_name }}</td>
             <td class="px-3 py-2">
