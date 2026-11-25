@@ -18,6 +18,8 @@ const error = ref('')
 
 async function submit() {
   error.value = ''
+  if (!form.email.trim()) { error.value = '이메일을 입력해 주세요.'; document.getElementById('l-email')?.focus(); return }
+  if (!form.password) { error.value = '비밀번호를 입력해 주세요.'; document.getElementById('l-pw')?.focus(); return }
   loading.value = true
   try {
     await $fetch('/api/members/login', { method: 'POST', body: { ...form } })
@@ -41,7 +43,7 @@ async function submit() {
       {{ needText }}
     </p>
 
-    <form class="mt-4 space-y-4" @submit.prevent="submit">
+    <form class="mt-4 space-y-4" novalidate @submit.prevent="submit">
       <div>
         <label for="l-email" class="text-[0.9375rem] font-bold text-ink">이메일</label>
         <input id="l-email" v-model="form.email" type="email" inputmode="email" autocomplete="email" class="field mt-1.5" required>
@@ -59,7 +61,7 @@ async function submit() {
         {{ error }}
       </p>
 
-      <button type="submit" class="btn btn-primary w-full" :disabled="loading || !form.email || !form.password">
+      <button type="submit" class="btn btn-primary w-full" :disabled="loading">
         {{ loading ? '로그인 중…' : '로그인' }}
       </button>
     </form>

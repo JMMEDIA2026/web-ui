@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const route = useRoute()
 
-// 하단 고정 메뉴 4개 (홈 / 업체 / 가이드 / 내 정보). 현재 메뉴만 보라색으로 강조합니다.
+// 하단 고정 메뉴 4개 (홈 / 업체 / 가이드 / 내 정보). 현재 메뉴는 초록색 글자·위쪽 막대·연한 배경으로 강조합니다.
 const items = [
   { label: '홈', to: '/', icon: 'home', match: (p: string) => p === '/' || p.startsWith('/exchange') },
   { label: '업체', to: '/businesses', icon: 'biz', match: (p: string) => p.startsWith('/businesses') },
@@ -20,10 +20,11 @@ const items = [
       <li v-for="item in items" :key="item.to" class="min-w-0">
         <NuxtLink
           :to="item.to"
-          class="flex h-full min-h-[44px] flex-col items-center justify-center gap-0.5 text-[0.8125rem] font-bold"
-          :class="item.match(route.path) ? 'text-brand-600' : 'text-ink-2'"
+          class="relative flex h-full min-h-[44px] flex-col items-center justify-center gap-0.5 text-[0.8125rem] font-bold"
+          :class="item.match(route.path) ? 'bg-brand-50 text-brand-600' : 'text-ink-2'"
           :aria-current="item.match(route.path) ? 'page' : undefined"
         >
+          <span v-if="item.match(route.path)" class="absolute inset-x-6 top-0 h-[3px] rounded-b-full bg-brand-500" aria-hidden="true" />
           <AppIcon :name="item.icon" class="size-7 transition" :class="item.match(route.path) ? 'scale-110' : 'opacity-60 saturate-50'" />
           <span>{{ item.label }}</span>
         </NuxtLink>
