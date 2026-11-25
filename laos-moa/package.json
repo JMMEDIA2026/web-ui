@@ -1,0 +1,20 @@
+{
+  "name": "laos-moa",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@iconify-json/lucide": "^1.2.0",
+    "@nuxt/ui": "^4.13.1",
+    "nuxt": "^4.1.0",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.9.0",
+    "zod": "^4.0.0"
+  }
+}
