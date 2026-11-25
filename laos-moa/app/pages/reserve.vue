@@ -4,6 +4,9 @@ useSeoMeta({
   description: '라자 협력업체(골프, 마사지, 오토바이 렌트 등)에 예약을 요청하세요.'
 })
 
+definePageMeta({ middleware: 'member' })
+const { member } = useMember()
+
 interface PartnerOption {
   id: string
   name: string
@@ -36,8 +39,8 @@ const today = new Date(Date.now() + 7 * 3600 * 1000).toISOString().slice(0, 10)
 
 const form = reactive({
   target: initialTarget(),
-  name: '',
-  contact: '',
+  name: member.value?.realName ?? '',
+  contact: member.value?.phone ?? '',
   date: '',
   people: 1,
   service: '',
@@ -71,7 +74,7 @@ async function submit() {
 
 function reset() {
   doneCode.value = ''
-  Object.assign(form, { target: initialTarget(), name: '', contact: '', date: '', people: 1, service: '', note: '', website: '' })
+  Object.assign(form, { target: initialTarget(), name: member.value?.realName ?? '', contact: member.value?.phone ?? '', date: '', people: 1, service: '', note: '', website: '' })
 }
 </script>
 
@@ -85,6 +88,10 @@ function reset() {
         예약 요청하기
       </h1>
     </div>
+
+    <p v-if="member && !doneCode" class="mt-3 text-[0.9375rem] text-ink-2">
+      <strong class="text-ink">{{ member.nickname }}</strong>님의 정보로 예약을 요청해요. 연락처는 필요하면 카카오톡 ID로 바꿀 수 있어요.
+    </p>
 
     <!-- 접수 완료 -->
     <div v-if="doneCode" class="card mt-4 p-6 text-center">

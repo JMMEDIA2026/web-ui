@@ -50,6 +50,9 @@ export default defineNuxtConfig({
   routeRules: {
     '/admin/**': { ssr: false, headers: { 'X-Robots-Tag': 'noindex, nofollow', 'Cache-Control': 'no-store' } },
     '/partner/**': { ssr: false, headers: { 'X-Robots-Tag': 'noindex, nofollow', 'Cache-Control': 'no-store' } },
+    '/login': { headers: { 'X-Robots-Tag': 'noindex, nofollow' } },
+    '/signup': { headers: { 'X-Robots-Tag': 'noindex, nofollow' } },
+    '/api/members/**': { headers: { 'Cache-Control': 'private, no-store' } },
     '/api/admin/**': { headers: { 'Cache-Control': 'no-store' } },
     '/api/partner/**': { headers: { 'Cache-Control': 'no-store' } }
   },

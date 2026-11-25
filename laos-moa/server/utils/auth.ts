@@ -70,6 +70,42 @@ export async function startSession(event: H3Event, role: Session['role'], pid?: 
   })
 }
 
+// --- 회원 세션 (관리자·협력업체와 별도 쿠키) ---
+const MEMBER_COOKIE = 'laja_member'
+const MEMBER_DAYS = 30
+
+export async function startMemberSession(event: H3Event, memberId: string): Promise<void> {
+  const payload = b64url(enc.encode(JSON.stringify({ mid: memberId, exp: Date.now() + MEMBER_DAYS * 86400 * 1000 })))
+  const signature = await sign(secretOf(event), payload)
+  setCookie(event, MEMBER_COOKIE, `${payload}.${signature}`, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'lax',
+    path: '/',
+    maxAge: MEMBER_DAYS * 86400
+  })
+}
+
+export function endMemberSession(event: H3Event): void {
+  deleteCookie(event, MEMBER_COOKIE, { path: '/' })
+}
+
+export async function readMemberId(event: H3Event): Promise<string | null> {
+  const raw = getCookie(event, MEMBER_COOKIE)
+  if (!raw) return null
+  const [payload, signature] = raw.split('.')
+  if (!payload || !signature) return null
+  const expected = await sign(secretOf(event), payload)
+  if (!timingSafeEqual(expected, signature)) return null
+  try {
+    const data = JSON.parse(b64urlDecode(payload)) as { mid?: string, exp?: number }
+    if (!data.mid || !data.exp || data.exp < Date.now()) return null
+    return data.mid
+  } catch {
+    return null
+  }
+}
+
 export function endSession(event: H3Event): void {
   deleteCookie(event, COOKIE, { path: '/' })
 }

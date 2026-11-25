@@ -19,6 +19,7 @@ const productLabel: Record<string, string> = {
 
 export default defineEventHandler(async (event) => {
   assertSameOrigin(event)
+  const member = await requireMember(event)
   const data = await parseBody(event, bodySchema)
 
   // 숨김 필드가 채워져 있으면 봇으로 보고 조용히 성공 처리합니다.
@@ -36,8 +37,8 @@ export default defineEventHandler(async (event) => {
 
   // 관리자 페이지의 "광고 문의" 목록에서 볼 수 있도록 저장합니다.
   await db
-    .prepare('INSERT INTO inquiries (id, company, contact, product, message, status, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)')
-    .bind(`Q${randomCode(6)}`, data.company, data.contact, data.product, data.message ?? '', 'new', nowIso())
+    .prepare('INSERT INTO inquiries (id, company, contact, product, message, status, created_at, member_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
+    .bind(`Q${randomCode(6)}`, data.company, data.contact, data.product, data.message ?? '', 'new', nowIso(), member.id)
     .run()
   await rateAdd(db, ip, RATE_KIND)
 
@@ -45,6 +46,7 @@ export default defineEventHandler(async (event) => {
     event,
     [
       '[라자] 새 광고·제휴 문의',
+      `회원: ${member.nickname}`,
       `업체명: ${data.company}`,
       `연락처: ${data.contact}`,
       `종류: ${productLabel[data.product]}`,

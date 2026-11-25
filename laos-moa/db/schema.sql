@@ -28,7 +28,8 @@ CREATE TABLE IF NOT EXISTS reservations (
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL,
   business_id TEXT NOT NULL DEFAULT '',   -- 예약 요청을 받은 업체(협력업체가 아니어도 저장)
-  business_name TEXT NOT NULL DEFAULT ''
+  business_name TEXT NOT NULL DEFAULT '',
+  member_id TEXT NOT NULL DEFAULT ''      -- 예약한 회원
 );
 CREATE INDEX IF NOT EXISTS idx_reservations_partner ON reservations (partner_id, created_at);
 CREATE INDEX IF NOT EXISTS idx_reservations_status ON reservations (status, created_at);
@@ -40,7 +41,8 @@ CREATE TABLE IF NOT EXISTS inquiries (
   product TEXT NOT NULL,
   message TEXT NOT NULL DEFAULT '',
   status TEXT NOT NULL DEFAULT 'new',
-  created_at TEXT NOT NULL
+  created_at TEXT NOT NULL,
+  member_id TEXT NOT NULL DEFAULT ''      -- 문의한 회원
 );
 
 CREATE TABLE IF NOT EXISTS rate_hits (
@@ -70,3 +72,19 @@ CREATE TABLE IF NOT EXISTS businesses (
   updated_at TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_businesses_category ON businesses (category, active);
+
+-- 회원 (이메일 + 비밀번호). 실명·휴대폰은 예약 처리에 필요한 개인정보입니다.
+CREATE TABLE IF NOT EXISTS members (
+  id TEXT PRIMARY KEY,
+  email TEXT NOT NULL UNIQUE,
+  password_hash TEXT NOT NULL,
+  nickname TEXT NOT NULL,
+  real_name TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  gender TEXT NOT NULL,
+  terms_at TEXT NOT NULL,
+  privacy_at TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  last_login_at TEXT NOT NULL DEFAULT ''
+);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_members_nickname ON members (lower(nickname));

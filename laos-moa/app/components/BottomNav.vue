@@ -6,7 +6,7 @@ const items = [
   { label: '홈', to: '/', icon: 'home', match: (p: string) => p === '/' || p.startsWith('/exchange') },
   { label: '업체', to: '/businesses', icon: 'biz', match: (p: string) => p.startsWith('/businesses') },
   { label: '가이드', to: '/guides', icon: 'guide', match: (p: string) => p.startsWith('/guides') },
-  { label: '내 정보', to: '/me', icon: 'me', match: (p: string) => p.startsWith('/me') || p.startsWith('/reserve') || p.startsWith('/advertise') }
+  { label: '내 정보', to: '/me', icon: 'me', match: (p: string) => ['/me', '/reserve', '/advertise', '/login', '/signup', '/terms', '/privacy'].some(x => p.startsWith(x)) }
 ]
 </script>
 

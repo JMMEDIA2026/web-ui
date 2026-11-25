@@ -1,9 +1,46 @@
 <script setup lang="ts">
-// 내 정보: 지금 실제로 제공하는 기능만 모았습니다. (회원가입·저장 기능은 아직 없습니다.)
+// 내 정보: 회원 정보와, 지금 실제로 제공하는 기능만 모았습니다.
 useSeoMeta({
   title: '내 정보 · 라자',
   description: '예약 요청, 협력업체 로그인, 광고·제휴 문의.'
 })
+
+const { member, refresh } = useMember()
+const toast = useToast()
+
+const leaving = ref(false)
+const leavePw = ref('')
+const leaveError = ref('')
+const busy = ref(false)
+
+async function logout() {
+  busy.value = true
+  try {
+    await $fetch('/api/members/logout', { method: 'POST' })
+    await refresh()
+    await refreshNuxtData('member')
+    toast.add({ title: '로그아웃했어요', color: 'neutral' })
+  } finally {
+    busy.value = false
+  }
+}
+
+async function leave() {
+  leaveError.value = ''
+  busy.value = true
+  try {
+    await $fetch('/api/members/delete', { method: 'POST', body: { password: leavePw.value } })
+    await refresh()
+    await refreshNuxtData('member')
+    leaving.value = false
+    leavePw.value = ''
+    toast.add({ title: '탈퇴가 완료됐어요', color: 'neutral' })
+  } catch (e) {
+    leaveError.value = errorMessage(e)
+  } finally {
+    busy.value = false
+  }
+}
 
 const items = [
   { label: '예약 요청하기', desc: '협력업체에 예약을 요청해요', icon: 'calendar', to: '/reserve' },
@@ -18,8 +55,66 @@ const items = [
       내 정보
     </h1>
     <p class="mt-1 text-[0.9375rem] leading-relaxed text-ink-2">
-      업체 검색과 연락은 로그인 없이 쓸 수 있어요.
+      업체 검색·환율·가이드는 가입 없이 쓸 수 있고, 예약과 문의는 회원만 보낼 수 있어요.
     </p>
+
+    <!-- 회원 상태 -->
+    <section v-if="member" class="card mt-4 p-4" aria-labelledby="member-title">
+      <h2 id="member-title" class="text-[1.125rem] font-bold text-ink">
+        {{ member.nickname }}님
+      </h2>
+      <dl class="mt-2 space-y-1 text-[0.9375rem]">
+        <div class="flex gap-2">
+          <dt class="w-16 shrink-0 text-ink-2">이메일</dt>
+          <dd class="min-w-0 break-all text-ink">{{ member.email }}</dd>
+        </div>
+        <div class="flex gap-2">
+          <dt class="w-16 shrink-0 text-ink-2">실명</dt>
+          <dd class="text-ink">{{ member.realName }}</dd>
+        </div>
+        <div class="flex gap-2">
+          <dt class="w-16 shrink-0 text-ink-2">휴대폰</dt>
+          <dd class="text-ink">{{ member.phone }}</dd>
+        </div>
+      </dl>
+      <div class="mt-3 flex flex-wrap gap-2">
+        <button type="button" class="btn btn-outline btn-sm" :disabled="busy" @click="logout">
+          로그아웃
+        </button>
+        <button type="button" class="btn btn-quiet btn-sm" :aria-expanded="leaving" @click="leaving = !leaving">
+          회원 탈퇴
+        </button>
+      </div>
+      <form v-if="leaving" class="mt-3 space-y-2 border-t border-line pt-3" @submit.prevent="leave">
+        <p class="text-[0.875rem] leading-relaxed text-ink-2">
+          탈퇴하면 회원 정보가 삭제되고 되돌릴 수 없어요. 비밀번호를 입력해 주세요.
+        </p>
+        <label for="leave-pw" class="sr-only">비밀번호</label>
+        <input id="leave-pw" v-model="leavePw" type="password" autocomplete="current-password" class="field" required>
+        <p v-if="leaveError" class="text-[0.875rem] font-bold text-red-700" role="alert">
+          {{ leaveError }}
+        </p>
+        <button type="submit" class="btn btn-primary w-full" :disabled="busy || !leavePw">
+          탈퇴하기
+        </button>
+      </form>
+    </section>
+    <section v-else class="card mt-4 p-4" aria-labelledby="guest-title">
+      <h2 id="guest-title" class="text-[1.125rem] font-bold text-ink">
+        로그인이 필요해요
+      </h2>
+      <p class="mt-1 text-[0.9375rem] text-ink-2">
+        예약과 문의를 보내려면 회원가입 후 로그인해 주세요.
+      </p>
+      <div class="mt-3 grid grid-cols-2 gap-2">
+        <NuxtLink to="/login" class="btn btn-outline">
+          로그인
+        </NuxtLink>
+        <NuxtLink to="/signup" class="btn btn-primary">
+          회원가입
+        </NuxtLink>
+      </div>
+    </section>
 
     <ul class="rows card mt-4 overflow-hidden">
       <li v-for="i in items" :key="i.to">
@@ -36,7 +131,16 @@ const items = [
       </li>
     </ul>
 
-    <section class="mt-8" aria-labelledby="credit-title">
+    <nav class="mt-6 flex gap-4" aria-label="약관">
+      <NuxtLink to="/terms" class="inline-flex min-h-11 items-center text-[0.875rem] font-bold text-ink-2 underline">
+        이용약관
+      </NuxtLink>
+      <NuxtLink to="/privacy" class="inline-flex min-h-11 items-center text-[0.875rem] font-bold text-ink-2 underline">
+        개인정보 처리 안내
+      </NuxtLink>
+    </nav>
+
+    <section class="mt-4" aria-labelledby="credit-title">
       <h2 id="credit-title" class="text-[0.9375rem] font-bold text-ink">
         출처 안내
       </h2>

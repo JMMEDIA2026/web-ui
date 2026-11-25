@@ -1,4 +1,7 @@
 <script setup lang="ts">
+definePageMeta({ middleware: 'member' })
+const { member } = useMember()
+
 useSeoMeta({
   title: '업체 등록·광고 문의 · 라자',
   description: '한인 업체 무료 등록, 추천 업체, 배너 광고 안내와 문의.'
@@ -19,7 +22,7 @@ const productOptions = [
   { label: '제휴·정보 수정 제안·기타', value: 'etc' }
 ]
 
-const form = reactive({ company: '', contact: '', product: '', message: '', website: '' })
+const form = reactive({ company: '', contact: member.value?.phone ?? '', product: '', message: '', website: '' })
 const loading = ref(false)
 const error = ref('')
 const done = ref(false)
@@ -33,7 +36,7 @@ async function submit() {
     await $fetch('/api/inquiry', { method: 'POST', body: { ...form } })
     done.value = true
     toast.add({ title: '문의가 접수되었어요', color: 'success' })
-    Object.assign(form, { company: '', contact: '', product: '', message: '', website: '' })
+    Object.assign(form, { company: '', contact: member.value?.phone ?? '', product: '', message: '', website: '' })
   } catch (e) {
     error.value = errorMessage(e)
   } finally {

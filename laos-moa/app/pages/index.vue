@@ -66,9 +66,9 @@ const firstGuides = ['visa', 'telecom', 'health', 'banking']
 
     <!-- 주요 카테고리 -->
     <nav class="mt-5" aria-label="주요 카테고리">
-      <ul class="grid grid-cols-4 gap-2">
+      <ul class="grid grid-cols-4 gap-3 pb-3">
         <li v-for="s in shortcuts" :key="s.label">
-          <NuxtLink :to="s.to" class="card flex min-h-[88px] flex-col items-center justify-center gap-1.5 px-1 py-3 text-center active:bg-brand-100">
+          <NuxtLink :to="s.to" class="soft-btn flex min-h-[92px] flex-col items-center justify-center gap-1.5 px-1 py-3 text-center">
             <img :src="s.emoji" alt="" width="40" height="40" class="size-10 object-contain" loading="lazy">
             <span class="text-[0.875rem] font-semibold leading-tight text-ink">{{ s.label }}</span>
           </NuxtLink>

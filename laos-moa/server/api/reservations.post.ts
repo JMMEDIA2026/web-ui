@@ -16,6 +16,7 @@ const schema = z.object({
 
 export default defineEventHandler(async (event) => {
   assertSameOrigin(event)
+  const member = await requireMember(event)
   const body = await parseBody(event, schema)
 
   // 숨김 필드가 채워져 있으면 봇으로 보고 조용히 성공 처리합니다.
@@ -72,10 +73,10 @@ export default defineEventHandler(async (event) => {
   await db
     .prepare(
       `INSERT INTO reservations
-        (id, partner_id, customer_name, customer_contact, service, reserve_date, people, note, status, partner_memo, created_at, updated_at, business_id, business_name)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', '', ?, ?, ?, ?)`
+        (id, partner_id, customer_name, customer_contact, service, reserve_date, people, note, status, partner_memo, created_at, updated_at, business_id, business_name, member_id)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', '', ?, ?, ?, ?, ?)`
     )
-    .bind(code, partner?.id ?? '', body.name, body.contact, body.service, body.date, body.people, body.note, now, now, business?.id ?? '', business?.name ?? '')
+    .bind(code, partner?.id ?? '', body.name, body.contact, body.service, body.date, body.people, body.note, now, now, business?.id ?? '', business?.name ?? '', member.id)
     .run()
   await rateAdd(db, ip, RATE_KIND)
 
@@ -84,7 +85,7 @@ export default defineEventHandler(async (event) => {
     [
       `[라자] 새 예약 요청 ${code}`,
       `업체: ${targetName}${partner ? '' : ' (협력업체 미연결 · 라자가 직접 확인 필요)'}`,
-      `고객: ${body.name} (${body.contact})`,
+      `고객: ${body.name} (${body.contact}) · 회원 ${member.nickname}`,
       `날짜: ${body.date} / ${body.people}명`,
       body.service ? `서비스: ${body.service}` : ''
     ].filter(Boolean).join('\n')

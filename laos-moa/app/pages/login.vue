@@ -1,0 +1,68 @@
+<script setup lang="ts">
+useSeoMeta({ title: '로그인 · 라자', robots: 'noindex' })
+
+const route = useRoute()
+const { member, refresh } = useMember()
+
+const next = safeNext(route.query.next, '/me')
+const needLogin = route.query.need === '1'
+
+// 이미 로그인했다면 바로 이동합니다.
+if (member.value) await navigateTo(next, { replace: true })
+
+const form = reactive({ email: '', password: '' })
+const loading = ref(false)
+const error = ref('')
+
+async function submit() {
+  error.value = ''
+  loading.value = true
+  try {
+    await $fetch('/api/members/login', { method: 'POST', body: { ...form } })
+    await refresh()
+    await refreshNuxtData('member')
+    await navigateTo(next, { replace: true })
+  } catch (e) {
+    error.value = errorMessage(e)
+  } finally {
+    loading.value = false
+  }
+}
+</script>
+
+<template>
+  <div class="px-4 pt-5 sm:px-5">
+    <h1 data-page-title tabindex="-1" class="text-[1.625rem] font-bold text-ink">
+      로그인
+    </h1>
+    <p v-if="needLogin" class="mt-2 rounded-lg bg-brand-100 p-3 text-[0.9375rem] font-semibold text-brand-700" role="status">
+      예약·문의는 로그인한 회원만 이용할 수 있어요.
+    </p>
+
+    <form class="mt-4 space-y-4" @submit.prevent="submit">
+      <div>
+        <label for="l-email" class="text-[0.9375rem] font-bold text-ink">이메일</label>
+        <input id="l-email" v-model="form.email" type="email" inputmode="email" autocomplete="email" class="field mt-1.5" required>
+      </div>
+      <div>
+        <label for="l-pw" class="text-[0.9375rem] font-bold text-ink">비밀번호</label>
+        <input id="l-pw" v-model="form.password" type="password" autocomplete="current-password" class="field mt-1.5" required>
+      </div>
+
+      <p v-if="error" class="rounded-lg bg-red-50 p-3 text-[0.9375rem] font-bold text-red-700" role="alert">
+        {{ error }}
+      </p>
+
+      <button type="submit" class="btn btn-primary w-full" :disabled="loading || !form.email || !form.password">
+        {{ loading ? '로그인 중…' : '로그인' }}
+      </button>
+    </form>
+
+    <p class="mt-5 text-center text-[0.9375rem] text-ink-2">
+      아직 회원이 아니신가요?
+    </p>
+    <NuxtLink :to="{ path: '/signup', query: route.query.next ? { next: route.query.next } : {} }" class="btn btn-outline mt-2 w-full">
+      회원가입
+    </NuxtLink>
+  </div>
+</template>
