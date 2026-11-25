@@ -5,6 +5,23 @@ useSeoMeta({ title: '설정 · 라자 관리자' })
 const api = useApi('admin')
 const toast = useToast()
 
+const testing = ref(false)
+const testResult = ref<'' | 'ok' | 'fail' | 'none'>('')
+
+// Slack 알림이 연결됐는지 시험 메시지를 보냅니다.
+async function testNotify() {
+  testing.value = true
+  testResult.value = ''
+  try {
+    const res = await api<{ configured: boolean, ok: boolean }>('/notify-test', { method: 'POST' })
+    testResult.value = !res.configured ? 'none' : res.ok ? 'ok' : 'fail'
+  } catch (e) {
+    toast.add({ title: errorMessage(e), color: 'error' })
+  } finally {
+    testing.value = false
+  }
+}
+
 const form = reactive({ current: '', next: '', confirm: '' })
 const saving = ref(false)
 
@@ -53,5 +70,18 @@ async function save() {
 
       <UButton type="submit" label="비밀번호 변경" class="mt-5" block :loading="saving" :disabled="!canSave" />
     </form>
+
+    <section class="box3d mt-6 max-w-md border border-default bg-white p-6" aria-labelledby="slack-title">
+      <h2 id="slack-title" class="font-bold text-highlighted">
+        Slack 알림
+      </h2>
+      <p class="mt-1 text-sm text-muted">
+        새 예약, 광고 문의, 협력업체 가입 신청이 들어오면 Slack으로 알려 드려요. 시험 알림을 보내 연결을 확인하세요.
+      </p>
+      <UButton label="시험 알림 보내기" class="mt-4" color="neutral" variant="outline" :loading="testing" @click="testNotify" />
+      <UAlert v-if="testResult === 'ok'" class="mt-3" color="success" variant="subtle" icon="i-lucide-circle-check" title="시험 알림을 보냈어요. Slack 채널을 확인해 주세요." />
+      <UAlert v-else-if="testResult === 'none'" class="mt-3" color="warning" variant="subtle" icon="i-lucide-circle-alert" title="아직 Slack 주소가 연결되지 않았어요." description="Cloudflare에서 INQUIRY_WEBHOOK_URL 비밀 값을 추가해 주세요." />
+      <UAlert v-else-if="testResult === 'fail'" class="mt-3" color="error" variant="subtle" icon="i-lucide-circle-alert" title="알림을 보내지 못했어요." description="Slack Incoming Webhook 주소가 맞는지 확인해 주세요." />
+    </section>
   </UContainer>
 </template>

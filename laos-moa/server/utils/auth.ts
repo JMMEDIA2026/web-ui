@@ -187,15 +187,33 @@ export async function parseBody<T extends z.ZodTypeAny>(event: H3Event, schema: 
   return result.data
 }
 
-export async function notify(event: H3Event, text: string): Promise<void> {
-  const webhook = useRuntimeConfig(event).inquiryWebhookUrl
+// Slack 알림 주소: Worker 비밀 값(INQUIRY_WEBHOOK_URL)을 우선 쓰고, 없으면 환경변수 설정을 씁니다.
+export function webhookUrlOf(event: H3Event): string {
+  const raw = cfEnv(event).INQUIRY_WEBHOOK_URL || (useRuntimeConfig(event).inquiryWebhookUrl as string) || ''
+  return String(raw).trim()
+}
+
+// 알림을 보내고 결과를 돌려줍니다. 주소가 없으면 로그에만 남깁니다.
+export async function sendWebhook(event: H3Event, text: string): Promise<{ configured: boolean, ok: boolean }> {
+  const webhook = webhookUrlOf(event)
   if (!webhook) {
     console.log(text)
-    return
+    return { configured: false, ok: false }
+  }
+  // 임의의 주소로 요청을 보내지 않도록 Slack 주소만 허용합니다.
+  if (!/^https:\/\/hooks\.slack\.com\/(services|workflows)\//.test(webhook)) {
+    console.error('[notify] Slack 주소가 아니어서 보내지 않았습니다')
+    return { configured: true, ok: false }
   }
   try {
-    await $fetch(webhook as string, { method: 'POST', body: { text } })
+    await $fetch(webhook, { method: 'POST', body: { text } })
+    return { configured: true, ok: true }
   } catch (error) {
     console.error('[notify] webhook failed', error)
+    return { configured: true, ok: false }
   }
+}
+
+export async function notify(event: H3Event, text: string): Promise<void> {
+  await sendWebhook(event, text)
 }

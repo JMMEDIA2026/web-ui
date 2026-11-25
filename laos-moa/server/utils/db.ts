@@ -19,6 +19,8 @@ export interface D1Database {
 interface CfEnv {
   DB?: D1Database
   SESSION_SECRET?: string
+  /** Slack 알림 주소(Incoming Webhook). Worker 비밀 값으로 저장합니다. */
+  INQUIRY_WEBHOOK_URL?: string
 }
 
 export function cfEnv(event: H3Event): CfEnv {
