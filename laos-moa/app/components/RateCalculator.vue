@@ -100,20 +100,20 @@ const asOf = computed(() => {
 </script>
 
 <template>
-  <section class="rounded-lg bg-brand-500 p-4 text-white" aria-labelledby="rate-title">
-    <h2 id="rate-title" class="text-[1.125rem] font-bold">
+  <section class="card p-4" aria-labelledby="rate-title">
+    <h2 id="rate-title" class="text-[1.125rem] font-bold text-ink">
       환율 변환
     </h2>
 
     <!-- 불러오는 중 -->
     <div v-if="pending && !data" class="mt-3 space-y-3" aria-busy="true">
-      <div class="h-[52px] animate-pulse rounded-lg bg-white/25" />
-      <div class="h-[84px] animate-pulse rounded-lg bg-white/25" />
+      <div class="h-[52px] animate-pulse rounded-lg bg-brand-100" />
+      <div class="h-[84px] animate-pulse rounded-lg bg-brand-100" />
       <span class="sr-only">환율을 불러오는 중입니다.</span>
     </div>
 
     <!-- 불러오기 실패: 임의의 숫자를 채우지 않습니다. -->
-    <div v-else-if="error || !data" class="mt-3 rounded-lg bg-surface p-4 text-ink" role="alert">
+    <div v-else-if="error || !data" class="mt-3 rounded-lg bg-brand-50 p-4 text-ink" role="alert">
       <p class="font-bold">
         지금은 환율을 확인할 수 없어요.
       </p>
@@ -133,8 +133,8 @@ const asOf = computed(() => {
           v-for="p in presets"
           :key="p.label"
           type="button"
-          class="min-h-11 rounded-lg px-3 text-[0.9375rem] font-bold"
-          :class="isPreset(p) ? 'bg-surface text-brand-600' : 'bg-brand-700 text-white active:bg-brand-800'"
+          class="min-h-11 rounded-lg border px-3 text-[0.9375rem] font-bold"
+          :class="isPreset(p) ? 'border-brand-500 bg-brand-500 text-white' : 'border-field-border bg-surface text-ink active:bg-brand-100'"
           :aria-pressed="isPreset(p)"
           @click="setPair(p.from, p.to)"
         >
@@ -144,7 +144,7 @@ const asOf = computed(() => {
 
       <!-- 금액 입력: 입력하면 바로 계산됩니다. -->
       <div class="mt-3">
-        <label for="rate-amount" class="text-[0.875rem] font-bold">{{ CUR[from].name }} 금액</label>
+        <label for="rate-amount" class="text-[0.875rem] font-bold text-ink">{{ CUR[from].name }} 금액</label>
         <div class="mt-1.5 flex gap-2">
           <input
             id="rate-amount"
@@ -152,10 +152,10 @@ const asOf = computed(() => {
             type="text"
             inputmode="decimal"
             autocomplete="off"
-            class="min-h-[52px] min-w-0 flex-1 rounded-lg border-0 bg-surface px-4 text-[1.125rem] font-bold text-ink"
+            class="field min-w-0 flex-1 !px-4 text-[1.125rem] font-bold"
             @input="onInput"
           >
-          <select v-model="from" aria-label="바꿀 통화" class="min-h-[52px] w-[112px] shrink-0 rounded-lg border-0 bg-surface px-3 text-[1rem] font-bold text-ink">
+          <select v-model="from" aria-label="바꿀 통화" class="field !w-[112px] shrink-0 !px-3 font-bold">
             <option v-for="o in options" :key="o.value" :value="o.value">
               {{ o.label }}
             </option>
@@ -164,18 +164,18 @@ const asOf = computed(() => {
       </div>
 
       <div class="my-2 flex items-center justify-center">
-        <button type="button" class="grid size-11 place-items-center rounded-lg bg-brand-700 active:bg-brand-800" aria-label="통화 위치 바꾸기" @click="swap">
+        <button type="button" class="grid size-11 place-items-center rounded-lg border border-field-border bg-surface text-brand-600 active:bg-brand-100" aria-label="통화 위치 바꾸기" @click="swap">
           <AppIcon name="swap" class="size-5" />
         </button>
       </div>
 
       <!-- 결과 -->
-      <div class="rounded-lg bg-surface p-4 text-ink" aria-live="polite">
+      <div class="rounded-lg bg-brand-50 p-4 text-ink" aria-live="polite">
         <div class="flex items-center justify-between gap-2">
           <p class="text-[0.875rem] text-ink-2">
             {{ fmt(amount, from) }}{{ CUR[from].unit }} =
           </p>
-          <select v-model="to" aria-label="받을 통화" class="min-h-11 rounded-lg border border-[#858C7A] bg-surface px-2 text-[0.9375rem] font-bold text-ink">
+          <select v-model="to" aria-label="받을 통화" class="min-h-11 rounded-lg border border-field-border bg-surface px-2 text-[0.9375rem] font-bold text-ink">
             <option v-for="o in options" :key="o.value" :value="o.value">
               {{ o.label }}
             </option>
@@ -189,7 +189,7 @@ const asOf = computed(() => {
         </p>
       </div>
 
-      <p class="mt-3 text-[0.8125rem] leading-snug">
+      <p class="mt-3 text-[0.8125rem] leading-snug text-ink-2">
         {{ asOf }} 기준 · 출처 ExchangeRate-API
         <br>
         국제 기준 환율이며 환전소의 실제 환율과 다를 수 있어요. 환전 전에 업체에 확인해 주세요.
