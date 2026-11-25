@@ -1,4 +1,4 @@
-import { VALID_RESERVATION_SQL, memberGrade } from '../../utils/grade'
+import { ADMIN_GRADE, VALID_RESERVATION_SQL, memberGrade } from '../../utils/grade'
 
 import { z } from 'zod'
 
@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
 
   const { results } = await db
     .prepare(
-      `SELECT m.id, m.nickname, m.real_name, m.email, m.phone, m.gender, m.created_at, m.last_login_at,
+      `SELECT m.id, m.nickname, m.real_name, m.email, m.phone, m.gender, m.created_at, m.last_login_at, m.role,
               (SELECT COUNT(*) FROM reservations r WHERE r.member_id = m.id) AS reservation_count,
               (SELECT COUNT(*) FROM inquiries i WHERE i.member_id = m.id) AS inquiry_count,
               (SELECT COUNT(*) FROM reservations r WHERE r.member_id = m.id AND ${VALID_RESERVATION_SQL}) AS valid_reservation_count
@@ -49,7 +49,8 @@ export default defineEventHandler(async (event) => {
       inquiries: Number(m.inquiry_count)
     })
     const { valid_reservation_count: _v, ...rest } = m
-    return { ...rest, grade_level: g.level, grade_name: g.name, grade_score: g.score }
+    const isAdmin = m.role === 'admin'
+    return { ...rest, grade_level: isAdmin ? ADMIN_GRADE.level : g.level, grade_name: isAdmin ? ADMIN_GRADE.name : g.name, grade_score: g.score }
   })
   const members = grade ? withGrade.filter(m => m.grade_level === grade) : withGrade
 

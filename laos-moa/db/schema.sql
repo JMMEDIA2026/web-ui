@@ -85,6 +85,7 @@ CREATE TABLE IF NOT EXISTS members (
   terms_at TEXT NOT NULL,
   privacy_at TEXT NOT NULL,
   created_at TEXT NOT NULL,
-  last_login_at TEXT NOT NULL DEFAULT ''
+  last_login_at TEXT NOT NULL DEFAULT '',
+  role TEXT NOT NULL DEFAULT 'member'      -- member / admin(10등급)
 );
 CREATE UNIQUE INDEX IF NOT EXISTS idx_members_nickname ON members (lower(nickname));

@@ -1,4 +1,4 @@
-import { VALID_RESERVATION_SQL, memberGrade } from '../../utils/grade'
+import { ADMIN_GRADE, VALID_RESERVATION_SQL, memberGrade } from '../../utils/grade'
 
 // 로그인하지 않았어도 오류 없이 { member: null }을 돌려줍니다.
 export default defineEventHandler(async (event) => {
@@ -18,7 +18,9 @@ export default defineEventHandler(async (event) => {
   return {
     member: {
       ...publicMember(member),
-      grade: memberGrade({ createdAt: member.created_at, reservations: counts?.reservations ?? 0, inquiries: counts?.inquiries ?? 0 })
+      grade: member.role === 'admin'
+        ? { level: ADMIN_GRADE.level, name: ADMIN_GRADE.name, score: 0, next: null }
+        : memberGrade({ createdAt: member.created_at, reservations: counts?.reservations ?? 0, inquiries: counts?.inquiries ?? 0 })
     }
   }
 })

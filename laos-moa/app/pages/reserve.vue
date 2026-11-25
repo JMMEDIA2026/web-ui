@@ -1,7 +1,7 @@
 <script setup lang="ts">
 useSeoMeta({
   title: '예약 요청 · 라자',
-  description: '라자 협력업체(골프, 마사지, 오토바이 렌트 등)에 예약을 요청하세요.'
+  description: '라자에 등록된 업체(골프, 마사지, 오토바이 렌트 등)에 예약을 요청하세요.'
 })
 
 definePageMeta({ middleware: 'member' })
@@ -135,9 +135,6 @@ function reset() {
       <div class="mt-4 flex flex-col gap-2">
         <NuxtLink to="/businesses" class="btn btn-primary">
           업체 찾기
-        </NuxtLink>
-        <NuxtLink to="/advertise" class="btn btn-quiet">
-          협력업체로 참여하기
         </NuxtLink>
       </div>
     </div>

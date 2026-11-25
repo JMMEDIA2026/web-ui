@@ -12,6 +12,7 @@ export interface Member {
   realName: string
   phone: string
   gender: 'M' | 'F' | 'N'
+  role?: 'member' | 'admin'
   createdAt: string
   grade?: { level: number, name: string, score: number, next: { level: number, name: string, min: number, remaining: number } | null }
 }

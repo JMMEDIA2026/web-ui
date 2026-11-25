@@ -39,7 +39,9 @@ async function logout() {
       <UContainer class="flex h-16 items-center gap-3">
         <NuxtLink :to="isPartner ? '/partner' : '/admin'" class="flex items-center gap-2 font-extrabold">
           <AppLogo :size="28" text-class="text-[1.25rem] text-brand-600" />
-          <UBadge :label="isPartner ? '협력업체' : '관리자 · 10등급'" :color="isPartner ? 'secondary' : 'primary'" variant="solid" />
+          <UBadge :color="isPartner ? 'secondary' : 'primary'" variant="solid" class="shrink-0">
+            {{ isPartner ? '협력업체' : '관리자' }}<span v-if="!isPartner" class="hidden sm:inline">&nbsp;· 10등급</span>
+          </UBadge>
         </NuxtLink>
 
         <nav v-if="!isLogin" class="ml-4 hidden items-center gap-1 md:flex" aria-label="관리 메뉴">

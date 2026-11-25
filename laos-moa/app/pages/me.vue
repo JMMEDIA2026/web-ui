@@ -56,10 +56,11 @@ async function leave() {
   }
 }
 
-const items = [
-  { label: '예약 요청하기', desc: '협력업체에 예약을 요청해요', icon: 'calendar', to: '/reserve' },
-  { label: '업체 등록·광고 문의', desc: '무료 등록과 광고 안내', icon: 'megaphone', to: '/advertise' }
-]
+const items = computed(() => [
+  { label: '예약 요청하기', desc: '등록된 업체에 예약을 요청해요', icon: 'calendar', to: '/reserve' },
+  { label: '업체 등록·광고 문의', desc: '무료 등록과 광고 안내', icon: 'megaphone', to: '/advertise' },
+  ...(member.value?.role === 'admin' ? [{ label: '관리자 화면', desc: '예약·회원·업체를 관리해요', icon: 'me', to: '/admin' }] : [])
+])
 </script>
 
 <template>
@@ -82,6 +83,9 @@ const items = [
       <p v-if="member.grade?.next" class="mt-1 text-[0.8125rem] text-ink-2">
         다음 등급 {{ member.grade.next.level }}등급 {{ member.grade.next.name }}까지 {{ member.grade.next.remaining }}점
         (현재 {{ member.grade.score }}점)
+      </p>
+      <p v-else-if="member.role === 'admin'" class="mt-1 text-[0.8125rem] text-ink-2">
+        10등급 관리자 계정이에요.
       </p>
       <p v-else-if="member.grade" class="mt-1 text-[0.8125rem] text-ink-2">
         회원 최고 등급이에요. (현재 {{ member.grade.score }}점)

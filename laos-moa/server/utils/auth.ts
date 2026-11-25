@@ -144,9 +144,19 @@ export function assertSameOrigin(event: H3Event): void {
 export async function requireAdmin(event: H3Event): Promise<void> {
   if (event.method !== 'GET') assertSameOrigin(event)
   const session = await readSession(event)
-  if (session?.role !== 'admin') {
-    throw createError({ statusCode: 401, statusMessage: '로그인이 필요합니다' })
+  if (session?.role === 'admin') return
+
+  // 10등급 관리자 회원: 관리자 권한은 최근 12시간 안에 로그인한 경우에만 인정합니다.
+  const memberId = await readMemberId(event)
+  if (memberId) {
+    const row = await useDB(event)
+      .prepare('SELECT role, last_login_at FROM members WHERE id = ?')
+      .bind(memberId)
+      .first<{ role: string, last_login_at: string }>()
+    const recent = row?.last_login_at ? Date.now() - Date.parse(row.last_login_at) < 12 * 3600 * 1000 : false
+    if (row?.role === 'admin' && recent) return
   }
+  throw createError({ statusCode: 401, statusMessage: '로그인이 필요합니다' })
 }
 
 export interface PartnerRow {

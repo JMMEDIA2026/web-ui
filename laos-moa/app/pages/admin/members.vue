@@ -18,6 +18,7 @@ interface MemberRow {
   grade_level: number
   grade_name: string
   grade_score: number
+  role: string
 }
 
 const api = useApi('admin')
@@ -52,6 +53,26 @@ watch(q, () => {
   clearTimeout(timer)
   timer = setTimeout(load, 300)
 })
+
+const roleTarget = ref<string | null>(null)
+
+// 실수로 누르지 않도록 한 번 더 눌러야 바뀝니다.
+async function changeRole(m: MemberRow) {
+  if (roleTarget.value !== m.id) {
+    roleTarget.value = m.id
+    setTimeout(() => { if (roleTarget.value === m.id) roleTarget.value = null }, 4000)
+    return
+  }
+  roleTarget.value = null
+  const next = m.role === 'admin' ? 'member' : 'admin'
+  try {
+    await api(`/members/${m.id}/role`, { method: 'POST', body: { role: next } })
+    toast.add({ title: next === 'admin' ? `${m.nickname}님을 10등급 관리자로 지정했습니다` : `${m.nickname}님을 일반 회원으로 되돌렸습니다`, color: 'success' })
+    await load()
+  } catch (e) {
+    toast.add({ title: errorMessage(e), color: 'error' })
+  }
+}
 
 async function copy(text: string, label: string) {
   try {
@@ -92,17 +113,17 @@ async function copy(text: string, label: string) {
     </div>
 
     <div class="mt-5 flex max-w-xl flex-wrap gap-3">
-      <div class="min-w-[240px] flex-1">
+      <div class="min-w-0 flex-1 sm:min-w-[240px]">
         <label for="member-search" class="sr-only">회원 검색</label>
         <UInput id="member-search" v-model="q" icon="i-lucide-search" placeholder="닉네임, 이름, 이메일, 휴대폰 번호로 검색" class="w-full" />
       </div>
-      <div>
+      <div class="w-full sm:w-auto">
         <label for="member-grade" class="sr-only">등급 필터</label>
-        <USelect id="member-grade" v-model="gradeFilter" :items="gradeItems" class="w-36" />
+        <USelect id="member-grade" v-model="gradeFilter" :items="gradeItems" class="w-full sm:w-36" />
       </div>
     </div>
     <p class="mt-2 text-xs text-muted">
-      등급은 활동 점수로 자동 계산돼요. (가입 후 7일마다 1점, 예약 요청 10점, 문의 5점) 10등급은 관리자 전용이에요.
+      등급은 활동 점수로 자동 계산돼요. (가입 후 7일마다 1점, 예약 요청 10점, 문의 5점) 10등급은 관리자 전용이며, 오른쪽 "관리자 지정"으로 회원에게 부여해요.
     </p>
 
     <p class="mt-3 text-sm text-muted" aria-live="polite">
@@ -115,7 +136,7 @@ async function copy(text: string, label: string) {
     </p>
 
     <div v-if="rows.length" class="mt-3 overflow-x-auto border border-default bg-white">
-      <table class="w-full min-w-[960px] text-left text-sm">
+      <table class="w-full min-w-[1080px] text-left text-sm">
         <thead class="bg-slate-50 text-xs text-muted">
           <tr>
             <th scope="col" class="px-3 py-2 font-bold">등급</th>
@@ -128,6 +149,7 @@ async function copy(text: string, label: string) {
             <th scope="col" class="px-3 py-2 font-bold">최근 로그인</th>
             <th scope="col" class="px-3 py-2 text-right font-bold">예약</th>
             <th scope="col" class="px-3 py-2 text-right font-bold">문의</th>
+            <th scope="col" class="px-3 py-2 font-bold">권한</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-default">
@@ -154,6 +176,15 @@ async function copy(text: string, label: string) {
             <td class="whitespace-nowrap px-3 py-2 text-muted">{{ m.last_login_at ? formatDateTime(m.last_login_at) : '-' }}</td>
             <td class="px-3 py-2 text-right tabular-nums">{{ m.reservation_count }}</td>
             <td class="px-3 py-2 text-right tabular-nums">{{ m.inquiry_count }}</td>
+            <td class="whitespace-nowrap px-3 py-2">
+              <UButton
+                :label="roleTarget === m.id ? (m.role === 'admin' ? '한 번 더 눌러 해제' : '한 번 더 눌러 지정') : (m.role === 'admin' ? '관리자 해제' : '관리자 지정')"
+                size="xs"
+                :color="roleTarget === m.id ? 'error' : 'neutral'"
+                variant="outline"
+                @click="changeRole(m)"
+              />
+            </td>
           </tr>
         </tbody>
       </table>

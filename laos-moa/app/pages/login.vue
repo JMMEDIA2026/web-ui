@@ -66,14 +66,7 @@ async function submit() {
       회원가입
     </NuxtLink>
 
-    <!-- 협력업체는 회원과 별도로 관리합니다. -->
-    <div class="mt-8 border-t border-line pt-4">
-      <p class="text-[0.875rem] text-ink-2">
-        업체 관계자이신가요? 협력업체는 회원과 별도로 로그인해요.
-      </p>
-      <NuxtLink to="/partner/login" class="inline-flex min-h-11 items-center text-[0.9375rem] font-bold text-brand-600 underline underline-offset-2">
-        협력업체 로그인
-      </NuxtLink>
+    <div class="mt-8 border-t border-line pt-2">
       <nav class="flex gap-4" aria-label="약관">
         <NuxtLink to="/terms" class="inline-flex min-h-11 items-center text-[0.8125rem] font-bold text-ink-2 underline">
           이용약관
