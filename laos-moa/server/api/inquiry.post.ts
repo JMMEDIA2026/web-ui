@@ -5,15 +5,16 @@ const RATE_KIND = 'inquiry'
 const bodySchema = z.object({
   company: z.string().trim().min(1, '업체명을 입력해 주세요').max(100),
   contact: z.string().trim().min(2, '연락처를 입력해 주세요').max(100),
-  product: z.enum(['free', 'premium', 'banner', 'etc'], { message: '문의 종류를 골라 주세요' }),
+  product: z.enum(['free', 'premium', 'banner', 'correction', 'etc'], { message: '문의 종류를 골라 주세요' }),
   message: z.string().trim().max(2000).optional(),
   website: z.string().optional() // 스팸 방지용 숨김 필드
 })
 
 const productLabel: Record<string, string> = {
   free: '무료 업체 등록',
-  premium: '프리미엄 업체',
+  premium: '추천 업체(광고)',
   banner: '배너 광고',
+  correction: '정보 수정 제안',
   etc: '제휴·기타'
 }
 

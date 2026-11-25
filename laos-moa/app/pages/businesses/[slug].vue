@@ -169,7 +169,7 @@ const actionCount = [!!directions, !!contact, true].filter(Boolean).length
       <p class="mt-4 text-[0.8125rem] leading-relaxed text-ink-2">
         <template v-if="checkedOn">정보 확인일 {{ checkedOn }}. </template>
         정보가 다르거나 바뀌었나요?
-        <NuxtLink to="/advertise#inquiry" class="inline-flex min-h-11 items-center font-bold text-brand-600 underline underline-offset-2">수정 제안하기</NuxtLink>
+        <NuxtLink :to="{ path: '/advertise', query: { type: 'correction', company: business.name }, hash: '#inquiry' }" class="inline-flex min-h-11 items-center font-bold text-brand-600 underline underline-offset-2">정보 수정 요청하기</NuxtLink>
       </p>
     </div>
 

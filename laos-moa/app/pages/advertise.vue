@@ -17,12 +17,19 @@ const tiers = [
 
 const productOptions = [
   { label: '무료 업체 등록', value: 'free' },
-  { label: '추천 업체', value: 'premium' },
+  { label: '추천 업체(광고)', value: 'premium' },
   { label: '배너 광고', value: 'banner' },
-  { label: '제휴·정보 수정 제안·기타', value: 'etc' }
+  { label: '정보 수정 제안', value: 'correction' },
+  { label: '제휴·기타', value: 'etc' }
 ]
 
-const form = reactive({ company: '', contact: member.value?.phone ?? '', product: '', message: '', website: '' })
+// 업체 상세의 "정보 수정 요청하기"로 들어오면 문의 종류와 업체명을 미리 채웁니다.
+const route = useRoute()
+const presetType = productOptions.some(o => o.value === route.query.type) ? String(route.query.type) : ''
+const presetCompany = typeof route.query.company === 'string' ? route.query.company.slice(0, 100) : ''
+const form = reactive({ company: presetCompany, contact: member.value?.phone ?? '', product: presetType, message: '', website: '' })
+// 회원 정보가 늦게 도착해도 연락처 칸을 미리 채웁니다.
+watch(() => member.value?.phone, (v) => { if (v && !form.contact) form.contact = v }, { immediate: true })
 const loading = ref(false)
 const error = ref('')
 const done = ref(false)
@@ -81,7 +88,7 @@ async function submit() {
         문의 남기기
       </h2>
       <p class="mt-1 text-[0.875rem] text-ink-2">
-        정보 수정 제안도 여기에 남겨 주세요.
+        업체 정보가 달라졌다면 문의 종류에서 “정보 수정 제안”을 골라 주세요.
       </p>
 
       <div v-if="done" class="mt-4 rounded-lg bg-brand-100 p-4 text-[0.9375rem] leading-relaxed text-brand-600" role="status">
@@ -113,7 +120,7 @@ async function submit() {
         </div>
         <div>
           <label for="i-message" class="text-[0.9375rem] font-bold text-ink">문의 내용 (선택)</label>
-          <textarea id="i-message" v-model="form.message" maxlength="2000" class="field mt-1.5" placeholder="업체 소개나 원하시는 내용을 적어 주세요." />
+          <textarea id="i-message" v-model="form.message" maxlength="2000" class="field mt-1.5" placeholder="업체 소개나 원하시는 내용을 적어 주세요. (정보 수정은 바뀐 내용을 적어 주세요)" />
         </div>
 
         <div class="hidden" aria-hidden="true">

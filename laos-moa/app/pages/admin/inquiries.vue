@@ -23,6 +23,7 @@ const productLabel: Record<string, string> = {
   free: '무료 업체 등록',
   premium: '프리미엄 업체',
   banner: '배너 광고',
+  correction: '정보 수정 제안',
   etc: '제휴·기타',
   partner: '협력업체 가입 신청'
 }
