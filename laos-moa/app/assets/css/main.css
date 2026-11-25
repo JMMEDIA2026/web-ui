@@ -101,6 +101,16 @@ body {
   font-size: 0.875rem;
 }
 
+/* 업체 목록 행의 버튼: 4개가 같은 크기로 한 줄에 들어가도록 여백을 줄입니다. (높이 44px 유지) */
+.btn-row {
+  min-height: 44px;
+  min-width: 0;
+  padding: 0 4px;
+  gap: 4px;
+  font-size: 0.8125rem;
+  line-height: 1.15;
+}
+
 /* 검색창·입력: 높이 52px, 모서리 12px */
 .field {
   width: 100%;

@@ -17,6 +17,9 @@ const located = computed(() => hasCoords(props.business))
 const directions = computed(() => directionsUrl(props.business))
 const contact = computed(() => contactAction(props.business.contact))
 
+// 목록 행에서는 좁은 칸에 맞춰 짧은 이름을 씁니다. (상세 화면에서는 "전화하기" 등 전체 이름)
+const shortContactLabel = computed(() => (contact.value?.kind === 'tel' ? '전화' : contact.value?.kind === 'link' ? '연락' : '연락처'))
+
 async function copy(text: string) {
   try {
     await navigator.clipboard.writeText(text)
@@ -46,13 +49,11 @@ async function copy(text: string) {
         <AppIcon v-else name="biz" class="size-12" />
       </span>
       <span class="min-w-0 flex-1">
-        <span class="flex flex-wrap items-center gap-x-2 gap-y-1">
-          <span class="min-w-0 break-words [overflow-wrap:anywhere] text-[1.0625rem] font-bold leading-snug text-ink">{{ business.name }}</span>
-          <span v-if="business.sponsored" class="rounded-md bg-brand-100 px-1.5 py-0.5 text-[0.75rem] font-bold text-brand-600">광고</span>
+        <span class="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-[0.8125rem] text-ink-2">
+          <span v-if="business.sponsored" class="shrink-0 rounded-md bg-brand-100 px-1.5 py-0.5 text-[0.75rem] font-bold text-brand-600">광고</span>
+          <span class="min-w-0">{{ category?.label }} · {{ business.area || '비엔티안' }}<template v-if="distance != null"> · {{ formatDistance(distance) }}</template></span>
         </span>
-        <span class="mt-0.5 block text-[0.875rem] text-ink-2">
-          {{ category?.label }} · {{ business.area || '비엔티안' }}<template v-if="distance != null"> · {{ formatDistance(distance) }}</template>
-        </span>
+        <span class="mt-0.5 block break-words [overflow-wrap:anywhere] text-[1.0625rem] font-bold leading-snug text-ink">{{ business.name }}</span>
         <span v-if="business.hours" class="mt-1 block text-[0.875rem] text-ink">영업시간 {{ business.hours }}</span>
         <span v-if="!located" class="mt-1 inline-flex items-center gap-1 text-[0.8125rem] font-bold text-ink-2">
           <AppIcon name="pin" class="size-4" />
@@ -61,30 +62,30 @@ async function copy(text: string) {
       </span>
     </button>
 
-    <div class="mt-2 flex flex-wrap gap-2">
-      <NuxtLink :to="`/businesses/${business.slug}`" class="btn btn-quiet btn-sm">
+    <div class="mt-2 grid gap-2" style="grid-template-columns: repeat(auto-fit, minmax(4.6rem, 1fr))">
+      <NuxtLink :to="`/businesses/${business.slug}`" class="btn btn-quiet btn-row">
         상세 보기
       </NuxtLink>
-      <a v-if="directions" :href="directions" target="_blank" rel="noopener" class="btn btn-outline btn-sm">
-        <AppIcon name="compass" class="size-5" />
+      <a v-if="directions" :href="directions" target="_blank" rel="noopener" class="btn btn-outline btn-row">
+        <AppIcon name="compass" class="size-4 shrink-0" />
         길찾기
       </a>
       <template v-if="contact">
-        <a v-if="contact.kind === 'tel'" :href="contact.href" class="btn btn-outline btn-sm">
-          <AppIcon name="phone" class="size-4" />
-          {{ contact.label }}
+        <a v-if="contact.kind === 'tel'" :href="contact.href" class="btn btn-outline btn-row">
+          <AppIcon name="phone" class="size-4 shrink-0" />
+          {{ shortContactLabel }}
         </a>
-        <a v-else-if="contact.kind === 'link'" :href="contact.href" target="_blank" rel="noopener" class="btn btn-outline btn-sm">
-          <AppIcon name="phone" class="size-4" />
-          {{ contact.label }}
+        <a v-else-if="contact.kind === 'link'" :href="contact.href" target="_blank" rel="noopener" class="btn btn-outline btn-row">
+          <AppIcon name="phone" class="size-4 shrink-0" />
+          {{ shortContactLabel }}
         </a>
-        <button v-else type="button" class="btn btn-outline btn-sm" @click="copy(contact.text)">
-          <AppIcon name="copy" class="size-4" />
-          {{ contact.label }}
+        <button v-else type="button" class="btn btn-outline btn-row" @click="copy(contact.text)">
+          <AppIcon name="copy" class="size-4 shrink-0" />
+          {{ shortContactLabel }}
         </button>
       </template>
-      <NuxtLink :to="{ path: '/reserve', query: { business: business.slug } }" class="btn btn-primary btn-sm">
-        <AppIcon name="calendar" class="size-5" />
+      <NuxtLink :to="{ path: '/reserve', query: { business: business.slug } }" class="btn btn-primary btn-row">
+        <AppIcon name="calendar" class="size-4 shrink-0" />
         예약
       </NuxtLink>
     </div>
