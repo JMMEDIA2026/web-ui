@@ -10,6 +10,7 @@ useHead({ meta: [{ name: 'robots', content: 'noindex, nofollow' }] })
 const adminLinks = [
   { label: '대시보드', to: '/admin', icon: 'i-lucide-layout-dashboard', exact: true },
   { label: '예약', to: '/admin/reservations', icon: 'i-lucide-calendar-check' },
+  { label: '업체', to: '/admin/businesses', icon: 'i-lucide-store' },
   { label: '협력업체', to: '/admin/partners', icon: 'i-lucide-handshake' },
   { label: '광고 문의', to: '/admin/inquiries', icon: 'i-lucide-inbox' },
   { label: '설정', to: '/admin/settings', icon: 'i-lucide-settings' }

@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { businesses } from '~/data/businesses'
-
 useSeoMeta({
   title: '환전·환율 · 라오스모아',
   description: '오늘의 원·킵·달러 환율과 라오스 한인 환전업체 안내.'
 })
 
-const exchangers = businesses.filter(b => b.category === 'exchange')
+const { all: allBusinesses } = await useBusinessList()
+const exchangers = computed(() => allBusinesses.value.filter(b => b.category === 'exchange'))
 
 const tips = [
   '방문 전에 환전소에 오늘의 환율을 먼저 물어보세요.',

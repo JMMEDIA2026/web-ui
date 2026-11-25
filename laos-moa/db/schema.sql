@@ -47,3 +47,24 @@ CREATE TABLE IF NOT EXISTS rate_hits (
   at INTEGER NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_rate_hits ON rate_hits (ip, kind, at);
+
+-- 지도·목록에 표시하는 업체. partner_id 는 나중에 사장님(협력업체) 계정과 연결할 때 채웁니다.
+CREATE TABLE IF NOT EXISTS businesses (
+  id TEXT PRIMARY KEY,            -- 주소용 ID (영문 소문자·숫자·하이픈)
+  name TEXT NOT NULL,
+  category TEXT NOT NULL,
+  area TEXT NOT NULL DEFAULT '',
+  address TEXT NOT NULL DEFAULT '',
+  lat REAL,
+  lng REAL,
+  description TEXT NOT NULL DEFAULT '',
+  hours TEXT NOT NULL DEFAULT '',
+  contact TEXT NOT NULL DEFAULT '',
+  map_url TEXT NOT NULL DEFAULT '',
+  partner_id TEXT,
+  sponsored INTEGER NOT NULL DEFAULT 0,
+  active INTEGER NOT NULL DEFAULT 1,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_businesses_category ON businesses (category, active);

@@ -35,6 +35,9 @@ const category = computed(() => categoryMap[props.business.category])
       <h3 class="text-lg font-bold text-highlighted">
         {{ business.name }}
       </h3>
+      <p v-if="business.address" class="text-xs text-muted">
+        {{ business.address }}
+      </p>
       <p class="text-sm leading-relaxed text-muted">
         {{ business.description }}
       </p>

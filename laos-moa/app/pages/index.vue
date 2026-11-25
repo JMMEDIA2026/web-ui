@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { businesses, categories } from '~/data/businesses'
+import { categories } from '~/data/businesses'
 import { guides } from '~/data/guides'
 import { toneBg } from '~/data/tones'
 
@@ -8,7 +8,8 @@ useSeoMeta({
   description: '비엔티안 한인을 위한 생활 가이드와 한인 업체 디렉토리.'
 })
 
-const featured = businesses.slice(0, 3)
+const { all: allBusinesses } = await useBusinessList()
+const featured = computed(() => allBusinesses.value.slice(0, 3))
 const [mainGuide, ...otherGuides] = guides
 
 const q = ref('')
@@ -109,7 +110,7 @@ const promises = [
           </div>
         </div>
 
-        <div class="grid grid-cols-4 gap-2 sm:gap-4 lg:grid-cols-7">
+        <div class="grid grid-cols-4 gap-2 sm:gap-4 lg:grid-cols-8">
           <NuxtLink
             v-for="c in categories"
             :key="c.key"

@@ -1,0 +1,18 @@
+export default defineEventHandler(async (event) => {
+  const id = getRouterParam(event, 'id') ?? ''
+
+  const row = await useDB(event)
+    .prepare(
+      `SELECT ${BUSINESS_SELECT}
+       FROM businesses b
+       LEFT JOIN partners p ON p.id = b.partner_id AND p.active = 1
+       WHERE b.id = ? AND b.active = 1`
+    )
+    .bind(id)
+    .first()
+
+  if (!row) {
+    throw createError({ statusCode: 404, statusMessage: '업체를 찾을 수 없습니다' })
+  }
+  return toPublicBusiness(row)
+})

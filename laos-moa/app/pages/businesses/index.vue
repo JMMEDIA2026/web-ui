@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { businesses, categories } from '~/data/businesses'
+import { categories } from '~/data/businesses'
 
 useSeoMeta({
   title: '한인 업체 · 라오스모아',
@@ -8,6 +8,7 @@ useSeoMeta({
 
 const route = useRoute()
 const router = useRouter()
+const { all: businesses } = await useBusinessList()
 
 // 홈 검색창에서 넘어온 검색어(?q=)를 처음 값으로 씁니다.
 const query = ref(typeof route.query.q === 'string' ? route.query.q : '')
@@ -19,7 +20,7 @@ function pick(key: string) {
 
 const filtered = computed(() => {
   const q = query.value.trim().toLowerCase()
-  const list = businesses.filter(b =>
+  const list = businesses.value.filter(b =>
     (!selected.value || b.category === selected.value)
     && (!q || `${b.name} ${b.description} ${b.area}`.toLowerCase().includes(q))
   )
