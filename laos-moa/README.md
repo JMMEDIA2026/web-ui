@@ -17,8 +17,7 @@ npm run build    # 빌드
 
 - `app/pages` 홈, 한인 업체(목록·상세), 생활 가이드(목록·상세), 광고 안내·문의
 - `app/data` 업체·가이드 예시 데이터 (실제 정보로 교체 필요)
-- `server/api/inquiry.post.ts` 광고 문의 접수. `INQUIRY_WEBHOOK_URL` 환경변수에 슬랙 웹훅을 넣으면 알림으로 전달
-- `nuxt.config.ts`의 `routeRules` 이미지 CDN 연결은 임시입니다. 별도 저장소에 `public/` 이미지를 올린 뒤 지우세요.
+- `server/api/inquiry.post.ts` 광고 문의 접수. `NUXT_INQUIRY_WEBHOOK_URL` 환경변수에 슬랙 웹훅을 넣으면 알림으로 전달
 
 ## 이미지 출처
 

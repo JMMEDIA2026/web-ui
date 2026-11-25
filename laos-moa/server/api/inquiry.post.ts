@@ -37,9 +37,9 @@ export default defineEventHandler(async (event) => {
     `내용: ${data.message || '(없음)'}`
   ].join('\n')
 
-  // INQUIRY_WEBHOOK_URL 환경변수에 슬랙 등 웹훅 주소를 넣으면 알림으로 전달됩니다.
-  // 설정하지 않으면 Vercel 함수 로그에만 남습니다.
-  const webhook = process.env.INQUIRY_WEBHOOK_URL
+  // 환경변수 NUXT_INQUIRY_WEBHOOK_URL 에 슬랙 등 웹훅 주소를 넣으면 알림으로 전달됩니다.
+  // 설정하지 않으면 서버 로그에만 남습니다.
+  const webhook = useRuntimeConfig(event).inquiryWebhookUrl
   if (webhook) {
     try {
       await $fetch(webhook, { method: 'POST', body: { text } })
