@@ -60,3 +60,24 @@ body {
   .lift { transition: none; }
   .lift:hover, .lift:active { transform: none; }
 }
+
+/* 라오스 직물 무늬를 단순화한 띠: 빨강 마름모 + 금색 점 + 파랑 삼각 */
+.lao-band {
+  background-color: #FFF9EE;
+  background-repeat: repeat-x;
+  background-size: 24px 12px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12' viewBox='0 0 24 12'%3E%3Cpath d='M12 0.5 21 6 12 11.5 3 6Z' fill='%23D6192F'/%3E%3Cpath d='M12 3.4 15.2 6 12 8.6 8.8 6Z' fill='%23F5A800'/%3E%3Cpath d='M0 0 3 0 0 6Z M0 12 3 12 0 6Z M24 0 21 0 24 6Z M24 12 21 12 24 6Z' fill='%230B3A8C'/%3E%3C/svg%3E");
+}
+
+/* 라오스 국기(빨강-파랑-빨강)를 닮은 제목 밑줄 */
+.section-title::after {
+  content: '';
+  display: block;
+  width: 56px;
+  height: 8px;
+  margin-top: 12px;
+  background: linear-gradient(#D6192F 0 25%, #0B3A8C 25% 75%, #D6192F 75%);
+}
+.section-title.text-center::after {
+  margin-inline: auto;
+}

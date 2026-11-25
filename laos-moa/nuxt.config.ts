@@ -19,6 +19,7 @@ export default defineNuxtConfig({
       htmlAttrs: { lang: 'ko' },
       title: '라오스모아',
       link: [
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
         { rel: 'preconnect', href: 'https://cdn.jsdelivr.net', crossorigin: '' },
         {
           rel: 'stylesheet',

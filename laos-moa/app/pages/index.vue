@@ -26,7 +26,7 @@ const quickLinks = [
 ]
 
 const promises = [
-  { emoji: '/emoji/chat.png', tone: 'sky', title: '한국어로 바로 이해', text: '영어나 라오어를 몰라도 읽을 수 있도록 한국어로 정리합니다.' },
+  { emoji: '/emoji/embassy.png', tone: 'sky', title: '한국어로 바로 이해', text: '영어나 라오어를 몰라도 읽을 수 있도록 한국어로 정리합니다.' },
   { emoji: '/emoji/visa.png', tone: 'peach', title: '확인한 정보만 게시', text: '제도 정보는 관할 기관의 최신 안내를 확인한 내용만 싣습니다.' },
   { emoji: '/emoji/job.png', tone: 'mint', title: '업체 등록은 무료', text: '한인 업체라면 누구나 무료로 등록하고 고객에게 알릴 수 있습니다.' }
 ] as const
@@ -100,7 +100,7 @@ const promises = [
       <UContainer>
         <div class="mb-8 flex items-end justify-between gap-4">
           <div>
-            <h2 class="text-2xl font-extrabold tracking-tight text-highlighted sm:text-3xl">
+            <h2 class="section-title text-2xl font-extrabold tracking-tight text-highlighted sm:text-3xl">
               지금 필요한 정보
             </h2>
             <p class="mt-2 text-muted">
@@ -109,18 +109,18 @@ const promises = [
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-6">
+        <div class="grid grid-cols-3 gap-2.5 sm:gap-4 lg:grid-cols-6">
           <NuxtLink
             v-for="c in categories"
             :key="c.key"
             :to="`/businesses?category=${c.key}`"
-            class="box3d lift group flex flex-col items-center gap-3 rounded-lg px-3 py-7 text-center"
+            class="box3d lift group flex flex-col items-center gap-2 rounded-lg px-2 py-4 text-center sm:gap-3 sm:px-3 sm:py-7"
             :class="toneBg[c.tone]"
           >
-            <img :src="c.emoji" alt="" class="size-20 transition-transform duration-300 group-hover:scale-110">
+            <img :src="c.emoji" alt="" class="size-12 transition-transform duration-300 group-hover:scale-110 sm:size-20">
             <span>
-              <span class="block text-base font-bold text-highlighted">{{ c.label }}</span>
-              <span class="mt-0.5 block text-xs text-default/70">{{ c.description }}</span>
+              <span class="block text-sm font-bold text-highlighted sm:text-base">{{ c.label }}</span>
+              <span class="mt-0.5 hidden text-xs text-default/70 sm:block">{{ c.description }}</span>
             </span>
           </NuxtLink>
         </div>
@@ -136,7 +136,7 @@ const promises = [
       <UContainer>
         <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 class="text-2xl font-extrabold tracking-tight text-highlighted sm:text-3xl">
+            <h2 class="section-title text-2xl font-extrabold tracking-tight text-highlighted sm:text-3xl">
               한인 업체
             </h2>
             <p class="mt-2 text-muted">
@@ -155,7 +155,7 @@ const promises = [
     <!-- 약속 3가지 -->
     <section class="border-y border-default py-16 sm:py-20">
       <UContainer>
-        <h2 class="text-center text-2xl font-extrabold tracking-tight text-highlighted sm:text-3xl">
+        <h2 class="section-title text-center text-2xl font-extrabold tracking-tight text-highlighted sm:text-3xl">
           라오스모아가 지키는 약속
         </h2>
         <div class="mt-10 grid gap-5 md:grid-cols-3">
@@ -177,7 +177,7 @@ const promises = [
       <UContainer>
         <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 class="text-2xl font-extrabold tracking-tight text-highlighted sm:text-3xl">
+            <h2 class="section-title text-2xl font-extrabold tracking-tight text-highlighted sm:text-3xl">
               생활 가이드
             </h2>
             <p class="mt-2 text-muted">
@@ -198,7 +198,7 @@ const promises = [
     <section class="pb-16 sm:pb-20">
       <UContainer>
         <div class="mb-8">
-          <h2 class="text-2xl font-extrabold tracking-tight text-highlighted sm:text-3xl">
+          <h2 class="section-title text-2xl font-extrabold tracking-tight text-highlighted sm:text-3xl">
             라오스 둘러보기
           </h2>
           <p class="mt-2 text-muted">
@@ -233,6 +233,7 @@ const promises = [
     <section class="pb-4">
       <UContainer>
         <div class="box3d relative overflow-hidden bg-primary px-6 py-12 text-white sm:px-12 sm:py-16">
+          <div class="lao-band absolute inset-x-0 top-0 h-3" aria-hidden="true" />
           <div class="relative z-10 max-w-xl">
             <p class="text-sm font-bold text-tone-sun">
               업체 사장님께

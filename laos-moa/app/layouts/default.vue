@@ -14,7 +14,7 @@ const items = computed<NavigationMenuItem[]>(() => [
   <UHeader to="/" class="bg-default/90 backdrop-blur">
     <template #title>
       <span class="flex items-center gap-2 text-lg font-extrabold tracking-tight">
-        <img src="/emoji/sun.png" alt="" class="size-8">
+        <LogoMark class="size-9" />
         라오스모아
       </span>
     </template>
@@ -39,11 +39,12 @@ const items = computed<NavigationMenuItem[]>(() => [
     <slot />
   </UMain>
 
-  <footer class="mt-24 border-t border-default">
+  <footer class="mt-24">
+    <div class="lao-band h-3" aria-hidden="true" />
     <UContainer class="grid gap-10 py-14 md:grid-cols-12">
       <div class="md:col-span-5">
         <div class="flex items-center gap-2 text-xl font-extrabold">
-          <img src="/emoji/sun.png" alt="" class="size-9">
+          <LogoMark class="size-10" />
           라오스모아
         </div>
         <p class="mt-3 max-w-sm text-sm leading-relaxed text-muted">

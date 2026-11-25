@@ -38,7 +38,7 @@ export const guides: Guide[] = [
     slug: 'health',
     title: '병원·응급',
     summary: '응급 연락처와 진료받는 방법을 안내합니다.',
-    emoji: '/emoji/hospital.png', tone: 'pink',
+    emoji: '/emoji/pill.png', tone: 'pink',
     topics: ['응급 연락처', '한국어 진료', '약국 이용', '여행자 보험']
   },
   {
