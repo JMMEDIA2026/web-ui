@@ -28,6 +28,8 @@ export interface Business {
   updatedAt?: string
   /** 예약을 받을 수 있는(활성 협력업체와 연결된) 업체의 협력업체 ID */
   partnerId?: string | null
+  /** 사진 ID 목록. 맨 앞이 대표(썸네일) 사진입니다. */
+  photos?: string[]
   sponsored?: boolean
   /** 실제 업체 정보로 교체되기 전까지 true. 화면에 "예시" 배지가 표시됩니다. */
   example: boolean

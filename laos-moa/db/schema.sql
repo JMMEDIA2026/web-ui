@@ -89,3 +89,16 @@ CREATE TABLE IF NOT EXISTS members (
   role TEXT NOT NULL DEFAULT 'member'      -- member / admin(10등급)
 );
 CREATE UNIQUE INDEX IF NOT EXISTS idx_members_nickname ON members (lower(nickname));
+
+-- 업체 사진 (큰 사진·작은 사진을 base64로 저장, 대표 사진 1장)
+CREATE TABLE IF NOT EXISTS business_photos (
+  id TEXT PRIMARY KEY,
+  business_id TEXT NOT NULL,
+  full_b64 TEXT NOT NULL,
+  thumb_b64 TEXT NOT NULL,
+  mime TEXT NOT NULL DEFAULT 'image/jpeg',
+  is_cover INTEGER NOT NULL DEFAULT 0,
+  sort_order INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_photos_business ON business_photos (business_id, is_cover DESC, sort_order, created_at);

@@ -41,8 +41,9 @@ async function copy(text: string) {
       @click="emit('select', business.slug)"
     >
       <!-- 실제 업체 사진이 없으면 업종 아이콘만 보여 줍니다. 다른 업체 사진으로 대체하지 않습니다. -->
-      <span class="grid size-[88px] shrink-0 place-items-center rounded-lg bg-brand-50 text-brand-600">
-        <img v-if="category?.emoji" :src="category.emoji" alt="" width="56" height="56" class="size-14 object-contain" loading="lazy">
+      <span class="grid size-[88px] shrink-0 place-items-center overflow-hidden rounded-lg bg-brand-50 text-brand-600">
+        <img v-if="business.photos?.length" :src="`/api/photos/${business.photos[0]}?size=thumb`" alt="" width="88" height="88" class="size-full object-cover" loading="lazy">
+        <img v-else-if="category?.emoji" :src="category.emoji" alt="" width="56" height="56" class="size-14 object-contain" loading="lazy">
         <AppIcon v-else name="biz" class="size-14" />
       </span>
       <span class="min-w-0 flex-1">

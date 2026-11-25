@@ -19,6 +19,7 @@ interface Biz {
   partner_name: string | null
   sponsored: number
   active: number
+  photo_ids: string | null
 }
 interface PartnerOption {
   id: string
@@ -54,6 +55,72 @@ const partnerItems = computed(() => [
   { label: '연결 안 함', value: NONE },
   ...partners.value.map(p => ({ label: `${p.name} (${p.id})`, value: p.id }))
 ])
+
+// ---- 업체 사진 ----
+// 사진은 올리기 전에 브라우저에서 줄입니다. (큰 사진 1600px, 작은 사진 480px)
+const MAX_PHOTOS = 12
+const uploadingId = ref<string | null>(null)
+const deleteTarget = ref<string | null>(null)
+const photosOf = (b: Biz) => (b.photo_ids ? b.photo_ids.split(',') : [])
+
+async function uploadPhotos(b: Biz, e: Event) {
+  const input = e.target as HTMLInputElement
+  const files = Array.from(input.files ?? [])
+  input.value = ''
+  if (!files.length) return
+  const room = MAX_PHOTOS - photosOf(b).length
+  if (room <= 0) {
+    toast.add({ title: `사진은 업체마다 ${MAX_PHOTOS}장까지 올릴 수 있습니다`, color: 'warning' })
+    return
+  }
+  uploadingId.value = b.id
+  let done = 0
+  for (const f of files.slice(0, room)) {
+    if (!f.type.startsWith('image/')) {
+      toast.add({ title: `${f.name}: 이미지 파일이 아닙니다`, color: 'error' })
+      continue
+    }
+    try {
+      const full = await shrinkImage(f, FULL_MAX_SIDE, FULL_MAX_CHARS)
+      const thumb = await shrinkImage(f, THUMB_MAX_SIDE, THUMB_MAX_CHARS)
+      await api(`/businesses/${b.id}/photos`, { method: 'POST', body: { full, thumb } })
+      done++
+    } catch (err) {
+      toast.add({ title: `${f.name}: ${errorMessage(err, '올리지 못했습니다')}`, color: 'error' })
+    }
+  }
+  if (files.length > room) toast.add({ title: `${MAX_PHOTOS}장까지만 올릴 수 있어 ${files.length - room}장은 건너뛰었습니다`, color: 'warning' })
+  uploadingId.value = null
+  if (done) toast.add({ title: `사진 ${done}장을 올렸습니다`, color: 'success' })
+  await load()
+}
+
+async function setCover(photoId: string) {
+  try {
+    await api(`/photos/${photoId}/cover`, { method: 'POST' })
+    toast.add({ title: '대표(썸네일) 사진으로 지정했습니다', color: 'success' })
+    await load()
+  } catch (err) {
+    toast.add({ title: errorMessage(err), color: 'error' })
+  }
+}
+
+// 실수로 지우지 않도록 한 번 더 눌러야 삭제됩니다.
+async function removePhoto(photoId: string) {
+  if (deleteTarget.value !== photoId) {
+    deleteTarget.value = photoId
+    setTimeout(() => { if (deleteTarget.value === photoId) deleteTarget.value = null }, 4000)
+    return
+  }
+  deleteTarget.value = null
+  try {
+    await api(`/photos/${photoId}`, { method: 'DELETE' })
+    toast.add({ title: '사진을 삭제했습니다', color: 'success' })
+    await load()
+  } catch (err) {
+    toast.add({ title: errorMessage(err), color: 'error' })
+  }
+}
 
 async function patch(id: string, body: Record<string, unknown>, message = '저장했습니다') {
   try {
@@ -186,6 +253,38 @@ async function create() {
           <p class="mt-1 text-xs text-muted">
             {{ b.partner_id ? '연결됨: 이 업체에 예약 요청 버튼이 보입니다.' : '연결 전: 예약 버튼이 보이지 않습니다. 먼저 "협력업체"에서 사장님 계정을 만드세요.' }}
           </p>
+        </div>
+
+        <div class="mt-4 border-t border-default pt-4">
+          <p class="text-xs font-bold text-highlighted">
+            사진 {{ photosOf(b).length }}/{{ MAX_PHOTOS }} · 첫 번째가 대표(썸네일)
+          </p>
+          <ul v-if="photosOf(b).length" class="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-4">
+            <li v-for="(pid, i) in photosOf(b)" :key="pid" class="relative">
+              <img :src="`/api/photos/${pid}?size=thumb`" :alt="`${b.name} 사진 ${i + 1}`" class="aspect-square w-full border border-default object-cover">
+              <span v-if="i === 0" class="absolute left-1 top-1 bg-primary px-1.5 py-0.5 text-[10px] font-bold text-white">대표</span>
+              <div class="mt-1 flex flex-wrap gap-1">
+                <UButton v-if="i > 0" label="대표로" size="xs" color="neutral" variant="outline" @click="setCover(pid)" />
+                <UButton :label="deleteTarget === pid ? '한 번 더' : '삭제'" size="xs" :color="deleteTarget === pid ? 'error' : 'neutral'" variant="outline" @click="removePhoto(pid)" />
+              </div>
+            </li>
+          </ul>
+          <p v-else class="mt-1 text-xs text-muted">
+            아직 사진이 없습니다. 사진이 없으면 업종 아이콘이 대신 보입니다.
+          </p>
+          <div class="mt-3">
+            <input :id="`photo-${b.id}`" type="file" accept="image/*" multiple class="peer sr-only" :disabled="uploadingId === b.id || photosOf(b).length >= MAX_PHOTOS" @change="uploadPhotos(b, $event)">
+            <label
+              :for="`photo-${b.id}`"
+              class="inline-flex cursor-pointer items-center gap-1.5 border border-default bg-white px-3 py-2 text-sm font-bold text-highlighted peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+            >
+              <UIcon name="i-lucide-image-plus" class="size-4" />
+              {{ uploadingId === b.id ? '올리는 중…' : '사진 올리기 (여러 장 가능)' }}
+            </label>
+            <p class="mt-1 text-xs text-muted">
+              가게 전경, 내부, 간판 사진을 올려 주세요. 사진은 자동으로 줄여서 저장됩니다.
+            </p>
+          </div>
         </div>
 
         <div class="mt-4 flex flex-wrap items-center gap-4 border-t border-default pt-4 text-sm">

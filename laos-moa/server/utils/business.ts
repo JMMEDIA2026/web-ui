@@ -14,6 +14,8 @@ export interface PublicBusiness {
   sponsored: boolean
   updatedAt: string
   partnerId: string | null
+  /** 사진 ID 목록. 맨 앞이 대표(썸네일) 사진입니다. */
+  photos: string[]
   example: false
 }
 
@@ -33,6 +35,7 @@ export function toPublicBusiness(row: Record<string, unknown>): PublicBusiness {
     sponsored: row.sponsored === 1,
     updatedAt: String(row.updated_at ?? ''),
     partnerId: row.partner_id ? String(row.partner_id) : null,
+    photos: row.photo_ids ? String(row.photo_ids).split(',') : [],
     example: false
   }
 }

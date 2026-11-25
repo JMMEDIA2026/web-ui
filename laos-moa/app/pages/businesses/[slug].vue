@@ -55,7 +55,8 @@ async function copy(text: string) {
 
 useSeoMeta({
   title: `${business.name} · 라자`,
-  description: business.description
+  description: business.description,
+  ...(business.photos?.length ? { ogImage: `https://laja.joybox.day/api/photos/${business.photos[0]}` } : {})
 })
 
 const actionCount = [!!directions, !!contact, true].filter(Boolean).length
@@ -77,7 +78,8 @@ const actionCount = [!!directions, !!contact, true].filter(Boolean).length
     </header>
 
     <!-- 실제 업체 사진이 아직 없으면 업종 아이콘을 보여 줍니다. -->
-    <div class="grid h-44 place-items-center bg-brand-50 text-brand-600" role="img" :aria-label="`${category?.label} 업종`">
+    <PhotoGallery v-if="business.photos?.length" :photos="business.photos" :name="business.name" />
+    <div v-else class="grid h-44 place-items-center bg-brand-50 text-brand-600" role="img" :aria-label="`${category?.label} 업종`">
       <img v-if="category?.emoji" :src="category.emoji" alt="" width="96" height="96" class="size-24 object-contain">
       <AppIcon v-else name="biz" class="size-24" />
     </div>
