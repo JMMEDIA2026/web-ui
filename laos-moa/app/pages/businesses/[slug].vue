@@ -20,9 +20,19 @@ const located = hasCoords(business)
 const directions = directionsUrl(business)
 const contact = contactAction(business.contact)
 
+// 구글 지도(API 키 없이 쓰는 삽입 지도와 링크)
 const embedUrl = located
-  ? `https://www.openstreetmap.org/export/embed.html?bbox=${[business.lng! - 0.004, business.lat! - 0.003, business.lng! + 0.004, business.lat! + 0.003].map(n => n.toFixed(5)).join('%2C')}&layer=mapnik&marker=${business.lat}%2C${business.lng}`
-  : ''
+  ? `https://www.google.com/maps?q=${business.lat},${business.lng}&z=17&output=embed&hl=ko`
+  : business.address
+    ? `https://www.google.com/maps?q=${encodeURIComponent(business.address)}&z=16&output=embed&hl=ko`
+    : ''
+const googleOpenUrl = /^https:\/\//i.test(business.mapUrl ?? '')
+  ? business.mapUrl!
+  : located
+    ? `https://www.google.com/maps/search/?api=1&query=${business.lat},${business.lng}`
+    : business.address
+      ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(business.address)}`
+      : ''
 
 const checkedOn = business.updatedAt
   ? new Date(business.updatedAt).toLocaleDateString('ko-KR', { timeZone: 'Asia/Vientiane', year: 'numeric', month: 'long', day: 'numeric' })
@@ -48,7 +58,7 @@ useSeoMeta({
   description: business.description
 })
 
-const actionCount = [!!directions, !!contact, !!business.partnerId].filter(Boolean).length
+const actionCount = [!!directions, !!contact, true].filter(Boolean).length
 </script>
 
 <template>
@@ -59,7 +69,7 @@ const actionCount = [!!directions, !!contact, !!business.partnerId].filter(Boole
       style="height: calc(56px + env(safe-area-inset-top, 0px)); padding-top: env(safe-area-inset-top, 0px)"
     >
       <button type="button" class="grid size-11 shrink-0 place-items-center rounded-full text-ink" aria-label="뒤로가기" @click="back">
-        <UIcon name="i-lucide-chevron-left" class="size-7" />
+        <AppIcon name="back" class="size-7" />
       </button>
       <p class="min-w-0 flex-1 truncate text-[1.0625rem] font-bold text-ink">
         {{ business.name }}
@@ -69,7 +79,7 @@ const actionCount = [!!directions, !!contact, !!business.partnerId].filter(Boole
     <!-- 실제 업체 사진이 아직 없으면 업종 아이콘을 보여 줍니다. -->
     <div class="grid h-44 place-items-center bg-brand-50 text-brand-600" role="img" :aria-label="`${category?.label} 업종`">
       <img v-if="category?.emoji" :src="category.emoji" alt="" width="96" height="96" class="size-24 object-contain">
-      <UIcon v-else name="i-lucide-store" class="size-14" />
+      <AppIcon v-else name="biz" class="size-24" />
     </div>
 
     <div class="px-4 pt-5 sm:px-5">
@@ -130,7 +140,7 @@ const actionCount = [!!directions, !!contact, !!business.partnerId].filter(Boole
         </p>
       </section>
 
-      <section v-if="located" class="card mt-3 overflow-hidden" aria-labelledby="loc-title">
+      <section v-if="embedUrl" class="card mt-3 overflow-hidden" aria-labelledby="loc-title">
         <h2 id="loc-title" class="px-4 pt-4 text-[1.125rem] font-bold text-ink">
           위치 안내
         </h2>
@@ -141,9 +151,15 @@ const actionCount = [!!directions, !!contact, !!business.partnerId].filter(Boole
           loading="lazy"
           referrerpolicy="no-referrer"
         />
-        <p class="px-4 py-3 text-[0.8125rem] leading-snug text-ink-2">
-          지도 위치는 OpenStreetMap 기준이라 실제 위치와 조금 다를 수 있어요. 방문 전에 업체에 확인하세요.
-        </p>
+        <div class="flex flex-wrap items-center gap-x-3 px-4 py-3">
+          <a v-if="googleOpenUrl" :href="googleOpenUrl" target="_blank" rel="noopener" class="inline-flex min-h-11 items-center gap-1 font-bold text-brand-600 underline underline-offset-2">
+            <AppIcon name="pin" class="size-5" />
+            구글 지도에서 열기
+          </a>
+          <p class="text-[0.8125rem] leading-snug text-ink-2">
+            지도 위치는 실제와 조금 다를 수 있어요. 방문 전에 업체에 확인하세요.
+          </p>
+        </div>
       </section>
 
       <!-- 정보 확인일과 수정 제안 -->
@@ -162,25 +178,25 @@ const actionCount = [!!directions, !!contact, !!business.partnerId].filter(Boole
     >
       <div class="grid gap-2" :style="{ gridTemplateColumns: `repeat(${actionCount}, minmax(0, 1fr))` }">
         <a v-if="directions" :href="directions" target="_blank" rel="noopener" class="btn btn-outline">
-          <UIcon name="i-lucide-navigation" class="size-5" />
+          <AppIcon name="compass" class="size-5" />
           길찾기
         </a>
         <template v-if="contact">
           <a v-if="contact.kind === 'tel'" :href="contact.href" class="btn btn-outline">
-            <UIcon name="i-lucide-phone" class="size-5" />
+            <AppIcon name="phone" class="size-5" />
             {{ contact.label }}
           </a>
           <a v-else-if="contact.kind === 'link'" :href="contact.href" target="_blank" rel="noopener" class="btn btn-outline">
-            <UIcon name="i-lucide-phone" class="size-5" />
+            <AppIcon name="phone" class="size-5" />
             {{ contact.label }}
           </a>
           <button v-else type="button" class="btn btn-outline" @click="copy(contact.text)">
-            <UIcon name="i-lucide-copy" class="size-5" />
+            <AppIcon name="copy" class="size-5" />
             {{ contact.label }}
           </button>
         </template>
-        <NuxtLink v-if="business.partnerId" :to="`/reserve?partner=${business.partnerId}`" class="btn btn-primary">
-          <UIcon name="i-lucide-calendar-check" class="size-5" />
+        <NuxtLink :to="{ path: '/reserve', query: { business: business.slug } }" class="btn btn-primary">
+          <AppIcon name="calendar" class="size-5" />
           예약 요청
         </NuxtLink>
       </div>

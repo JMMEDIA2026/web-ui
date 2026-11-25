@@ -48,7 +48,7 @@ function onKey(e: KeyboardEvent) {
             지역 선택
           </h2>
           <button type="button" class="grid size-11 place-items-center rounded-full text-ink-2" aria-label="닫기" @click="close">
-            <UIcon name="i-lucide-x" class="size-6" />
+            <AppIcon name="close" class="size-6" />
           </button>
         </div>
         <ul class="mt-2">
@@ -61,7 +61,7 @@ function onKey(e: KeyboardEvent) {
               @click="pick(r.key)"
             >
               {{ r.label }}
-              <UIcon v-if="regionKey === r.key" name="i-lucide-circle-check" class="size-6" />
+              <AppIcon v-if="regionKey === r.key" name="check" class="size-7" />
             </button>
           </li>
         </ul>

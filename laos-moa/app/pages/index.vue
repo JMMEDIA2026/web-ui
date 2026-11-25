@@ -60,7 +60,7 @@ const firstGuides = ['visa', 'telecom', 'health', 'banking']
         class="field pr-14 shadow-sm"
       >
       <button type="submit" class="absolute right-1 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-lg text-brand-600" aria-label="검색">
-        <UIcon name="i-lucide-search" class="size-6" />
+        <AppIcon name="search" class="size-6" />
       </button>
     </form>
 
@@ -86,7 +86,7 @@ const firstGuides = ['visa', 'telecom', 'health', 'banking']
       </span>
       <span class="inline-flex shrink-0 items-center text-[0.875rem] font-bold text-brand-600">
         변환하기
-        <UIcon name="i-lucide-chevron-right" class="size-4" />
+        <AppIcon name="next" class="size-4" />
       </span>
     </NuxtLink>
 
@@ -98,7 +98,7 @@ const firstGuides = ['visa', 'telecom', 'health', 'banking']
         </h2>
         <NuxtLink to="/guides" class="inline-flex min-h-11 items-center text-[0.875rem] font-bold text-brand-600">
           가이드 전체
-          <UIcon name="i-lucide-chevron-right" class="size-4" />
+          <AppIcon name="next" class="size-4" />
         </NuxtLink>
       </div>
       <ul class="rows card mt-2 overflow-hidden">
@@ -111,7 +111,7 @@ const firstGuides = ['visa', 'telecom', 'health', 'banking']
               <span class="block text-[1rem] font-bold text-ink">{{ g.title }}</span>
               <span class="block text-[0.875rem] leading-snug text-ink-2">{{ g.summary }}</span>
             </span>
-            <UIcon name="i-lucide-chevron-right" class="size-5 shrink-0 text-ink-2" />
+            <AppIcon name="next" class="size-5 shrink-0 text-ink-2" />
           </NuxtLink>
         </li>
       </ul>

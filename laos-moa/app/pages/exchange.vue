@@ -25,7 +25,7 @@ const fmt = (n: number) => n.toLocaleString('ko-KR', { maximumFractionDigits: 0 
   <div class="px-4 pt-3 sm:px-5">
     <div class="flex items-center gap-1">
       <NuxtLink to="/" class="-ml-2 grid size-11 place-items-center rounded-full text-ink" aria-label="홈으로">
-        <UIcon name="i-lucide-chevron-left" class="size-7" />
+        <AppIcon name="back" class="size-7" />
       </NuxtLink>
       <h1 data-page-title tabindex="-1" class="text-[1.5rem] font-bold text-ink">
         환율
@@ -50,7 +50,7 @@ const fmt = (n: number) => n.toLocaleString('ko-KR', { maximumFractionDigits: 0 
               <span class="block font-bold text-ink">{{ b.name }}</span>
               <span class="block truncate text-[0.875rem] text-ink-2">{{ b.address || b.area }}</span>
             </span>
-            <UIcon name="i-lucide-chevron-right" class="size-5 shrink-0 text-ink-2" />
+            <AppIcon name="next" class="size-5 shrink-0 text-ink-2" />
           </NuxtLink>
         </li>
       </ul>

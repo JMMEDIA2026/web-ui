@@ -48,9 +48,9 @@ onBeforeUnmount(() => stop?.())
         :aria-label="`지역 선택. 현재 ${region.label}`"
         @click="sheetOpen = true"
       >
-        <UIcon name="i-lucide-map-pin" class="size-4" />
+        <AppIcon name="pin" class="size-4" />
         {{ region.label }}
-        <UIcon name="i-lucide-chevron-down" class="size-5" />
+        <AppIcon name="next" class="size-5 rotate-90" />
       </button>
     </header>
 

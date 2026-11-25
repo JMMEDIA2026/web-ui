@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
 
   const recent = await db
     .prepare(
-      `SELECT r.id, r.customer_name, r.reserve_date, r.status, r.service, p.name AS partner_name
+      `SELECT r.id, r.customer_name, r.reserve_date, r.status, r.service, COALESCE(p.name, NULLIF(r.business_name, '')) AS partner_name
        FROM reservations r LEFT JOIN partners p ON p.id = r.partner_id
        ORDER BY r.created_at DESC LIMIT 5`
     )

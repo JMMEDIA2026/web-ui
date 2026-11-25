@@ -121,7 +121,7 @@ const asOf = computed(() => {
         숫자를 임의로 보여 드리지 않아요. 잠시 후 다시 시도해 주세요.
       </p>
       <button type="button" class="btn btn-primary btn-sm mt-3" @click="refresh()">
-        <UIcon name="i-lucide-refresh-cw" class="size-4" />
+        <AppIcon name="refresh" class="size-4" />
         다시 불러오기
       </button>
     </div>
@@ -165,7 +165,7 @@ const asOf = computed(() => {
 
       <div class="my-2 flex items-center justify-center">
         <button type="button" class="grid size-11 place-items-center rounded-lg bg-white/20 active:bg-white/30" aria-label="통화 위치 바꾸기" @click="swap">
-          <UIcon name="i-lucide-arrow-up-down" class="size-5" />
+          <AppIcon name="swap" class="size-5" />
         </button>
       </div>
 

@@ -252,7 +252,7 @@ defineExpose({ invalidate, getBounds, locate, retry })
       :aria-busy="locating"
       @click="locate"
     >
-      <UIcon :name="locating ? 'i-lucide-refresh-cw' : 'i-lucide-locate-fixed'" class="size-6" :class="locating ? 'animate-spin' : ''" />
+      <AppIcon :name="locating ? 'refresh' : 'locate'" class="size-7" :class="locating ? 'animate-spin' : ''" />
     </button>
 
     <p
@@ -266,7 +266,7 @@ defineExpose({ invalidate, getBounds, locate, retry })
     <!-- 지도 실패: 업체 목록과 연락 기능은 그대로 쓸 수 있습니다. -->
     <div v-if="failed" class="absolute inset-0 z-[600] grid place-items-center bg-[#E9EAF0] p-6 text-center" role="alert">
       <div>
-        <UIcon name="i-lucide-map" class="mx-auto size-8 text-ink-2" />
+        <AppIcon name="map" class="mx-auto size-8 text-ink-2" />
         <p class="mt-2 font-bold text-ink">
           지도를 불러오지 못했어요
         </p>

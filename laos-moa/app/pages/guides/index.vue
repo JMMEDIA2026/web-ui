@@ -29,7 +29,7 @@ const shown = computed(() => {
       <label for="guide-search" class="sr-only">가이드 검색</label>
       <input id="guide-search" v-model="q" type="search" enterkeyhint="search" autocomplete="off" placeholder="가이드를 검색하세요" class="field pr-14">
       <span class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-brand-600">
-        <UIcon name="i-lucide-search" class="size-6" />
+        <AppIcon name="search" class="size-6" />
       </span>
     </form>
 
@@ -47,7 +47,7 @@ const shown = computed(() => {
             <span class="block text-[1rem] font-bold text-ink">{{ g.title }}</span>
             <span class="block text-[0.875rem] leading-snug text-ink-2">{{ g.summary }}</span>
           </span>
-          <UIcon name="i-lucide-chevron-right" class="size-5 shrink-0 text-ink-2" />
+          <AppIcon name="next" class="size-5 shrink-0 text-ink-2" />
         </NuxtLink>
       </li>
     </ul>

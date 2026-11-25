@@ -26,7 +26,9 @@ CREATE TABLE IF NOT EXISTS reservations (
   status TEXT NOT NULL DEFAULT 'pending',
   partner_memo TEXT NOT NULL DEFAULT '',
   created_at TEXT NOT NULL,
-  updated_at TEXT NOT NULL
+  updated_at TEXT NOT NULL,
+  business_id TEXT NOT NULL DEFAULT '',   -- 예약 요청을 받은 업체(협력업체가 아니어도 저장)
+  business_name TEXT NOT NULL DEFAULT ''
 );
 CREATE INDEX IF NOT EXISTS idx_reservations_partner ON reservations (partner_id, created_at);
 CREATE INDEX IF NOT EXISTS idx_reservations_status ON reservations (status, created_at);

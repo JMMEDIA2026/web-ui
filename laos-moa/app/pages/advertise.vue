@@ -46,7 +46,7 @@ async function submit() {
   <div class="px-4 pt-3 sm:px-5">
     <div class="flex items-center gap-1">
       <NuxtLink to="/me" class="-ml-2 grid size-11 place-items-center rounded-full text-ink" aria-label="내 정보로">
-        <UIcon name="i-lucide-chevron-left" class="size-7" />
+        <AppIcon name="back" class="size-7" />
       </NuxtLink>
       <h1 data-page-title tabindex="-1" class="text-[1.5rem] font-bold text-ink">
         업체 등록·광고 문의
@@ -63,7 +63,7 @@ async function submit() {
         </h2>
         <ul class="mt-2 space-y-1.5">
           <li v-for="i in t.items" :key="i" class="flex items-start gap-2 text-[0.9375rem] text-ink">
-            <UIcon name="i-lucide-circle-check" class="mt-0.5 size-5 shrink-0 text-brand-500" />
+            <AppIcon name="check" class="mt-0.5 size-5 shrink-0 text-brand-500" />
             {{ i }}
           </li>
         </ul>

@@ -6,9 +6,9 @@ useSeoMeta({
 })
 
 const items = [
-  { label: '예약 요청하기', desc: '협력업체에 예약을 요청해요', icon: 'i-lucide-calendar-check', to: '/reserve' },
-  { label: '협력업체 로그인', desc: '받은 예약을 확인하는 업체용', icon: 'i-lucide-store', to: '/partner/login' },
-  { label: '업체 등록·광고 문의', desc: '무료 등록과 광고 안내', icon: 'i-lucide-megaphone', to: '/advertise' }
+  { label: '예약 요청하기', desc: '협력업체에 예약을 요청해요', icon: 'calendar', to: '/reserve' },
+  { label: '협력업체 로그인', desc: '받은 예약을 확인하는 업체용', icon: 'biz', to: '/partner/login' },
+  { label: '업체 등록·광고 문의', desc: '무료 등록과 광고 안내', icon: 'megaphone', to: '/advertise' }
 ]
 </script>
 
@@ -25,13 +25,13 @@ const items = [
       <li v-for="i in items" :key="i.to">
         <NuxtLink :to="i.to" class="flex min-h-[72px] items-center gap-3 px-4 py-3 active:bg-brand-100">
           <span class="grid size-11 shrink-0 place-items-center rounded-lg bg-brand-50 text-brand-600">
-            <UIcon :name="i.icon" class="size-6" />
+            <AppIcon :name="i.icon" class="size-8" />
           </span>
           <span class="min-w-0 flex-1">
             <span class="block text-[1rem] font-bold text-ink">{{ i.label }}</span>
             <span class="block text-[0.875rem] text-ink-2">{{ i.desc }}</span>
           </span>
-          <UIcon name="i-lucide-chevron-right" class="size-5 shrink-0 text-ink-2" />
+          <AppIcon name="next" class="size-5 shrink-0 text-ink-2" />
         </NuxtLink>
       </li>
     </ul>
@@ -40,11 +40,17 @@ const items = [
       <h2 id="credit-title" class="text-[0.9375rem] font-bold text-ink">
         출처 안내
       </h2>
-      <p class="mt-1 text-[0.8125rem] leading-relaxed text-ink-2">
-        지도 © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" class="underline">OpenStreetMap</a> contributors.
-        환율 제공 <a href="https://www.exchangerate-api.com" target="_blank" rel="noopener" class="underline">ExchangeRate-API</a>(국제 기준 환율, 참고용).
-        아이콘 <a href="https://lucide.dev" target="_blank" rel="noopener" class="underline">Lucide</a>.
-      </p>
+      <ul class="mt-1 text-[0.8125rem] leading-relaxed text-ink-2">
+        <li>
+          <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" class="inline-flex min-h-11 items-center underline">지도 © OpenStreetMap contributors</a>
+        </li>
+        <li>
+          <a href="https://www.exchangerate-api.com" target="_blank" rel="noopener" class="inline-flex min-h-11 items-center underline">환율 제공 ExchangeRate-API (국제 기준 환율, 참고용)</a>
+        </li>
+        <li>
+          <a href="https://github.com/microsoft/fluentui-emoji" target="_blank" rel="noopener" class="inline-flex min-h-11 items-center underline">3D 아이콘 Microsoft Fluent Emoji (MIT)</a>
+        </li>
+      </ul>
     </section>
   </div>
 </template>

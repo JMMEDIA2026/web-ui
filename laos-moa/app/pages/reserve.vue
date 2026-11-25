@@ -13,13 +13,29 @@ interface PartnerOption {
 const route = useRoute()
 const toast = useToast()
 
+// 등록된 모든 업체에 예약을 요청할 수 있습니다. (협력업체와 연결되지 않은 업체는 라자가 확인해 전달)
+const { real: businesses } = await useBusinessList()
 const { data: partners } = await useFetch<PartnerOption[]>('/api/partners', { default: () => [] })
+
+// 업체에 연결되지 않은 협력업체도 선택지에 남깁니다.
+const linkedPartnerIds = computed(() => new Set(businesses.value.map(b => b.partnerId).filter(Boolean)))
+const extraPartners = computed(() => (partners.value ?? []).filter(x => !linkedPartnerIds.value.has(x.id)))
+const hasTargets = computed(() => businesses.value.length > 0 || extraPartners.value.length > 0)
+
+function initialTarget() {
+  if (typeof route.query.business === 'string') return `b:${route.query.business}`
+  if (typeof route.query.partner === 'string') {
+    const linked = businesses.value.find(b => b.partnerId === route.query.partner)
+    return linked ? `b:${linked.slug}` : `p:${route.query.partner}`
+  }
+  return ''
+}
 
 // 라오스 시간(UTC+7) 기준 오늘 날짜
 const today = new Date(Date.now() + 7 * 3600 * 1000).toISOString().slice(0, 10)
 
 const form = reactive({
-  partnerId: typeof route.query.partner === 'string' ? route.query.partner : '',
+  target: initialTarget(),
   name: '',
   contact: '',
   date: '',
@@ -32,15 +48,19 @@ const form = reactive({
 const loading = ref(false)
 const error = ref('')
 const doneCode = ref('')
+const doneDirect = ref(true)
 
-const canSubmit = computed(() => form.partnerId && form.name.trim() && form.contact.trim().length >= 2 && form.date && form.people >= 1)
+const canSubmit = computed(() => form.target && form.name.trim() && form.contact.trim().length >= 2 && form.date && form.people >= 1)
 
 async function submit() {
   error.value = ''
   loading.value = true
   try {
-    const res = await $fetch<{ code: string }>('/api/reservations', { method: 'POST', body: { ...form } })
+    const { target, ...rest } = form
+    const body = target.startsWith('b:') ? { ...rest, businessId: target.slice(2) } : { ...rest, partnerId: target.slice(2) }
+    const res = await $fetch<{ code: string, direct?: boolean }>('/api/reservations', { method: 'POST', body })
     doneCode.value = res.code
+    doneDirect.value = res.direct !== false
     toast.add({ title: '예약 요청을 보냈어요', color: 'success' })
   } catch (e) {
     error.value = errorMessage(e)
@@ -51,7 +71,7 @@ async function submit() {
 
 function reset() {
   doneCode.value = ''
-  Object.assign(form, { name: '', contact: '', date: '', people: 1, service: '', note: '', website: '' })
+  Object.assign(form, { target: initialTarget(), name: '', contact: '', date: '', people: 1, service: '', note: '', website: '' })
 }
 </script>
 
@@ -59,7 +79,7 @@ function reset() {
   <div class="px-4 pt-3 sm:px-5">
     <div class="flex items-center gap-1">
       <NuxtLink to="/me" class="-ml-2 grid size-11 place-items-center rounded-full text-ink" aria-label="내 정보로">
-        <UIcon name="i-lucide-chevron-left" class="size-7" />
+        <AppIcon name="back" class="size-7" />
       </NuxtLink>
       <h1 data-page-title tabindex="-1" class="text-[1.5rem] font-bold text-ink">
         예약 요청하기
@@ -68,7 +88,7 @@ function reset() {
 
     <!-- 접수 완료 -->
     <div v-if="doneCode" class="card mt-4 p-6 text-center">
-      <UIcon name="i-lucide-circle-check" class="mx-auto size-12 text-brand-500" />
+      <AppIcon name="check" class="mx-auto size-12 text-brand-500" />
       <h2 class="mt-3 text-[1.375rem] font-bold text-ink">
         예약 요청이 접수되었어요
       </h2>
@@ -79,7 +99,12 @@ function reset() {
         {{ doneCode }}
       </p>
       <p class="mt-3 text-[0.9375rem] leading-relaxed text-ink-2">
-        아직 확정된 예약이 아니에요. 업체가 확인하면 남겨 주신 연락처로 확정 여부를 알려 드려요. 문의하실 때 예약번호를 알려 주세요.
+        <template v-if="doneDirect">
+          아직 확정된 예약이 아니에요. 업체가 확인하면 남겨 주신 연락처로 확정 여부를 알려 드려요. 문의하실 때 예약번호를 알려 주세요.
+        </template>
+        <template v-else>
+          아직 확정된 예약이 아니에요. 라자가 업체에 확인한 뒤 남겨 주신 연락처로 확정 여부를 알려 드려요. 문의하실 때 예약번호를 알려 주세요.
+        </template>
       </p>
       <div class="mt-5 flex flex-col gap-2">
         <button type="button" class="btn btn-outline" @click="reset">
@@ -92,8 +117,8 @@ function reset() {
     </div>
 
     <!-- 예약을 받는 협력업체가 아직 없을 때 -->
-    <div v-else-if="!(partners ?? []).length" class="card mt-4 p-6 text-center">
-      <UIcon name="i-lucide-store" class="mx-auto size-10 text-ink-2" />
+    <div v-else-if="!hasTargets" class="card mt-4 p-6 text-center">
+      <AppIcon name="biz" class="mx-auto size-10 text-ink-2" />
       <p class="mt-2 text-[1.125rem] font-bold text-ink">
         예약을 받는 업체를 준비하고 있어요
       </p>
@@ -113,12 +138,15 @@ function reset() {
     <form v-else class="mt-4 space-y-4" @submit.prevent="submit">
       <div>
         <label for="r-partner" class="text-[0.9375rem] font-bold text-ink">예약할 업체 <span class="text-brand-600">*</span></label>
-        <select id="r-partner" v-model="form.partnerId" class="field mt-1.5" required>
+        <select id="r-partner" v-model="form.target" class="field mt-1.5" required>
           <option value="" disabled>
             업체를 선택하세요
           </option>
-          <option v-for="p in partners" :key="p.id" :value="p.id">
-            {{ p.name }} · {{ p.category }}
+          <option v-for="b in businesses" :key="b.slug" :value="`b:${b.slug}`">
+            {{ b.name }}
+          </option>
+          <option v-for="x in extraPartners" :key="x.id" :value="`p:${x.id}`">
+            {{ x.name }} · {{ x.category }}
           </option>
         </select>
       </div>
@@ -167,7 +195,7 @@ function reset() {
         {{ loading ? '보내는 중…' : '예약 요청 보내기' }}
       </button>
       <p class="text-center text-[0.8125rem] leading-relaxed text-ink-2">
-        요청을 보내는 것만으로는 예약이 확정되지 않아요. 업체의 확인을 거쳐 확정돼요.
+        요청을 보내는 것만으로는 예약이 확정되지 않아요. 업체 확인을 거쳐 확정돼요. 협력업체가 아닌 곳은 라자가 업체에 확인해 연락드려요.
       </p>
     </form>
   </div>

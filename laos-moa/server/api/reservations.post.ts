@@ -3,7 +3,8 @@ import { z } from 'zod'
 const RATE_KIND = 'reserve'
 
 const schema = z.object({
-  partnerId: z.string().trim().min(1, '예약할 업체를 선택하세요').max(40),
+  partnerId: z.string().trim().max(40).default(''),
+  businessId: z.string().trim().max(60).default(''),
   name: z.string().trim().min(1, '이름을 입력하세요').max(50),
   contact: z.string().trim().min(2, '연락처를 입력하세요').max(100),
   service: z.string().trim().max(100).default(''),
@@ -37,23 +38,44 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 429, statusMessage: '예약 요청이 너무 많습니다. 잠시 후 다시 시도해 주세요' })
   }
 
-  const partner = await db
-    .prepare('SELECT id, name FROM partners WHERE id = ? AND active = 1')
-    .bind(body.partnerId)
-    .first<{ id: string, name: string }>()
-  if (!partner) {
+  if (!body.partnerId && !body.businessId) {
+    throw createError({ statusCode: 400, statusMessage: '예약할 업체를 선택하세요' })
+  }
+
+  // 업체(businesses)를 골랐다면 연결된 협력업체가 있을 때만 그쪽으로 전달하고,
+  // 없으면 라자 관리자가 확인해 업체에 전달합니다.
+  let business: { id: string, name: string, partner_id: string | null } | null = null
+  if (body.businessId) {
+    business = await db
+      .prepare('SELECT id, name, partner_id FROM businesses WHERE id = ?')
+      .bind(body.businessId)
+      .first<{ id: string, name: string, partner_id: string | null }>()
+    if (!business) {
+      throw createError({ statusCode: 404, statusMessage: '예약할 수 없는 업체입니다' })
+    }
+  }
+
+  const wantedPartnerId = business?.partner_id || body.partnerId
+  const partner = wantedPartnerId
+    ? await db
+      .prepare('SELECT id, name FROM partners WHERE id = ? AND active = 1')
+      .bind(wantedPartnerId)
+      .first<{ id: string, name: string }>()
+    : null
+  if (!partner && !business) {
     throw createError({ statusCode: 404, statusMessage: '예약할 수 없는 업체입니다' })
   }
+  const targetName = partner?.name ?? business!.name
 
   const code = `R${randomCode(6)}`
   const now = nowIso()
   await db
     .prepare(
       `INSERT INTO reservations
-        (id, partner_id, customer_name, customer_contact, service, reserve_date, people, note, status, partner_memo, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', '', ?, ?)`
+        (id, partner_id, customer_name, customer_contact, service, reserve_date, people, note, status, partner_memo, created_at, updated_at, business_id, business_name)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', '', ?, ?, ?, ?)`
     )
-    .bind(code, partner.id, body.name, body.contact, body.service, body.date, body.people, body.note, now, now)
+    .bind(code, partner?.id ?? '', body.name, body.contact, body.service, body.date, body.people, body.note, now, now, business?.id ?? '', business?.name ?? '')
     .run()
   await rateAdd(db, ip, RATE_KIND)
 
@@ -61,12 +83,12 @@ export default defineEventHandler(async (event) => {
     event,
     [
       `[라자] 새 예약 요청 ${code}`,
-      `업체: ${partner.name}`,
+      `업체: ${targetName}${partner ? '' : ' (협력업체 미연결 · 라자가 직접 확인 필요)'}`,
       `고객: ${body.name} (${body.contact})`,
       `날짜: ${body.date} / ${body.people}명`,
       body.service ? `서비스: ${body.service}` : ''
     ].filter(Boolean).join('\n')
   )
 
-  return { ok: true, code }
+  return { ok: true, code, direct: !!partner }
 })

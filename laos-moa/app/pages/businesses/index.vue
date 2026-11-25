@@ -265,10 +265,10 @@ onBeforeUnmount(() => {
           aria-label="검색어 지우기"
           @click="clearSearch"
         >
-          <UIcon name="i-lucide-x" class="size-5" />
+          <AppIcon name="close" class="size-5" />
         </button>
         <button type="submit" class="absolute right-1 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-lg text-brand-600" aria-label="검색">
-          <UIcon name="i-lucide-search" class="size-6" />
+          <AppIcon name="search" class="size-6" />
         </button>
       </form>
 
@@ -343,7 +343,7 @@ onBeforeUnmount(() => {
           상세 보기
         </NuxtLink>
         <button type="button" class="grid size-11 shrink-0 place-items-center rounded-full text-ink-2" aria-label="선택 해제" @click="selected = ''">
-          <UIcon name="i-lucide-x" class="size-5" />
+          <AppIcon name="close" class="size-5" />
         </button>
       </div>
     </div>
@@ -367,7 +367,7 @@ onBeforeUnmount(() => {
           </option>
         </select>
         <button type="button" class="btn btn-quiet btn-sm" :aria-pressed="expanded" @click="toggleExpanded">
-          <UIcon :name="expanded ? 'i-lucide-map' : 'i-lucide-list'" class="size-4" />
+          <AppIcon :name="expanded ? 'map' : 'list'" class="size-5" />
           {{ expanded ? '지도 보기' : '목록 크게 보기' }}
         </button>
       </div>
@@ -395,7 +395,7 @@ onBeforeUnmount(() => {
 
       <!-- 연결 오류: 검색 조건은 그대로 둡니다. -->
       <div v-else-if="error" class="px-6 py-10 text-center" role="alert">
-        <UIcon name="i-lucide-circle-alert" class="mx-auto size-8 text-ink-2" />
+        <AppIcon name="warning" class="mx-auto size-8 text-ink-2" />
         <p class="mt-2 text-[1.0625rem] font-bold text-ink">
           업체 정보를 불러오지 못했어요
         </p>
@@ -409,7 +409,7 @@ onBeforeUnmount(() => {
 
       <!-- 결과 없음 -->
       <div v-else-if="!filtered.length" class="px-6 py-10 text-center">
-        <UIcon name="i-lucide-search" class="mx-auto size-8 text-ink-2" />
+        <AppIcon name="search" class="mx-auto size-8 text-ink-2" />
         <p class="mt-2 text-[1.125rem] font-bold text-ink">
           {{ !real.length ? '아직 등록된 업체가 없어요' : !inRegion.length ? `${region.label}에는 아직 등록된 업체가 없어요` : '검색 결과가 없어요' }}
         </p>

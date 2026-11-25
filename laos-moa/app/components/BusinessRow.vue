@@ -43,7 +43,7 @@ async function copy(text: string) {
       <!-- 실제 업체 사진이 없으면 업종 아이콘만 보여 줍니다. 다른 업체 사진으로 대체하지 않습니다. -->
       <span class="grid size-[88px] shrink-0 place-items-center rounded-lg bg-brand-50 text-brand-600">
         <img v-if="category?.emoji" :src="category.emoji" alt="" width="56" height="56" class="size-14 object-contain" loading="lazy">
-        <UIcon v-else name="i-lucide-store" class="size-9" />
+        <AppIcon v-else name="biz" class="size-14" />
       </span>
       <span class="min-w-0 flex-1">
         <span class="flex flex-wrap items-center gap-x-2 gap-y-1">
@@ -55,7 +55,7 @@ async function copy(text: string) {
         </span>
         <span v-if="business.hours" class="mt-1 block text-[0.875rem] text-ink">영업시간 {{ business.hours }}</span>
         <span v-if="!located" class="mt-1 inline-flex items-center gap-1 text-[0.8125rem] font-bold text-ink-2">
-          <UIcon name="i-lucide-map-pin" class="size-4" />
+          <AppIcon name="pin" class="size-4" />
           위치 확인 중
         </span>
       </span>
@@ -66,23 +66,27 @@ async function copy(text: string) {
         상세 보기
       </NuxtLink>
       <a v-if="directions" :href="directions" target="_blank" rel="noopener" class="btn btn-outline btn-sm">
-        <UIcon name="i-lucide-navigation" class="size-4" />
+        <AppIcon name="compass" class="size-5" />
         길찾기
       </a>
       <template v-if="contact">
         <a v-if="contact.kind === 'tel'" :href="contact.href" class="btn btn-outline btn-sm">
-          <UIcon name="i-lucide-phone" class="size-4" />
+          <AppIcon name="phone" class="size-4" />
           {{ contact.label }}
         </a>
         <a v-else-if="contact.kind === 'link'" :href="contact.href" target="_blank" rel="noopener" class="btn btn-outline btn-sm">
-          <UIcon name="i-lucide-phone" class="size-4" />
+          <AppIcon name="phone" class="size-4" />
           {{ contact.label }}
         </a>
         <button v-else type="button" class="btn btn-outline btn-sm" @click="copy(contact.text)">
-          <UIcon name="i-lucide-copy" class="size-4" />
+          <AppIcon name="copy" class="size-4" />
           {{ contact.label }}
         </button>
       </template>
+      <NuxtLink :to="{ path: '/reserve', query: { business: business.slug } }" class="btn btn-primary btn-sm">
+        <AppIcon name="calendar" class="size-5" />
+        예약
+      </NuxtLink>
     </div>
   </li>
 </template>
