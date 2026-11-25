@@ -34,7 +34,7 @@ async function copy(text: string) {
   <li
     :id="`biz-${business.slug}`"
     class="border-l-4 px-4 py-3"
-    :class="selected ? 'border-brand-500 bg-brand-100' : 'border-transparent bg-white'"
+    :class="selected ? 'border-brand-500 bg-brand-100' : 'border-transparent bg-surface'"
   >
     <button
       type="button"
@@ -50,10 +50,10 @@ async function copy(text: string) {
       </span>
       <span class="min-w-0 flex-1">
         <span class="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-[0.8125rem] text-ink-2">
-          <span v-if="business.sponsored" class="shrink-0 rounded-md bg-brand-100 px-1.5 py-0.5 text-[0.75rem] font-bold text-brand-600">광고</span>
+          <span v-if="business.sponsored" class="shrink-0 rounded-md bg-gold-50 px-1.5 py-0.5 text-[0.75rem] font-bold text-gold-700">광고</span>
           <span class="min-w-0">{{ category?.label }} · {{ business.area || '비엔티안' }}<template v-if="distance != null"> · {{ formatDistance(distance) }}</template></span>
         </span>
-        <span class="mt-0.5 block break-words [overflow-wrap:anywhere] text-[1.0625rem] font-bold leading-snug text-ink">{{ business.name }}</span>
+        <span class="mt-0.5 block break-words [overflow-wrap:anywhere] [text-wrap:balance] font-serif text-[1.0625rem] font-bold leading-snug text-ink">{{ business.name }}</span>
         <span v-if="business.hours" class="mt-1 block text-[0.875rem] text-ink">영업시간 {{ business.hours }}</span>
         <span v-if="!located" class="mt-1 inline-flex items-center gap-1 text-[0.8125rem] font-bold text-ink-2">
           <AppIcon name="pin" class="size-4" />

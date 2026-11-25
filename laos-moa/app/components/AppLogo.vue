@@ -4,11 +4,11 @@ withDefaults(defineProps<{ size?: number, textClass?: string }>(), { size: 30, t
 </script>
 
 <template>
-  <span class="inline-flex items-center gap-2 font-extrabold tracking-tight">
+  <span class="inline-flex items-center gap-2 font-serif font-bold tracking-tight">
     <svg :width="size" :height="size" viewBox="0 0 96 96" aria-hidden="true" focusable="false">
-      <rect width="96" height="96" rx="22" fill="#635BFF" />
+      <rect width="96" height="96" rx="22" fill="#2F4B2C" />
       <path d="M48 18c-11.6 0-21 9.1-21 20.4 0 15 21 38.6 21 38.6s21-23.6 21-38.6C69 27.1 59.6 18 48 18z" fill="#fff" />
-      <circle cx="48" cy="38.5" r="8" fill="#635BFF" />
+      <circle cx="48" cy="38.5" r="8" fill="#2F4B2C" />
     </svg>
     <span :class="textClass">라자</span>
   </span>

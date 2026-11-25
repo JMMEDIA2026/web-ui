@@ -76,7 +76,7 @@ const items = computed(() => [
     <section v-if="member" class="card mt-4 p-4" aria-labelledby="member-title">
       <h2 id="member-title" class="flex flex-wrap items-center gap-2 text-[1.125rem] font-bold text-ink">
         {{ member.nickname }}님
-        <span v-if="member.grade" class="rounded-md bg-brand-100 px-2 py-0.5 text-[0.8125rem] font-bold text-brand-600">
+        <span v-if="member.grade" class="rounded-md bg-brand-100 px-2 py-0.5 font-sans text-[0.8125rem] font-bold text-brand-600">
           {{ member.grade.level }}등급 · {{ member.grade.name }}
         </span>
       </h2>

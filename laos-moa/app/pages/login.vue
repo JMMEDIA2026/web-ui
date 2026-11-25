@@ -50,7 +50,7 @@ async function submit() {
         <label for="l-pw" class="text-[0.9375rem] font-bold text-ink">비밀번호</label>
         <input id="l-pw" v-model="form.password" :type="showPw ? 'text' : 'password'" autocomplete="current-password" class="field mt-1.5" required>
         <label class="mt-1 flex min-h-11 cursor-pointer items-center gap-3 text-[0.9375rem] text-ink">
-          <input v-model="showPw" type="checkbox" class="size-6 shrink-0 accent-[#635BFF]">
+          <input v-model="showPw" type="checkbox" class="size-6 shrink-0 accent-[#2F4B2C]">
           비밀번호 보이기
         </label>
       </div>

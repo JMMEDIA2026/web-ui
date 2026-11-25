@@ -90,7 +90,7 @@ async function submit() {
           비밀번호가 서로 달라요.
         </p>
         <label class="mt-1 flex min-h-11 cursor-pointer items-center gap-3 text-[0.9375rem] text-ink">
-          <input v-model="showPw" type="checkbox" class="size-6 shrink-0 accent-[#635BFF]">
+          <input v-model="showPw" type="checkbox" class="size-6 shrink-0 accent-[#2F4B2C]">
           비밀번호 보이기
         </label>
       </div>
@@ -123,7 +123,7 @@ async function submit() {
         <div class="mt-1.5 grid grid-cols-3 gap-2">
           <label v-for="g in genders" :key="g.value" class="block">
             <input v-model="form.gender" type="radio" name="gender" :value="g.value" class="peer sr-only" required>
-            <span class="flex min-h-[52px] cursor-pointer items-center justify-center rounded-lg border border-line bg-white px-1 text-center text-[0.9375rem] font-semibold text-ink peer-checked:border-brand-500 peer-checked:bg-brand-500 peer-checked:text-white peer-focus-visible:outline peer-focus-visible:outline-[3px] peer-focus-visible:outline-offset-2 peer-focus-visible:outline-brand-500">
+            <span class="flex min-h-[52px] cursor-pointer items-center justify-center rounded-lg border border-line bg-surface px-1 text-center text-[0.9375rem] font-semibold text-ink peer-checked:border-brand-500 peer-checked:bg-brand-500 peer-checked:text-white peer-focus-visible:outline peer-focus-visible:outline-[3px] peer-focus-visible:outline-offset-2 peer-focus-visible:outline-brand-500">
               {{ g.label }}
             </span>
           </label>
@@ -133,13 +133,13 @@ async function submit() {
       <!-- 약관 동의 -->
       <div class="card p-3">
         <label class="flex min-h-11 cursor-pointer items-center gap-3 font-bold text-ink">
-          <input v-model="agreeAll" type="checkbox" class="size-6 shrink-0 accent-[#635BFF]">
+          <input v-model="agreeAll" type="checkbox" class="size-6 shrink-0 accent-[#2F4B2C]">
           전체 동의
         </label>
         <div class="mt-1 border-t border-line pt-1">
           <div class="flex items-center">
             <label class="flex min-h-11 flex-1 cursor-pointer items-center gap-3 text-[0.9375rem] text-ink">
-              <input v-model="form.agreeTerms" type="checkbox" class="size-6 shrink-0 accent-[#635BFF]" required>
+              <input v-model="form.agreeTerms" type="checkbox" class="size-6 shrink-0 accent-[#2F4B2C]" required>
               (필수) 이용약관 동의
             </label>
             <NuxtLink to="/terms" target="_blank" class="inline-flex min-h-11 items-center px-2 text-[0.875rem] font-bold text-brand-600 underline">
@@ -148,7 +148,7 @@ async function submit() {
           </div>
           <div class="flex items-center">
             <label class="flex min-h-11 flex-1 cursor-pointer items-center gap-3 text-[0.9375rem] text-ink">
-              <input v-model="form.agreePrivacy" type="checkbox" class="size-6 shrink-0 accent-[#635BFF]" required>
+              <input v-model="form.agreePrivacy" type="checkbox" class="size-6 shrink-0 accent-[#2F4B2C]" required>
               (필수) 개인정보 수집·이용 동의
             </label>
             <NuxtLink to="/privacy" target="_blank" class="inline-flex min-h-11 items-center px-2 text-[0.875rem] font-bold text-brand-600 underline">

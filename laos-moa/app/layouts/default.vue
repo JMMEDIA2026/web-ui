@@ -28,13 +28,13 @@ onBeforeUnmount(() => stop?.())
 
 <template>
   <div
-    class="mx-auto min-h-dvh w-full max-w-[560px] bg-app-bg sm:border-x sm:border-line"
+    class="laja-public mx-auto min-h-dvh w-full max-w-[560px] bg-app-bg sm:border-x sm:border-line"
     :style="{ '--nav-h': navVisible ? '64px' : '0px' }"
   >
     <a href="#main-content" class="skip-link">본문 바로가기</a>
     <header
       v-if="showHeader"
-      class="sticky top-0 z-30 flex items-center justify-between border-b border-line bg-white px-4"
+      class="sticky top-0 z-30 flex items-center justify-between border-b border-line bg-surface px-4"
       style="height: calc(56px + env(safe-area-inset-top, 0px)); padding-top: env(safe-area-inset-top, 0px)"
     >
       <NuxtLink to="/" class="-ml-1 inline-flex min-h-11 shrink-0 items-center px-1" aria-label="라자 홈">

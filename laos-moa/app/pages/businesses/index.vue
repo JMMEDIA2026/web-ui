@@ -246,7 +246,7 @@ onBeforeUnmount(() => {
     </h1>
 
     <!-- 검색과 업종 필터 -->
-    <div class="shrink-0 border-b border-line bg-white px-4 pb-2 pt-3">
+    <div class="shrink-0 border-b border-line bg-surface px-4 pb-2 pt-3">
       <form class="relative" role="search" @submit.prevent="submitSearch">
         <label for="biz-search" class="sr-only">업체명이나 업종 검색</label>
         <input
@@ -291,7 +291,7 @@ onBeforeUnmount(() => {
 
     <!-- 상단 지도 (목록 크게 보기를 누르면 접힙니다) -->
     <div
-      class="relative shrink-0 overflow-hidden bg-[#E9EAF0] transition-[height] duration-200"
+      class="relative shrink-0 overflow-hidden bg-[#E6E2D2] transition-[height] duration-200"
       :style="{ height: expanded ? '0px' : 'min(300px, 38dvh)' }"
       :inert="expanded"
     >
@@ -327,7 +327,7 @@ onBeforeUnmount(() => {
       <!-- 선택한 업체 요약 -->
       <div
         v-if="selectedBusiness"
-        class="absolute inset-x-3 bottom-7 z-[500] flex items-center gap-2 rounded-lg bg-white p-3 shadow-md"
+        class="absolute inset-x-3 bottom-7 z-[500] flex items-center gap-2 rounded-lg bg-surface p-3 shadow-md"
         role="region"
         aria-label="선택한 업체"
       >
@@ -349,13 +349,13 @@ onBeforeUnmount(() => {
     </div>
 
     <!-- 결과 수 · 정렬 · 목록 크게 보기 -->
-    <div class="flex shrink-0 items-center justify-between gap-2 border-y border-line bg-white px-4 py-1.5">
+    <div class="flex shrink-0 items-center justify-between gap-2 border-y border-line bg-surface px-4 py-1.5">
       <p class="text-[0.9375rem] font-bold text-ink" aria-live="polite">
         결과 <span class="text-brand-600">{{ filtered.length }}</span>곳
       </p>
       <div class="flex items-center gap-2">
         <label for="biz-sort" class="sr-only">정렬</label>
-        <select id="biz-sort" v-model="sort" class="min-h-11 rounded-lg border border-[#8A91A0] bg-white px-2 text-[0.875rem] text-ink">
+        <select id="biz-sort" v-model="sort" class="min-h-11 rounded-lg border border-[#858C7A] bg-surface px-2 text-[0.875rem] text-ink">
           <option value="default">
             추천순
           </option>
@@ -381,7 +381,7 @@ onBeforeUnmount(() => {
     </div>
 
     <!-- 하단 업체 목록 -->
-    <div ref="listEl" class="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-white" @scroll.passive="onScroll">
+    <div ref="listEl" class="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-surface" @scroll.passive="onScroll">
       <!-- 불러오는 중 -->
       <ul v-if="pending && !real.length" class="rows" aria-busy="true">
         <li v-for="n in 3" :key="n" class="flex gap-3 px-4 py-3">

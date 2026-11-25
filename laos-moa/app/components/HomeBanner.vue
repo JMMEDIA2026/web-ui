@@ -100,7 +100,7 @@ const NuxtLinkComponent = resolveComponent('NuxtLink')
           :aria-current="i === index"
           @click="goTo(i)"
         >
-          <span class="block h-2.5 rounded-full ring-1 ring-ink/50 shadow-[0_0_3px_rgb(0_0_0/0.6)] transition-all" :class="i === index ? 'w-6 bg-white' : 'w-2.5 bg-white/60'" />
+          <span class="block h-2.5 rounded-full ring-1 ring-ink/50 shadow-[0_0_3px_rgb(0_0_0/0.6)] transition-all" :class="i === index ? 'w-6 bg-surface' : 'w-2.5 bg-white/60'" />
         </button>
       </div>
       <button type="button" class="pointer-events-auto grid size-11 place-items-center" :aria-label="playing ? '자동 넘김 멈춤' : '자동 넘김 시작'" @click="playing = !playing">

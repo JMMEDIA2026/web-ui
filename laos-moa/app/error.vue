@@ -12,12 +12,12 @@ const go = (to: string) => clearError({ redirect: to })
 </script>
 
 <template>
-  <main class="mx-auto flex min-h-dvh max-w-[560px] flex-col items-center justify-center bg-[#F5F6F8] px-6 text-center">
+  <main class="mx-auto flex min-h-dvh max-w-[560px] flex-col items-center justify-center bg-[#F2ECDF] px-6 text-center">
     <AppLogo :size="40" text-class="text-[1.625rem] text-brand-600" />
-    <h1 class="mt-6 text-[1.5rem] font-bold text-[#1F2430]">
+    <h1 class="mt-6 text-[1.5rem] font-bold text-[#1F2B1D]">
       {{ notFound ? '찾으시는 페이지가 없어요' : '문제가 생겼어요' }}
     </h1>
-    <p class="mt-2 text-[1rem] leading-relaxed text-[#606775]">
+    <p class="mt-2 text-[1rem] leading-relaxed text-[#5E6A57]">
       {{ notFound ? '주소가 바뀌었거나 없어진 업체·가이드일 수 있어요.' : '잠시 후 다시 시도해 주세요.' }}
     </p>
     <div class="mt-6 flex w-full max-w-xs flex-col gap-2">

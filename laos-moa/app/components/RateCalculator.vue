@@ -113,7 +113,7 @@ const asOf = computed(() => {
     </div>
 
     <!-- 불러오기 실패: 임의의 숫자를 채우지 않습니다. -->
-    <div v-else-if="error || !data" class="mt-3 rounded-lg bg-white p-4 text-ink" role="alert">
+    <div v-else-if="error || !data" class="mt-3 rounded-lg bg-surface p-4 text-ink" role="alert">
       <p class="font-bold">
         지금은 환율을 확인할 수 없어요.
       </p>
@@ -134,7 +134,7 @@ const asOf = computed(() => {
           :key="p.label"
           type="button"
           class="min-h-11 rounded-lg px-3 text-[0.9375rem] font-bold"
-          :class="isPreset(p) ? 'bg-white text-brand-600' : 'bg-brand-700 text-white active:bg-brand-800'"
+          :class="isPreset(p) ? 'bg-surface text-brand-600' : 'bg-brand-700 text-white active:bg-brand-800'"
           :aria-pressed="isPreset(p)"
           @click="setPair(p.from, p.to)"
         >
@@ -152,10 +152,10 @@ const asOf = computed(() => {
             type="text"
             inputmode="decimal"
             autocomplete="off"
-            class="min-h-[52px] min-w-0 flex-1 rounded-lg border-0 bg-white px-4 text-[1.125rem] font-bold text-ink"
+            class="min-h-[52px] min-w-0 flex-1 rounded-lg border-0 bg-surface px-4 text-[1.125rem] font-bold text-ink"
             @input="onInput"
           >
-          <select v-model="from" aria-label="바꿀 통화" class="min-h-[52px] w-[112px] shrink-0 rounded-lg border-0 bg-white px-3 text-[1rem] font-bold text-ink">
+          <select v-model="from" aria-label="바꿀 통화" class="min-h-[52px] w-[112px] shrink-0 rounded-lg border-0 bg-surface px-3 text-[1rem] font-bold text-ink">
             <option v-for="o in options" :key="o.value" :value="o.value">
               {{ o.label }}
             </option>
@@ -170,12 +170,12 @@ const asOf = computed(() => {
       </div>
 
       <!-- 결과 -->
-      <div class="rounded-lg bg-white p-4 text-ink" aria-live="polite">
+      <div class="rounded-lg bg-surface p-4 text-ink" aria-live="polite">
         <div class="flex items-center justify-between gap-2">
           <p class="text-[0.875rem] text-ink-2">
             {{ fmt(amount, from) }}{{ CUR[from].unit }} =
           </p>
-          <select v-model="to" aria-label="받을 통화" class="min-h-11 rounded-lg border border-[#8A91A0] bg-white px-2 text-[0.9375rem] font-bold text-ink">
+          <select v-model="to" aria-label="받을 통화" class="min-h-11 rounded-lg border border-[#858C7A] bg-surface px-2 text-[0.9375rem] font-bold text-ink">
             <option v-for="o in options" :key="o.value" :value="o.value">
               {{ o.label }}
             </option>

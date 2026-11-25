@@ -69,7 +69,7 @@ function onKey(e: KeyboardEvent) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="region-sheet-title"
-        class="relative w-full max-w-[560px] rounded-t-xl bg-white px-4 pt-5"
+        class="relative w-full max-w-[560px] rounded-t-xl bg-surface px-4 pt-5"
         style="padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px))"
       >
         <div class="flex items-center justify-between">

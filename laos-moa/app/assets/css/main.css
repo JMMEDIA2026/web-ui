@@ -1,29 +1,37 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
-/* 라자 모바일 디자인 토큰 (laosmoa_mobile_design.md 6장 기준) */
+/* 라자 디자인 토큰 — 스파 그린 + 크림
+   브랜드 녹색: 500 = 주요 버튼·선택·핀, 600 = 누름 상태·작은 강조 글자, 100 = 선택 배경 */
 @theme static {
   --font-sans: 'Pretendard Variable', Pretendard, 'Noto Sans KR', system-ui, -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  /* 제목에만 쓰는 명조체 */
+  --font-serif: 'Noto Serif KR', 'Nanum Myeongjo', 'Apple SD Gothic Neo', 'Malgun Gothic', serif;
 
-  /* 브랜드 보라색: 500 = #635BFF(주요 버튼·선택·핀), 600 = #5146D8(누름 상태·작은 강조 글자), 100 = #EEECFF(선택 배경) */
-  --color-brand-50: #F7F6FF;
-  --color-brand-100: #EEECFF;
-  --color-brand-200: #DEDAFF;
-  --color-brand-300: #C5BFFF;
-  --color-brand-400: #A39AFF;
-  --color-brand-500: #635BFF;
-  --color-brand-600: #5146D8;
-  --color-brand-700: #4339B8;
-  --color-brand-800: #372F96;
-  --color-brand-900: #2C2677;
-  --color-brand-950: #1A1650;
+  --color-brand-50: #F3F7EF;
+  --color-brand-100: #E5EDDD;
+  --color-brand-200: #D3E1C9;
+  --color-brand-300: #C5D5BC;
+  --color-brand-400: #8FAA86;
+  --color-brand-500: #2F4B2C;
+  --color-brand-600: #243B22;
+  --color-brand-700: #1B2E1A;
+  --color-brand-800: #142213;
+  --color-brand-900: #0E190D;
+  --color-brand-950: #080F08;
 
-  --color-app-bg: #F5F6F8;
-  --color-line: #E5E7ED;
-  /* 입력칸·보조 버튼의 테두리: 흰 배경 대비 3:1 이상 (WCAG 1.4.11) */
-  --color-field-border: #8A91A0;
-  --color-ink: #1F2430;
-  --color-ink-2: #606775;
+  --color-app-bg: #F2ECDF;
+  /* 카드·입력칸·헤더·하단 메뉴의 바탕: 순백보다 살짝 따뜻한 크림 */
+  --color-surface: #FCF9F3;
+  --color-line: #E3DAC8;
+  /* 입력칸·보조 버튼의 테두리: 카드 표면 대비 3:1 이상 (WCAG 1.4.11) */
+  --color-field-border: #858C7A;
+  --color-ink: #1F2B1D;
+  --color-ink-2: #5E6A57;
+  /* 광고 표시 등 금색 포인트 */
+  --color-gold-50: #F1E6CF;
+  --color-gold-500: #B08D57;
+  --color-gold-700: #7A5A22;
 }
 
 /* Nuxt UI 기본 모서리: 입력·버튼 12px */
@@ -35,12 +43,12 @@
 }
 
 html {
-  background: #F5F6F8;
+  background: #F2ECDF;
 }
 
 body {
-  background: #F5F6F8;
-  color: #1F2430;
+  background: #F2ECDF;
+  color: #1F2B1D;
   font-size: 1rem;
   line-height: 1.5;
   word-break: keep-all;
@@ -49,7 +57,7 @@ body {
 
 /* ---------- 공통 컴포넌트 ---------- */
 
-/* 버튼: 높이 48px, 모서리 12px, 누름 상태 #5146D8 */
+/* 버튼: 높이 48px, 모서리 12px, 누름 상태 #243B22 */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -57,7 +65,7 @@ body {
   gap: 8px;
   min-height: 48px;
   padding: 0 20px;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 1rem;
   font-weight: 700;
   line-height: 1.2;
@@ -72,26 +80,26 @@ body {
   cursor: not-allowed;
 }
 .btn-primary {
-  background: #635BFF;
+  background: #2F4B2C;
   color: #fff;
 }
 .btn-primary:active:not(:disabled) {
-  background: #5146D8;
+  background: #243B22;
 }
 .btn-outline {
-  background: #fff;
-  color: #5146D8;
-  border: 1px solid #8C84F5;
+  background: #FCF9F3;
+  color: #243B22;
+  border: 1px solid #6F8F63;
 }
 .btn-outline:active:not(:disabled) {
-  background: #EEECFF;
+  background: #E5EDDD;
 }
 .btn-quiet {
-  background: #EEECFF;
-  color: #5146D8;
+  background: #E5EDDD;
+  color: #243B22;
 }
 .btn-quiet:active:not(:disabled) {
-  background: #DEDAFF;
+  background: #D3E1C9;
 }
 /* 보조 버튼: 최소 터치 영역 44px */
 .btn-sm {
@@ -99,6 +107,15 @@ body {
   min-width: 44px;
   padding: 0 14px;
   font-size: 0.875rem;
+}
+
+/* 상세 화면 하단 바의 버튼: 세 개가 한 줄에 들어가도록 좌우 여백을 줄입니다. */
+.btn-bar {
+  padding: 0 8px;
+  gap: 6px;
+  min-width: 0;
+  font-size: 0.9375rem;
+  line-height: 1.15;
 }
 
 /* 업체 목록 행의 버튼: 4개가 같은 크기로 한 줄에 들어가도록 여백을 줄입니다. (높이 44px 유지) */
@@ -116,14 +133,14 @@ body {
   width: 100%;
   min-height: 52px;
   padding: 0 16px;
-  border: 1px solid #8A91A0;
-  border-radius: 8px;
-  background: #fff;
-  color: #1F2430;
+  border: 1px solid #858C7A;
+  border-radius: 10px;
+  background: #FCF9F3;
+  color: #1F2B1D;
   font-size: 1rem;
 }
 .field::placeholder {
-  color: #606775;
+  color: #5E6A57;
 }
 textarea.field {
   padding: 12px 16px;
@@ -136,14 +153,14 @@ a:focus-visible,
 button:focus-visible,
 select:focus-visible,
 summary:focus-visible {
-  outline: 3px solid #635BFF;
+  outline: 3px solid #2F4B2C;
   outline-offset: 2px;
 }
 
 /* 주요 모듈: 모서리 16px, 얇은 선 */
 .card {
-  background: #fff;
-  border: 1px solid #E5E7ED;
+  background: #FCF9F3;
+  border: 1px solid #E3DAC8;
   border-radius: 10px;
 }
 
@@ -151,14 +168,14 @@ summary:focus-visible {
    밝은 회색 배경 위의 흰 카드. 넓고 부드러운 아래 그림자, 위쪽 가장자리의 은은한 흰색 하이라이트,
    아주 연한 테두리. 누르면 그림자가 줄고 2px 내려갑니다. */
 .soft-btn {
-  background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%);
-  border: 1px solid rgb(31 36 48 / 0.05);
+  background: linear-gradient(180deg, #FFFDF8 0%, #FCF9F3 100%);
+  border: 1px solid rgb(60 50 20 / 0.05);
   border-radius: 20px;
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.95),
-    0 1px 2px rgb(31 36 48 / 0.04),
-    0 8px 18px -6px rgb(31 36 48 / 0.14),
-    0 18px 30px -16px rgb(31 36 48 / 0.12);
+    0 1px 2px rgb(60 50 20 / 0.04),
+    0 8px 18px -6px rgb(60 50 20 / 0.14),
+    0 18px 30px -16px rgb(60 50 20 / 0.12);
   transition: transform 0.12s ease, box-shadow 0.12s ease;
   -webkit-tap-highlight-color: transparent;
 }
@@ -166,13 +183,13 @@ summary:focus-visible {
   transform: translateY(2px);
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.95),
-    0 1px 1px rgb(31 36 48 / 0.06),
-    0 3px 6px -3px rgb(31 36 48 / 0.14);
+    0 1px 1px rgb(60 50 20 / 0.06),
+    0 3px 6px -3px rgb(60 50 20 / 0.14);
 }
 
 /* 목록 행 구분선 */
 .rows > * + * {
-  border-top: 1px solid #E5E7ED;
+  border-top: 1px solid #E3DAC8;
 }
 
 /* 필터 칩 */
@@ -182,18 +199,18 @@ summary:focus-visible {
   flex: none;
   min-height: 44px;
   padding: 0 16px;
-  border-radius: 8px;
-  border: 1px solid #E5E7ED;
-  background: #fff;
-  color: #1F2430;
+  border-radius: 10px;
+  border: 1px solid #E3DAC8;
+  background: #FCF9F3;
+  color: #1F2B1D;
   font-size: 0.9375rem;
   font-weight: 600;
   white-space: nowrap;
   cursor: pointer;
 }
 .chip[aria-pressed='true'] {
-  background: #635BFF;
-  border-color: #635BFF;
+  background: #2F4B2C;
+  border-color: #2F4B2C;
   color: #fff;
 }
 
@@ -216,10 +233,10 @@ summary:focus-visible {
   align-items: center;
   min-height: 44px;
   padding: 0 16px;
-  border: 2px solid #635BFF;
+  border: 2px solid #2F4B2C;
   border-radius: 8px;
-  background: #fff;
-  color: #5146D8;
+  background: #FCF9F3;
+  color: #243B22;
   font-weight: 700;
 }
 .skip-link:focus {
@@ -227,6 +244,18 @@ summary:focus-visible {
 }
 main:focus {
   outline: none;
+}
+
+/* 파란 3D 아이콘 → 브랜드 녹색 */
+.icon-brand-tint {
+  filter: hue-rotate(-100deg) saturate(0.6) brightness(0.82);
+}
+
+/* 공개 화면의 제목은 명조체로 고급스럽게. 본문과 버튼은 고딕을 유지합니다. */
+.laja-public h1,
+.laja-public h2 {
+  font-family: var(--font-serif);
+  letter-spacing: -0.01em;
 }
 
 /* 제목으로 포커스를 옮길 때 윤곽선은 보이지 않게 합니다. */
@@ -245,7 +274,7 @@ main:focus {
 /* ---------- 지도(Leaflet) ---------- */
 .leaflet-container {
   font-family: inherit;
-  background: #E9EAF0;
+  background: #E6E2D2;
 }
 .lm-pin {
   background: transparent;
@@ -254,7 +283,7 @@ main:focus {
 .lm-pin svg {
   display: block;
   margin: 0 auto;
-  filter: drop-shadow(0 1px 2px rgb(31 36 48 / 0.35));
+  filter: drop-shadow(0 1px 2px rgb(60 50 20 / 0.35));
   transition: transform 0.15s ease;
   transform-origin: 50% 100%;
 }
@@ -269,9 +298,9 @@ main:focus {
   max-width: 180px;
   padding: 4px 10px;
   border-radius: 999px;
-  border: 2px solid #635BFF;
-  background: #fff;
-  color: #1F2430;
+  border: 2px solid #2F4B2C;
+  background: #FCF9F3;
+  color: #1F2B1D;
   font-size: 0.8125rem;
   font-weight: 700;
   line-height: 1.3;
@@ -287,7 +316,7 @@ main:focus {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: #635BFF;
+  background: #2F4B2C;
   border: 3px solid #fff;
   color: #fff;
   display: flex;
@@ -295,7 +324,7 @@ main:focus {
   justify-content: center;
   font-size: 0.9375rem;
   font-weight: 700;
-  box-shadow: 0 1px 3px rgb(31 36 48 / 0.35);
+  box-shadow: 0 1px 3px rgb(60 50 20 / 0.35);
 }
 /* 묶음 숫자는 스타일로 그립니다. (낭독기는 바깥 요소의 이름 "업체 N곳 묶음"을 읽음) */
 .lm-cluster div::after {
@@ -310,9 +339,9 @@ main:focus {
   height: 18px;
   margin: 13px;
   border-radius: 50%;
-  background: #1F2430;
+  background: #1F2B1D;
   border: 3px solid #fff;
-  box-shadow: 0 0 0 2px #1F2430;
+  box-shadow: 0 0 0 2px #1F2B1D;
 }
 /* 확대·축소 버튼도 44px */
 .leaflet-touch .leaflet-bar a {
@@ -327,7 +356,7 @@ main:focus {
 
 /* ---------- 관리자 화면에서 쓰는 상자(그림자 최소화) ---------- */
 .box3d {
-  box-shadow: 0 1px 2px rgb(31 36 48 / 0.06);
+  box-shadow: 0 1px 2px rgb(60 50 20 / 0.06);
 }
 
 @media (prefers-reduced-motion: reduce) {

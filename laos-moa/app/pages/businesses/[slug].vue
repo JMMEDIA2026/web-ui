@@ -66,7 +66,7 @@ const actionCount = [!!directions, !!contact, true].filter(Boolean).length
   <div class="min-h-dvh bg-app-bg" :style="{ paddingBottom: actionCount ? 'calc(88px + env(safe-area-inset-bottom, 0px))' : '24px' }">
     <!-- 상단: 뒤로가기와 업체명 -->
     <header
-      class="sticky top-0 z-30 flex items-center gap-1 border-b border-line bg-white px-2"
+      class="sticky top-0 z-30 flex items-center gap-1 border-b border-line bg-surface px-2"
       style="height: calc(56px + env(safe-area-inset-top, 0px)); padding-top: env(safe-area-inset-top, 0px)"
     >
       <button type="button" class="grid size-11 shrink-0 place-items-center rounded-full text-ink" aria-label="뒤로가기" @click="back">
@@ -87,9 +87,9 @@ const actionCount = [!!directions, !!contact, true].filter(Boolean).length
     <div class="px-4 pt-5 sm:px-5">
       <div class="flex flex-wrap items-center gap-2">
         <span class="rounded-md bg-brand-100 px-2 py-0.5 text-[0.8125rem] font-bold text-brand-600">{{ category?.label }}</span>
-        <span v-if="business.sponsored" class="rounded-md bg-brand-100 px-2 py-0.5 text-[0.8125rem] font-bold text-brand-600">광고</span>
+        <span v-if="business.sponsored" class="rounded-md bg-gold-50 px-2 py-0.5 text-[0.8125rem] font-bold text-gold-700">광고</span>
       </div>
-      <h1 data-page-title tabindex="-1" class="mt-2 text-[1.625rem] font-bold leading-tight text-ink">
+      <h1 data-page-title tabindex="-1" class="mt-2 text-[1.625rem] font-bold leading-tight text-ink [text-wrap:balance]">
         {{ business.name }}
       </h1>
 
@@ -176,29 +176,29 @@ const actionCount = [!!directions, !!contact, true].filter(Boolean).length
     <!-- 하단 고정 행동 바 -->
     <div
       v-if="actionCount"
-      class="fixed bottom-0 left-1/2 z-40 w-full max-w-[560px] -translate-x-1/2 border-t border-line bg-white px-4 pt-3"
+      class="fixed bottom-0 left-1/2 z-40 w-full max-w-[560px] -translate-x-1/2 border-t border-line bg-surface px-4 pt-3"
       style="padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px))"
     >
-      <div class="grid gap-2" :style="{ gridTemplateColumns: `repeat(${actionCount}, minmax(0, 1fr))` }">
-        <a v-if="directions" :href="directions" target="_blank" rel="noopener" class="btn btn-outline">
+      <div class="grid gap-2" style="grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr))">
+        <a v-if="directions" :href="directions" target="_blank" rel="noopener" class="btn btn-outline btn-bar">
           <AppIcon name="compass" class="size-5" />
           길찾기
         </a>
         <template v-if="contact">
-          <a v-if="contact.kind === 'tel'" :href="contact.href" class="btn btn-outline">
+          <a v-if="contact.kind === 'tel'" :href="contact.href" class="btn btn-outline btn-bar">
             <AppIcon name="phone" class="size-5" />
             {{ contact.label }}
           </a>
-          <a v-else-if="contact.kind === 'link'" :href="contact.href" target="_blank" rel="noopener" class="btn btn-outline">
+          <a v-else-if="contact.kind === 'link'" :href="contact.href" target="_blank" rel="noopener" class="btn btn-outline btn-bar">
             <AppIcon name="phone" class="size-5" />
             {{ contact.label }}
           </a>
-          <button v-else type="button" class="btn btn-outline" @click="copy(contact.text)">
+          <button v-else type="button" class="btn btn-outline btn-bar" @click="copy(contact.text)">
             <AppIcon name="copy" class="size-5" />
             {{ contact.label }}
           </button>
         </template>
-        <NuxtLink :to="{ path: '/reserve', query: { business: business.slug } }" class="btn btn-primary">
+        <NuxtLink :to="{ path: '/reserve', query: { business: business.slug } }" class="btn btn-primary btn-bar">
           <AppIcon name="calendar" class="size-5" />
           예약 요청
         </NuxtLink>
