@@ -109,7 +109,7 @@ const promises = [
           </div>
         </div>
 
-        <div class="grid grid-cols-3 gap-2.5 sm:gap-4 lg:grid-cols-6">
+        <div class="grid grid-cols-4 gap-2 sm:gap-4 lg:grid-cols-7">
           <NuxtLink
             v-for="c in categories"
             :key="c.key"
@@ -117,11 +117,38 @@ const promises = [
             class="box3d lift group flex flex-col items-center gap-2 rounded-lg px-2 py-4 text-center sm:gap-3 sm:px-3 sm:py-7"
             :class="toneBg[c.tone]"
           >
-            <img :src="c.emoji" alt="" class="size-12 transition-transform duration-300 group-hover:scale-110 sm:size-20">
+            <img :src="c.emoji" alt="" class="size-10 transition-transform duration-300 group-hover:scale-110 sm:size-20">
             <span>
-              <span class="block text-sm font-bold text-highlighted sm:text-base">{{ c.label }}</span>
+              <span class="block text-xs font-bold text-highlighted sm:text-base">{{ c.label }}</span>
               <span class="mt-0.5 hidden text-xs text-default/70 sm:block">{{ c.description }}</span>
             </span>
+          </NuxtLink>
+        </div>
+      </UContainer>
+    </section>
+
+    <!-- 오늘의 환율 -->
+    <section class="pb-16 sm:pb-20">
+      <UContainer>
+        <div class="grid gap-5 lg:grid-cols-12">
+          <RateWidget class="lg:col-span-7" />
+          <NuxtLink to="/exchange" class="box3d lift group flex flex-col justify-between gap-6 rounded-lg bg-tone-sun p-7 lg:col-span-5">
+            <div>
+              <UBadge label="환전" color="neutral" variant="solid" />
+              <h3 class="mt-3 text-2xl font-extrabold text-highlighted">
+                한인 환전업체 찾기
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-default/70">
+                환율은 환전소마다 다릅니다. 위치와 영업시간을 확인하고 비교해 보세요.
+              </p>
+            </div>
+            <div class="flex items-end justify-between">
+              <span class="inline-flex items-center gap-1 text-sm font-bold text-primary">
+                환전소 보기
+                <UIcon name="i-lucide-arrow-right" class="size-4" />
+              </span>
+              <img src="/emoji/exchange.png" alt="" class="size-24 transition-transform duration-300 group-hover:scale-110">
+            </div>
           </NuxtLink>
         </div>
       </UContainer>

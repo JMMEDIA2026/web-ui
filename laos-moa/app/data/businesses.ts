@@ -1,6 +1,6 @@
 import type { Tone } from './tones'
 
-export type CategoryKey = 'food' | 'mart' | 'hospital' | 'school' | 'rent' | 'job'
+export type CategoryKey = 'food' | 'mart' | 'exchange' | 'hospital' | 'school' | 'rent' | 'job'
 
 export interface Category {
   key: CategoryKey
@@ -25,11 +25,12 @@ export interface Business {
 
 export const categories: Category[] = [
   { key: 'food', label: '한식당', description: '한식당·카페·배달', emoji: '/emoji/food.png', tone: 'peach' },
-  { key: 'mart', label: '마트·환전', description: '한인 마트·환전소', emoji: '/emoji/mart.png', tone: 'mint' },
+  { key: 'mart', label: '마트', description: '한인 마트·식료품', emoji: '/emoji/mart.png', tone: 'mint' },
+  { key: 'exchange', label: '환전', description: '환전소·환율', emoji: '/emoji/exchange.png', tone: 'sun' },
   { key: 'hospital', label: '병원·약국', description: '한국어 진료·약국', emoji: '/emoji/hospital.png', tone: 'pink' },
   { key: 'school', label: '학교·학원', description: '국제학교·학원', emoji: '/emoji/school.png', tone: 'lilac' },
   { key: 'rent', label: '렌트·부동산', description: '주거·사무실 임대', emoji: '/emoji/house.png', tone: 'sky' },
-  { key: 'job', label: '구인·구직', description: '일자리·인력', emoji: '/emoji/job.png', tone: 'sun' }
+  { key: 'job', label: '구인·구직', description: '일자리·인력', emoji: '/emoji/job.png', tone: 'peach' }
 ]
 
 export const categoryMap = Object.fromEntries(categories.map(c => [c.key, c])) as Record<CategoryKey, Category>
@@ -53,6 +54,16 @@ export const businesses: Business[] = [
     category: 'mart',
     area: '비엔티안',
     description: '한국 식품과 생활용품 취급 여부, 환전 가능 여부를 표시하는 예시입니다.',
+    hours: '영업시간 등록 예정',
+    contact: '연락처 등록 예정',
+    example: true
+  },
+  {
+    slug: 'example-exchange',
+    name: '예시 환전소 G',
+    category: 'exchange',
+    area: '비엔티안',
+    description: '원·달러·킵 환전 가능 여부와 영업시간, 위치를 안내하는 예시입니다.',
     hours: '영업시간 등록 예정',
     contact: '연락처 등록 예정',
     example: true
