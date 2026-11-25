@@ -355,7 +355,7 @@ onBeforeUnmount(() => {
       </p>
       <div class="flex items-center gap-2">
         <label for="biz-sort" class="sr-only">정렬</label>
-        <select id="biz-sort" v-model="sort" class="min-h-11 rounded-lg border border-line bg-white px-2 text-[0.875rem] text-ink">
+        <select id="biz-sort" v-model="sort" class="min-h-11 rounded-lg border border-[#8A91A0] bg-white px-2 text-[0.875rem] text-ink">
           <option value="default">
             추천순
           </option>

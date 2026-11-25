@@ -97,11 +97,11 @@ const items = computed(() => [
         </div>
         <div class="flex gap-2">
           <dt class="w-16 shrink-0 text-ink-2">실명</dt>
-          <dd class="text-ink">{{ member.realName }}</dd>
+          <dd class="min-w-0 break-words text-ink">{{ member.realName }}</dd>
         </div>
         <div class="flex gap-2">
           <dt class="w-16 shrink-0 text-ink-2">휴대폰</dt>
-          <dd class="text-ink">{{ member.phone }}</dd>
+          <dd class="min-w-0 break-all text-ink">{{ member.phone }}</dd>
         </div>
       </dl>
       <details class="mt-3 border-t border-line pt-1" @toggle="loadGrades">

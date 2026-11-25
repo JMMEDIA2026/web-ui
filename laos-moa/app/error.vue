@@ -12,7 +12,7 @@ const go = (to: string) => clearError({ redirect: to })
 </script>
 
 <template>
-  <div class="mx-auto flex min-h-dvh max-w-[560px] flex-col items-center justify-center bg-[#F5F6F8] px-6 text-center">
+  <main class="mx-auto flex min-h-dvh max-w-[560px] flex-col items-center justify-center bg-[#F5F6F8] px-6 text-center">
     <AppLogo :size="40" text-class="text-[1.625rem] text-brand-600" />
     <h1 class="mt-6 text-[1.5rem] font-bold text-[#1F2430]">
       {{ notFound ? '찾으시는 페이지가 없어요' : '문제가 생겼어요' }}
@@ -28,5 +28,5 @@ const go = (to: string) => clearError({ redirect: to })
         홈으로
       </button>
     </div>
-  </div>
+  </main>
 </template>

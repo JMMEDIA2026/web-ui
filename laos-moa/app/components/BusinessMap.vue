@@ -136,8 +136,8 @@ async function init() {
     await import('leaflet.markercluster')
     if (!el.value) return
 
-    map = L.map(el.value, { zoomControl: true, attributionControl: true, worldCopyJump: true })
-    map.zoomControl.setPosition('bottomright')
+    map = L.map(el.value, { zoomControl: false, attributionControl: true, worldCopyJump: true })
+    L.control.zoom({ position: 'bottomright', zoomInTitle: '지도 확대', zoomOutTitle: '지도 축소' }).addTo(map)
 
     const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -151,14 +151,21 @@ async function init() {
     })
     tiles.addTo(map)
 
+    // 묶음 마커: 키보드 초점이 가는 바깥 요소에 이름을 붙입니다. (낭독기가 "업체 5곳 묶음"이라고 읽음)
+    const ClusterIcon = L.DivIcon.extend({
+      createIcon(old: HTMLElement) {
+        const icon = L.DivIcon.prototype.createIcon.call(this, old)
+        icon.setAttribute('aria-label', (this as any).options.ariaLabel)
+        return icon
+      }
+    })
     cluster = L.markerClusterGroup({
       showCoverageOnHover: false,
       maxClusterRadius: 50,
-      iconCreateFunction: (c: any) => L.divIcon({
-        html: `<div aria-label="업체 ${c.getChildCount()}곳 묶음">${c.getChildCount()}</div>`,
-        className: 'lm-cluster',
-        iconSize: [44, 44]
-      })
+      iconCreateFunction: (c: any) => {
+        const n = c.getChildCount()
+        return new ClusterIcon({ html: `<div aria-hidden="true" data-n="${n}"></div>`, className: 'lm-cluster', iconSize: [44, 44], ariaLabel: `업체 ${n}곳 묶음. 누르면 펼쳐져요` })
+      }
     })
     map.addLayer(cluster)
     map.on('moveend', onMoveEnd)

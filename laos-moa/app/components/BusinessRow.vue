@@ -37,18 +37,17 @@ async function copy(text: string) {
       type="button"
       class="flex min-h-[88px] w-full gap-3 rounded-lg text-left"
       :aria-pressed="selected"
-      :aria-label="`${business.name} 선택`"
       @click="emit('select', business.slug)"
     >
       <!-- 실제 업체 사진이 없으면 업종 아이콘만 보여 줍니다. 다른 업체 사진으로 대체하지 않습니다. -->
-      <span class="grid h-[72px] w-32 shrink-0 place-items-center overflow-hidden rounded-lg bg-brand-50 text-brand-600">
+      <span class="grid h-[72px] w-[128px] shrink-0 place-items-center overflow-hidden rounded-lg bg-brand-50 text-brand-600">
         <img v-if="business.photos?.length" :src="`/api/photos/${business.photos[0]}?size=thumb`" alt="" width="128" height="72" class="size-full object-cover" loading="lazy">
         <img v-else-if="category?.emoji" :src="category.emoji" alt="" width="48" height="48" class="size-12 object-contain" loading="lazy">
         <AppIcon v-else name="biz" class="size-12" />
       </span>
       <span class="min-w-0 flex-1">
         <span class="flex flex-wrap items-center gap-x-2 gap-y-1">
-          <span class="break-words text-[1.0625rem] font-bold leading-snug text-ink">{{ business.name }}</span>
+          <span class="min-w-0 break-words [overflow-wrap:anywhere] text-[1.0625rem] font-bold leading-snug text-ink">{{ business.name }}</span>
           <span v-if="business.sponsored" class="rounded-md bg-brand-100 px-1.5 py-0.5 text-[0.75rem] font-bold text-brand-600">광고</span>
         </span>
         <span class="mt-0.5 block text-[0.875rem] text-ink-2">

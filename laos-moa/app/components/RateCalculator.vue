@@ -134,7 +134,7 @@ const asOf = computed(() => {
           :key="p.label"
           type="button"
           class="min-h-11 rounded-lg px-3 text-[0.9375rem] font-bold"
-          :class="isPreset(p) ? 'bg-white text-brand-600' : 'bg-white/20 text-white active:bg-white/30'"
+          :class="isPreset(p) ? 'bg-white text-brand-600' : 'bg-brand-700 text-white active:bg-brand-800'"
           :aria-pressed="isPreset(p)"
           @click="setPair(p.from, p.to)"
         >
@@ -164,7 +164,7 @@ const asOf = computed(() => {
       </div>
 
       <div class="my-2 flex items-center justify-center">
-        <button type="button" class="grid size-11 place-items-center rounded-lg bg-white/20 active:bg-white/30" aria-label="통화 위치 바꾸기" @click="swap">
+        <button type="button" class="grid size-11 place-items-center rounded-lg bg-brand-700 active:bg-brand-800" aria-label="통화 위치 바꾸기" @click="swap">
           <AppIcon name="swap" class="size-5" />
         </button>
       </div>
@@ -175,7 +175,7 @@ const asOf = computed(() => {
           <p class="text-[0.875rem] text-ink-2">
             {{ fmt(amount, from) }}{{ CUR[from].unit }} =
           </p>
-          <select v-model="to" aria-label="받을 통화" class="min-h-11 rounded-lg border border-line bg-white px-2 text-[0.9375rem] font-bold text-ink">
+          <select v-model="to" aria-label="받을 통화" class="min-h-11 rounded-lg border border-[#8A91A0] bg-white px-2 text-[0.9375rem] font-bold text-ink">
             <option v-for="o in options" :key="o.value" :value="o.value">
               {{ o.label }}
             </option>

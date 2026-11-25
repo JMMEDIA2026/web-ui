@@ -31,30 +31,33 @@ onBeforeUnmount(() => stop?.())
     class="mx-auto min-h-dvh w-full max-w-[560px] bg-app-bg sm:border-x sm:border-line"
     :style="{ '--nav-h': navVisible ? '64px' : '0px' }"
   >
+    <a href="#main-content" class="skip-link">본문 바로가기</a>
     <header
       v-if="showHeader"
       class="sticky top-0 z-30 flex items-center justify-between border-b border-line bg-white px-4"
       style="height: calc(56px + env(safe-area-inset-top, 0px)); padding-top: env(safe-area-inset-top, 0px)"
     >
-      <NuxtLink to="/" class="-ml-1 inline-flex min-h-11 items-center px-1" aria-label="라자 홈">
+      <NuxtLink to="/" class="-ml-1 inline-flex min-h-11 shrink-0 items-center px-1" aria-label="라자 홈">
         <AppLogo />
       </NuxtLink>
 
       <button
         v-if="showRegion"
         type="button"
-        class="inline-flex min-h-11 items-center gap-1 rounded-lg bg-brand-100 pl-3 pr-2 text-[0.9375rem] font-bold text-brand-600"
+        class="inline-flex min-h-11 min-w-0 items-center gap-1 rounded-lg bg-brand-100 pl-3 pr-2 text-[0.9375rem] font-bold text-brand-600"
         aria-haspopup="dialog"
         :aria-label="`지역 선택. 현재 ${region.label}`"
         @click="sheetOpen = true"
       >
         <AppIcon name="pin" class="size-4" />
-        {{ region.label }}
-        <AppIcon name="next" class="size-5 rotate-90" />
+        <span class="min-w-0 truncate">{{ region.label }}</span>
+        <AppIcon name="next" class="size-5 shrink-0 rotate-90" />
       </button>
     </header>
 
     <main
+      id="main-content"
+      tabindex="-1"
       :style="isExplorer ? undefined : { paddingBottom: hasNav ? 'calc(64px + env(safe-area-inset-bottom, 0px) + 24px)' : '24px' }"
     >
       <slot />

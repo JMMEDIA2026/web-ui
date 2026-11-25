@@ -83,7 +83,7 @@ const firstGuides = ['visa', 'telecom', 'health', 'banking']
     </nav>
 
     <!-- 오늘의 환율: 작게 보여 주고, 변환은 환율 화면에서 합니다. -->
-    <NuxtLink to="/exchange" class="card mt-5 flex min-h-[64px] items-center gap-3 px-4 py-3 active:bg-brand-100" aria-label="환율 변환 화면으로 이동">
+    <NuxtLink to="/exchange" class="card mt-5 flex min-h-[64px] items-center gap-3 px-4 py-3 active:bg-brand-100">
       <img src="/emoji/exchange.png" alt="" width="32" height="32" class="size-8 shrink-0 object-contain">
       <span class="min-w-0 flex-1">
         <span class="block text-[0.8125rem] text-ink-2">오늘의 환율</span>

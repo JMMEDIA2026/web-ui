@@ -16,18 +16,47 @@ function pick(key: string) {
   close()
 }
 
+// 창이 열려 있는 동안 뒤쪽 화면은 키보드·낭독기에서 비활성(inert)으로 만듭니다.
+function setBackgroundInert(on: boolean) {
+  const root = document.getElementById('__nuxt')
+  if (!root) return
+  if (on) root.setAttribute('inert', '')
+  else root.removeAttribute('inert')
+}
+
 watch(open, async (isOpen) => {
   if (isOpen) {
     opener = document.activeElement as HTMLElement | null
+    setBackgroundInert(true)
     await nextTick()
     panel.value?.querySelector<HTMLElement>('button[aria-pressed="true"], button')?.focus()
   } else {
+    setBackgroundInert(false)
     opener?.focus?.()
   }
 })
 
+onBeforeUnmount(() => setBackgroundInert(false))
+
+// Esc로 닫고, Tab·Shift+Tab은 창 안에서만 돌게 합니다.
 function onKey(e: KeyboardEvent) {
-  if (e.key === 'Escape') close()
+  if (e.key === 'Escape') {
+    close()
+    return
+  }
+  if (e.key !== 'Tab') return
+  const items = Array.from(panel.value?.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])') ?? [])
+  if (!items.length) return
+  const first = items[0]!
+  const last = items[items.length - 1]!
+  const active = document.activeElement
+  if (e.shiftKey && (active === first || !panel.value?.contains(active))) {
+    e.preventDefault()
+    last.focus()
+  } else if (!e.shiftKey && (active === last || !panel.value?.contains(active))) {
+    e.preventDefault()
+    first.focus()
+  }
 }
 </script>
 

@@ -19,6 +19,7 @@ const form = reactive({
   agreePrivacy: false,
   website: ''
 })
+const showPw = ref(false)
 const loading = ref(false)
 const error = ref('')
 
@@ -77,17 +78,21 @@ async function submit() {
 
       <div>
         <label for="s-pw" class="text-[0.9375rem] font-bold text-ink">비밀번호 <span class="text-brand-600">*</span></label>
-        <input id="s-pw" v-model="form.password" type="password" autocomplete="new-password" minlength="8" maxlength="64" class="field mt-1.5" aria-describedby="s-pw-help" required>
+        <input id="s-pw" v-model="form.password" :type="showPw ? 'text' : 'password'" autocomplete="new-password" minlength="8" maxlength="64" class="field mt-1.5" aria-describedby="s-pw-help" required>
         <p id="s-pw-help" class="mt-1 text-[0.8125rem] text-ink-2">
           8자 이상, 영문과 숫자를 함께 넣어 주세요.
         </p>
       </div>
       <div>
         <label for="s-pw2" class="text-[0.9375rem] font-bold text-ink">비밀번호 확인 <span class="text-brand-600">*</span></label>
-        <input id="s-pw2" v-model="form.password2" type="password" autocomplete="new-password" class="field mt-1.5" :aria-invalid="pwMismatch" required>
+        <input id="s-pw2" v-model="form.password2" :type="showPw ? 'text' : 'password'" autocomplete="new-password" class="field mt-1.5" :aria-invalid="pwMismatch" required>
         <p v-if="pwMismatch" class="mt-1 text-[0.8125rem] font-bold text-red-700" role="alert">
           비밀번호가 서로 달라요.
         </p>
+        <label class="mt-1 flex min-h-11 cursor-pointer items-center gap-3 text-[0.9375rem] text-ink">
+          <input v-model="showPw" type="checkbox" class="size-6 shrink-0 accent-[#635BFF]">
+          비밀번호 보이기
+        </label>
       </div>
 
       <div>

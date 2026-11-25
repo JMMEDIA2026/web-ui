@@ -12,6 +12,7 @@ const needText = next.startsWith('/me') ? '내 정보는 로그인한 뒤에 볼
 if (member.value) await navigateTo(next, { replace: true })
 
 const form = reactive({ email: '', password: '' })
+const showPw = ref(false)
 const loading = ref(false)
 const error = ref('')
 
@@ -47,7 +48,11 @@ async function submit() {
       </div>
       <div>
         <label for="l-pw" class="text-[0.9375rem] font-bold text-ink">비밀번호</label>
-        <input id="l-pw" v-model="form.password" type="password" autocomplete="current-password" class="field mt-1.5" required>
+        <input id="l-pw" v-model="form.password" :type="showPw ? 'text' : 'password'" autocomplete="current-password" class="field mt-1.5" required>
+        <label class="mt-1 flex min-h-11 cursor-pointer items-center gap-3 text-[0.9375rem] text-ink">
+          <input v-model="showPw" type="checkbox" class="size-6 shrink-0 accent-[#635BFF]">
+          비밀번호 보이기
+        </label>
       </div>
 
       <p v-if="error" class="rounded-lg bg-red-50 p-3 text-[0.9375rem] font-bold text-red-700" role="alert">

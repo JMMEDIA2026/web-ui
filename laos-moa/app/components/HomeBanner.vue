@@ -63,7 +63,7 @@ const NuxtLinkComponent = resolveComponent('NuxtLink')
 <template>
   <section class="relative overflow-hidden rounded-lg bg-brand-50" aria-roledescription="carousel" aria-label="광고 배너" @mouseenter="hovering = true" @mouseleave="hovering = false" @focusin="hovering = true" @focusout="hovering = false">
     <div ref="scroller" class="no-scrollbar flex snap-x snap-mandatory overflow-x-auto" @scroll.passive="onScroll" @touchstart.passive="hovering = true" @touchend.passive="hovering = false">
-      <div v-for="(b, i) in banners" :key="b.id" class="relative aspect-[2/1] w-full shrink-0 snap-center" role="group" aria-roledescription="slide" :aria-label="`${i + 1} / ${count}`">
+      <div v-for="(b, i) in banners" :key="b.id" class="relative aspect-[2/1] w-full shrink-0 snap-center" :inert="i !== index ? true : null" role="group" aria-roledescription="slide" :aria-label="`${i + 1} / ${count}`">
         <component
           :is="b.linkUrl ? (isExternal(b.linkUrl) ? 'a' : NuxtLinkComponent) : 'div'"
           v-bind="b.linkUrl ? (isExternal(b.linkUrl) ? { href: b.linkUrl, target: '_blank', rel: 'noopener sponsored' } : { to: b.linkUrl }) : {}"
