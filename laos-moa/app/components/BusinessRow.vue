@@ -63,7 +63,7 @@ async function copy(text: string) {
     </button>
 
     <div class="mt-2 grid gap-2" style="grid-template-columns: repeat(auto-fit, minmax(4.6rem, 1fr))">
-      <NuxtLink :to="`/businesses/${business.slug}`" class="btn btn-quiet btn-row">
+      <NuxtLink :to="`/businesses/${business.slug}`" class="btn btn-row text-brand-600 underline underline-offset-4">
         상세 보기
       </NuxtLink>
       <a v-if="directions" :href="directions" target="_blank" rel="noopener" class="btn btn-outline btn-row">

@@ -114,7 +114,7 @@ function fit() {
   } else if (points.length === 1) {
     map.setView(points[0], 16, { animate: false })
   } else {
-    map.fitBounds(L.latLngBounds(points), { padding: [40, 40], maxZoom: 16, animate: false })
+    map.fitBounds(L.latLngBounds(points), { paddingTopLeft: [40, 96], paddingBottomRight: [40, 40], maxZoom: 16, animate: false })
   }
   applySelection()
 }
@@ -254,12 +254,12 @@ defineExpose({ invalidate, getBounds, locate, retry })
 
     <button
       type="button"
-      class="absolute right-3 top-3 z-[500] grid size-11 place-items-center rounded-full bg-surface text-brand-600 shadow-md"
-      aria-label="현재 위치로 이동"
+      class="absolute right-3 top-3 z-[500] inline-flex h-11 items-center gap-1.5 rounded-full bg-surface pe-4 ps-3 text-[0.875rem] font-bold text-brand-600 shadow-md"
       :aria-busy="locating"
       @click="locate"
     >
-      <AppIcon :name="locating ? 'refresh' : 'locate'" class="size-7" :class="locating ? 'animate-spin' : ''" />
+      <AppIcon :name="locating ? 'refresh' : 'locate'" class="size-6" :class="locating ? 'animate-spin' : ''" />
+      내 위치
     </button>
 
     <p

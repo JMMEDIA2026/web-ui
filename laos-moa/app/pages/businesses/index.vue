@@ -292,7 +292,7 @@ onBeforeUnmount(() => {
     <!-- 상단 지도 (목록 크게 보기를 누르면 접힙니다) -->
     <div
       class="relative shrink-0 overflow-hidden bg-[#E6E2D2] transition-[height] duration-200"
-      :style="{ height: expanded ? '0px' : 'min(300px, 38dvh)' }"
+      :style="{ height: expanded ? '0px' : 'min(240px, 30dvh)' }"
       :inert="expanded"
     >
       <ClientOnly>
