@@ -86,7 +86,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           :title="t.title"
           :description="t.level"
           variant="outline"
-          :class="t.level === '추천' ? 'ring-2 ring-primary' : ''"
+          :class="['box3d', t.level === '추천' ? 'ring-2 ring-primary' : '']"
         >
           <ul class="flex flex-col gap-2 text-sm">
             <li v-for="i in t.items" :key="i" class="flex items-start gap-2">
@@ -105,7 +105,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     </UPageSection>
 
     <UPageSection id="inquiry" title="광고·제휴 문의" description="업체명과 연락처를 남겨 주시면 확인 후 연락드립니다.">
-      <UCard class="mx-auto w-full max-w-xl">
+      <UCard class="box3d mx-auto w-full max-w-xl">
         <UForm :schema="schema" :state="state" class="flex flex-col gap-4" @submit="onSubmit">
           <UFormField label="업체명" name="company" required>
             <UInput v-model="state.company" placeholder="예) 라오스 한식당" class="w-full" />

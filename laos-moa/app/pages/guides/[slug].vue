@@ -34,7 +34,7 @@ useSeoMeta({
             description="제도 정보는 관할 기관의 최신 안내를 확인한 뒤 게시합니다. 아래는 담을 항목입니다."
           />
 
-          <UCard>
+          <UCard class="box3d">
             <template #header>
               <div class="flex items-center gap-3">
                 <img :src="guide.emoji" alt="" class="size-10">

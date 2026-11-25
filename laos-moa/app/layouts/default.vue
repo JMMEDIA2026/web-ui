@@ -39,7 +39,7 @@ const items = computed<NavigationMenuItem[]>(() => [
     <slot />
   </UMain>
 
-  <footer class="mt-24 border-t border-default bg-tone-cream">
+  <footer class="mt-24 border-t border-default">
     <UContainer class="grid gap-10 py-14 md:grid-cols-12">
       <div class="md:col-span-5">
         <div class="flex items-center gap-2 text-xl font-extrabold">

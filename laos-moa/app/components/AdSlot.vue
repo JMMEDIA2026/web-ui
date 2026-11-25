@@ -11,7 +11,7 @@ withDefaults(defineProps<{
 <template>
   <aside
     aria-label="광고 영역"
-    class="flex flex-col gap-4 rounded-lg border-2 border-dashed border-accented bg-white/70 p-5 sm:flex-row sm:items-center"
+    class="flex flex-col gap-4 box3d rounded-lg border-2 border-dashed border-accented bg-white p-5 sm:flex-row sm:items-center"
   >
     <div class="flex size-12 shrink-0 items-center justify-center bg-tone-sun text-amber-700">
       <UIcon name="i-lucide-megaphone" class="size-6" />

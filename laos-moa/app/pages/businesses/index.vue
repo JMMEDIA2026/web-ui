@@ -30,7 +30,7 @@ const filtered = computed(() => {
 
 <template>
   <div>
-    <section class="border-b border-default bg-tone-cream">
+    <section class="border-b border-default">
       <UContainer class="py-12 sm:py-14">
         <h1 class="text-3xl font-extrabold tracking-tight text-highlighted sm:text-4xl">
           한인 업체

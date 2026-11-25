@@ -35,7 +35,7 @@ const promises = [
 <template>
   <div>
     <!-- 히어로 -->
-    <section class="bg-tone-cream">
+    <section>
       <UContainer class="grid items-center gap-12 py-12 sm:py-16 lg:grid-cols-12 lg:py-20">
         <div class="lg:col-span-6">
           <UBadge label="비엔티안 한인 커뮤니티" color="primary" variant="subtle" size="lg" />
@@ -66,7 +66,7 @@ const promises = [
               v-for="l in quickLinks"
               :key="l.label"
               :to="l.to"
-              class="border border-default bg-white px-3 py-1 text-sm font-medium text-default transition-colors hover:border-primary hover:text-primary"
+              class="box3d border border-default bg-white px-3 py-1 text-sm font-medium text-default transition-colors hover:border-primary hover:text-primary"
             >
               {{ l.label }}
             </NuxtLink>
@@ -74,7 +74,7 @@ const promises = [
         </div>
 
         <div class="relative px-3 lg:col-span-6">
-          <div class="bg-tone-sky p-3 sm:p-4">
+          <div class="box3d bg-tone-sky p-3 sm:p-4">
             <img
               src="/images/sunset.jpg"
               alt="비엔티안 메콩강의 석양"
@@ -82,11 +82,11 @@ const promises = [
             >
           </div>
 
-          <div class="absolute -left-1 bottom-8 flex items-center gap-3 border border-default bg-white py-2 pl-2 pr-4 shadow-xl sm:-left-5">
+          <div class="absolute -left-1 bottom-8 flex items-center gap-3 box3d border border-default bg-white py-2 pl-2 pr-4 sm:-left-5">
             <span class="flex size-12 items-center justify-center bg-tone-peach"><img src="/emoji/food.png" alt="" class="size-9"></span>
             <span class="text-sm font-bold">한식당<span class="block text-xs font-normal text-muted">메뉴·위치</span></span>
           </div>
-          <div class="absolute -right-1 top-10 flex items-center gap-3 border border-default bg-white py-2 pl-2 pr-4 shadow-xl sm:-right-4">
+          <div class="absolute -right-1 top-10 flex items-center gap-3 box3d border border-default bg-white py-2 pl-2 pr-4 sm:-right-4">
             <span class="flex size-12 items-center justify-center bg-tone-pink"><img src="/emoji/hospital.png" alt="" class="size-9"></span>
             <span class="text-sm font-bold">병원·약국<span class="block text-xs font-normal text-muted">한국어 진료</span></span>
           </div>
@@ -114,7 +114,7 @@ const promises = [
             v-for="c in categories"
             :key="c.key"
             :to="`/businesses?category=${c.key}`"
-            class="lift group flex flex-col items-center gap-3 rounded-lg px-3 py-7 text-center"
+            class="box3d lift group flex flex-col items-center gap-3 rounded-lg px-3 py-7 text-center"
             :class="toneBg[c.tone]"
           >
             <img :src="c.emoji" alt="" class="size-20 transition-transform duration-300 group-hover:scale-110">
@@ -153,13 +153,13 @@ const promises = [
     </section>
 
     <!-- 약속 3가지 -->
-    <section class="bg-tone-cream py-16 sm:py-20">
+    <section class="border-y border-default py-16 sm:py-20">
       <UContainer>
         <h2 class="text-center text-2xl font-extrabold tracking-tight text-highlighted sm:text-3xl">
           라오스모아가 지키는 약속
         </h2>
         <div class="mt-10 grid gap-5 md:grid-cols-3">
-          <div v-for="p in promises" :key="p.title" class="flex flex-col items-start gap-4 border border-default bg-white p-7">
+          <div v-for="p in promises" :key="p.title" class="box3d flex flex-col items-start gap-4 border border-default bg-white p-7">
             <span class="flex size-16 items-center justify-center" :class="toneBg[p.tone]"><img :src="p.emoji" alt="" class="size-12"></span>
             <h3 class="text-lg font-bold text-highlighted">
               {{ p.title }}
@@ -232,7 +232,7 @@ const promises = [
     <!-- 업체 CTA -->
     <section class="pb-4">
       <UContainer>
-        <div class="relative overflow-hidden bg-primary px-6 py-12 text-white sm:px-12 sm:py-16">
+        <div class="box3d relative overflow-hidden bg-primary px-6 py-12 text-white sm:px-12 sm:py-16">
           <div class="relative z-10 max-w-xl">
             <p class="text-sm font-bold text-tone-sun">
               업체 사장님께

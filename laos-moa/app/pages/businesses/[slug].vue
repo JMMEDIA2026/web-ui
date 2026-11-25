@@ -46,7 +46,7 @@ useSeoMeta({
             description="실제 업체 정보를 등록하기 전까지 화면 구성을 보여주기 위한 예시 정보입니다."
           />
 
-          <UCard>
+          <UCard class="box3d">
             <template #header>
               <div class="flex items-center gap-3">
                 <img :src="category.emoji" alt="" class="size-10">

@@ -13,7 +13,7 @@ const category = computed(() => categoryMap[props.business.category])
 <template>
   <NuxtLink
     :to="`/businesses/${business.slug}`"
-    class="lift group flex flex-col overflow-hidden rounded-lg border bg-white"
+    class="box3d lift group flex flex-col overflow-hidden rounded-lg border bg-white"
     :class="business.sponsored ? 'border-secondary ring-2 ring-secondary' : 'border-default'"
   >
     <div class="relative flex h-40 items-center justify-center" :class="toneBg[category.tone]">

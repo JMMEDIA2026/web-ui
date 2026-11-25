@@ -11,7 +11,7 @@ defineProps<{
 <template>
   <NuxtLink
     :to="`/guides/${guide.slug}`"
-    class="lift group flex overflow-hidden rounded-lg border border-default"
+    class="box3d lift group flex overflow-hidden rounded-lg border border-default"
     :class="[toneBg[guide.tone], featured ? 'min-h-72 flex-col justify-between p-8 sm:p-10 lg:col-span-2 lg:row-span-2' : 'items-center gap-4 p-5']"
   >
     <img
