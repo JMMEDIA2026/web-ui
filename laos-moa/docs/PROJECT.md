@@ -96,7 +96,7 @@ npx wrangler deploy -c wrangler.deploy.json
 - Worker 비밀 값: `SESSION_SECRET`(필수), `INQUIRY_WEBHOOK_URL`(Slack). 코드·저장소에 넣지 마세요.
 - 배포 직후 몇 초는 새 파일이 404로 보일 수 있습니다.
 
-**로컬 시험**: `wrangler dev --local -c wrangler.json --port 8788 --var SESSION_SECRET:...`(`.output/server`에서). 로컬 DB는 `db/schema.sql`로 만듭니다. 시험 스크립트는 작업 중 임시 폴더에 두었기 때문에 **저장소에는 없습니다.**
+**로컬 시험**: `wrangler dev --local -c wrangler.json --port 8788 --var SESSION_SECRET:...`(`.output/server`에서). 로컬 DB는 `db/schema.sql`로 만듭니다. 자동 시험 스크립트(회귀·접근성)는 2026-11-26에 **모두 삭제**했습니다. 저장소에 시험 코드는 없으므로, 기능을 바꿀 때는 화면을 직접 확인하고 필요하면 시험을 새로 만드세요.
 
 ## 8. 일하는 약속
 
@@ -104,7 +104,7 @@ npx wrangler deploy -c wrangler.deploy.json
 2. 확인되지 않은 업체·전화번호·가격·후기를 지어내지 않습니다. 사이트에는 실제 등록 정보만 보입니다.
 3. 제도·요금 정보는 출처와 확인일을 붙이고, 모르는 숫자는 적지 않습니다.
 4. 비밀 값은 채팅에 붙여 넣지 않습니다. 필요한 값은 Cloudflare 설정에 직접 넣습니다.
-5. 바꿀 때마다 회귀 시험과 접근성 점검(axe)을 돌리고, 백업 브랜치에 올립니다.
+5. 바꿀 때마다 화면과 접근성(축소 화면 360~430px, 글자 대비, 터치 44px)을 확인하고, 백업 브랜치에 올립니다.
 
 ## 9. 남은 일
 
@@ -117,7 +117,7 @@ npx wrangler deploy -c wrangler.deploy.json
 - [ ] 커뮤니티 운영진 첫 글(이용 안내)
 - [ ] 가이드 본문 검토(비자·운전면허·응급 번호는 출처 확인 필요)
 - [ ] 목록 행 연락 버튼을 아이콘만으로 줄일지 결정
-- [ ] 시험 스크립트를 저장소로 옮기기
+- [ ] (선택) 자동 시험이 필요해지면 `tests/`에 새로 작성
 - [ ] 관리자·협력업체 화면을 흰색+파랑 디자인으로 맞추기
 
 ## 10. 폴더 구조
