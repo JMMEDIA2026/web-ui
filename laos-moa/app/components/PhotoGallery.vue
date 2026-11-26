@@ -20,7 +20,7 @@ function go(delta: number) {
 </script>
 
 <template>
-  <div class="relative bg-ink" role="region" :aria-label="`${name} 사진 ${photos.length}장`">
+  <div class="relative bg-inverted" role="region" :aria-label="`${name} 사진 ${photos.length}장`">
     <div ref="scroller" class="no-scrollbar flex snap-x snap-mandatory overflow-x-auto" tabindex="0" @scroll.passive="onScroll" @keydown.left.prevent="go(-1)" @keydown.right.prevent="go(1)">
       <img
         v-for="(id, i) in photos"
@@ -33,14 +33,14 @@ function go(delta: number) {
         draggable="false"
       >
     </div>
-    <p v-if="photos.length > 1" class="pointer-events-none absolute bottom-3 right-3 rounded-md bg-ink/70 px-2 py-1 text-[0.8125rem] font-bold text-white" aria-live="polite">
+    <p v-if="photos.length > 1" class="pointer-events-none absolute bottom-3 right-3 rounded-md bg-inverted/70 px-2 py-1 text-[0.8125rem] font-bold text-white" aria-live="polite">
       {{ index + 1 }} / {{ photos.length }}
     </p>
     <template v-if="photos.length > 1">
-      <button v-if="index > 0" type="button" class="absolute left-2 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-white/85 text-ink" aria-label="이전 사진" @click="go(-1)">
+      <button v-if="index > 0" type="button" class="absolute left-2 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-md bg-default/85 text-highlighted" aria-label="이전 사진" @click="go(-1)">
         <AppIcon name="back" class="size-6" />
       </button>
-      <button v-if="index < photos.length - 1" type="button" class="absolute right-2 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-white/85 text-ink" aria-label="다음 사진" @click="go(1)">
+      <button v-if="index < photos.length - 1" type="button" class="absolute right-2 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-md bg-default/85 text-highlighted" aria-label="다음 사진" @click="go(1)">
         <AppIcon name="next" class="size-6" />
       </button>
     </template>

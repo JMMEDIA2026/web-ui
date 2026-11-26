@@ -13,20 +13,20 @@ const sections = [
 
 <template>
   <div class="px-4 pt-5 sm:px-5">
-    <h1 data-page-title tabindex="-1" class="text-[1.625rem] font-bold text-ink">
+    <h1 data-page-title tabindex="-1" class="text-[1.625rem] font-bold text-highlighted">
       이용약관
     </h1>
     <div class="mt-4 space-y-3">
       <section v-for="s in sections" :key="s.title" class="card p-4">
-        <h2 class="text-[1.0625rem] font-bold text-ink">
+        <h2 class="text-[1.0625rem] font-bold text-highlighted">
           {{ s.title }}
         </h2>
-        <p class="mt-1.5 text-[0.9375rem] leading-relaxed text-ink">
+        <p class="mt-1.5 text-[0.9375rem] leading-relaxed text-highlighted">
           {{ s.body }}
         </p>
       </section>
     </div>
-    <NuxtLink to="/privacy" class="mt-4 inline-flex min-h-11 items-center text-[0.9375rem] font-bold text-brand-600 underline">
+    <NuxtLink to="/privacy" class="mt-4 inline-flex min-h-11 items-center text-[0.9375rem] font-bold text-primary underline">
       개인정보 처리 안내 보기
     </NuxtLink>
   </div>

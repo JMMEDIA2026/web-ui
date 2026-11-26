@@ -65,116 +65,116 @@ const items = computed(() => [
 
 <template>
   <div class="px-4 pt-5 sm:px-5">
-    <h1 data-page-title tabindex="-1" class="text-[1.625rem] font-bold text-ink">
+    <h1 data-page-title tabindex="-1" class="text-[1.625rem] font-bold text-highlighted">
       내 정보
     </h1>
-    <p class="mt-1 text-[0.9375rem] leading-relaxed text-ink-2">
+    <p class="mt-1 text-[0.9375rem] leading-relaxed text-muted">
       내 정보를 확인하고 예약과 문의를 보낼 수 있어요.
     </p>
 
     <!-- 회원 상태 -->
     <section v-if="member" class="card mt-4 p-4" aria-labelledby="member-title">
-      <h2 id="member-title" class="flex flex-wrap items-center gap-2 text-[1.125rem] font-bold text-ink">
+      <h2 id="member-title" class="flex flex-wrap items-center gap-2 text-[1.125rem] font-bold text-highlighted">
         {{ member.nickname }}님
-        <span v-if="member.grade" class="rounded-md bg-brand-100 px-2 py-0.5 font-sans text-[0.8125rem] font-bold text-brand-600">
+        <span v-if="member.grade" class="rounded-md bg-primary/10 px-2 py-0.5 font-sans text-[0.8125rem] font-bold text-primary">
           {{ member.grade.level }}등급 · {{ member.grade.name }}
         </span>
       </h2>
-      <p v-if="member.grade?.next" class="mt-1 text-[0.8125rem] text-ink-2">
+      <p v-if="member.grade?.next" class="mt-1 text-[0.8125rem] text-muted">
         다음 등급 {{ member.grade.next.level }}등급 {{ member.grade.next.name }}까지 {{ member.grade.next.remaining }}점
         (현재 {{ member.grade.score }}점)
       </p>
-      <p v-else-if="member.role === 'admin'" class="mt-1 text-[0.8125rem] text-ink-2">
+      <p v-else-if="member.role === 'admin'" class="mt-1 text-[0.8125rem] text-muted">
         10등급 관리자 계정이에요.
       </p>
-      <p v-else-if="member.grade" class="mt-1 text-[0.8125rem] text-ink-2">
+      <p v-else-if="member.grade" class="mt-1 text-[0.8125rem] text-muted">
         회원 최고 등급이에요. (현재 {{ member.grade.score }}점)
       </p>
       <dl class="mt-2 space-y-1 text-[0.9375rem]">
         <div class="flex gap-2">
-          <dt class="w-16 shrink-0 text-ink-2">이메일</dt>
-          <dd class="min-w-0 break-all text-ink">{{ member.email }}</dd>
+          <dt class="w-16 shrink-0 text-muted">이메일</dt>
+          <dd class="min-w-0 break-all text-highlighted">{{ member.email }}</dd>
         </div>
         <div class="flex gap-2">
-          <dt class="w-16 shrink-0 text-ink-2">실명</dt>
-          <dd class="min-w-0 break-words text-ink">{{ member.realName }}</dd>
+          <dt class="w-16 shrink-0 text-muted">실명</dt>
+          <dd class="min-w-0 break-words text-highlighted">{{ member.realName }}</dd>
         </div>
         <div class="flex gap-2">
-          <dt class="w-16 shrink-0 text-ink-2">휴대폰</dt>
-          <dd class="min-w-0 break-all text-ink">{{ member.phone }}</dd>
+          <dt class="w-16 shrink-0 text-muted">휴대폰</dt>
+          <dd class="min-w-0 break-all text-highlighted">{{ member.phone }}</dd>
         </div>
       </dl>
-      <details class="mt-3 border-t border-line pt-1" @toggle="loadGrades">
-        <summary class="flex min-h-11 cursor-pointer items-center text-[0.9375rem] font-bold text-brand-600">
+      <details class="mt-3 border-t border-default pt-1" @toggle="loadGrades">
+        <summary class="flex min-h-11 cursor-pointer items-center text-[0.9375rem] font-bold text-primary">
           등급 안내
         </summary>
-        <div v-if="gradeInfo" class="pb-2 text-[0.875rem] text-ink">
-          <p class="leading-relaxed text-ink-2">
+        <div v-if="gradeInfo" class="pb-2 text-[0.875rem] text-highlighted">
+          <p class="leading-relaxed text-muted">
             점수는 가입 후 7일마다 {{ gradeInfo.rules.perWeek }}점, 예약 요청 1건당 {{ gradeInfo.rules.perReservation }}점, 문의 1건당 {{ gradeInfo.rules.perInquiry }}점이에요. 취소·거절된 예약은 빠져요. 등급은 자동으로 올라가요.
           </p>
-          <ul class="mt-2 divide-y divide-line rounded-lg border border-line">
-            <li v-for="g in gradeInfo.grades" :key="g.level" class="flex items-center justify-between px-3 py-2" :class="member.grade?.level === g.level ? 'bg-brand-100 font-bold' : ''">
+          <ul class="mt-2 divide-y divide-default rounded-lg border border-default">
+            <li v-for="g in gradeInfo.grades" :key="g.level" class="flex items-center justify-between px-3 py-2" :class="member.grade?.level === g.level ? 'bg-primary/10 font-bold' : ''">
               <span>{{ g.level }}등급 · {{ g.name }}</span>
-              <span class="text-ink-2">{{ g.min === null ? '운영진' : `${g.min}점~` }}</span>
+              <span class="text-muted">{{ g.min === null ? '운영진' : `${g.min}점~` }}</span>
             </li>
           </ul>
         </div>
-        <p v-else class="pb-2 text-[0.875rem] text-ink-2">
+        <p v-else class="pb-2 text-[0.875rem] text-muted">
           불러오는 중…
         </p>
       </details>
       <div class="mt-1 flex flex-wrap gap-2">
-        <button type="button" class="btn btn-outline btn-sm" :disabled="busy" @click="logout">
+        <UButton color="neutral" variant="outline" size="md" type="button"  :disabled="busy" @click="logout">
           로그아웃
-        </button>
-        <button type="button" class="btn btn-quiet btn-sm" :aria-expanded="leaving" @click="leaving = !leaving">
+        </UButton>
+        <UButton color="primary" variant="soft" size="md" type="button"  :aria-expanded="leaving" @click="leaving = !leaving">
           회원 탈퇴
-        </button>
+        </UButton>
       </div>
-      <form v-if="leaving" class="mt-3 space-y-2 border-t border-line pt-3" @submit.prevent="leave">
-        <p class="text-[0.875rem] leading-relaxed text-ink-2">
+      <form v-if="leaving" class="mt-3 space-y-2 border-t border-default pt-3" @submit.prevent="leave">
+        <p class="text-[0.875rem] leading-relaxed text-muted">
           탈퇴하면 회원 정보가 삭제되고 되돌릴 수 없어요. 예약·문의 기록은 1년간 보관된 뒤 삭제돼요. 쓴 글과 댓글은 "탈퇴한 회원"이 쓴 것으로 바뀌어 남아요. 비밀번호를 입력해 주세요.
         </p>
         <label for="leave-pw" class="sr-only">비밀번호</label>
-        <input id="leave-pw" v-model="leavePw" type="password" autocomplete="current-password" class="field" required>
+        <UInput id="leave-pw" v-model="leavePw" type="password" autocomplete="current-password" required size="xl" class="w-full" />
         <p v-if="leaveError" class="text-[0.875rem] font-bold text-red-700" role="alert">
           {{ leaveError }}
         </p>
-        <button type="submit" class="btn btn-primary w-full" :disabled="busy || !leavePw">
+        <UButton color="primary" variant="solid" size="xl" block type="submit"  :disabled="busy || !leavePw">
           탈퇴하기
-        </button>
+        </UButton>
       </form>
     </section>
 
     <ul class="rows card mt-4 overflow-hidden">
       <li v-for="i in items" :key="i.to">
-        <NuxtLink :to="i.to" class="flex min-h-[72px] items-center gap-3 px-4 py-3 active:bg-brand-100">
-          <span class="grid size-11 shrink-0 place-items-center rounded-lg bg-brand-50 text-brand-600">
+        <NuxtLink :to="i.to" class="flex min-h-[72px] items-center gap-3 px-4 py-3 active:bg-primary/10">
+          <span class="grid size-11 shrink-0 place-items-center rounded-lg bg-primary/5 text-primary">
             <AppIcon :name="i.icon" class="size-8" />
           </span>
           <span class="min-w-0 flex-1">
-            <span class="block text-[1rem] font-bold text-ink">{{ i.label }}</span>
-            <span class="block text-[0.875rem] text-ink-2">{{ i.desc }}</span>
+            <span class="block text-[1rem] font-bold text-highlighted">{{ i.label }}</span>
+            <span class="block text-[0.875rem] text-muted">{{ i.desc }}</span>
           </span>
-          <AppIcon name="next" class="size-5 shrink-0 text-ink-2" />
+          <AppIcon name="next" class="size-5 shrink-0 text-muted" />
         </NuxtLink>
       </li>
     </ul>
 
     <nav class="mt-6 flex gap-4" aria-label="약관">
-      <NuxtLink to="/terms" class="inline-flex min-h-11 items-center text-[0.875rem] font-bold text-ink-2 underline">
+      <NuxtLink to="/terms" class="inline-flex min-h-11 items-center text-[0.875rem] font-bold text-muted underline">
         이용약관
       </NuxtLink>
-      <NuxtLink to="/privacy" class="inline-flex min-h-11 items-center text-[0.875rem] font-bold text-ink-2 underline">
+      <NuxtLink to="/privacy" class="inline-flex min-h-11 items-center text-[0.875rem] font-bold text-muted underline">
         개인정보 처리 안내
       </NuxtLink>
     </nav>
 
     <section class="mt-4" aria-labelledby="credit-title">
-      <h2 id="credit-title" class="text-[0.9375rem] font-bold text-ink">
+      <h2 id="credit-title" class="text-[0.9375rem] font-bold text-highlighted">
         출처 안내
       </h2>
-      <ul class="mt-1 text-[0.8125rem] leading-relaxed text-ink-2">
+      <ul class="mt-1 text-[0.8125rem] leading-relaxed text-muted">
         <li>
           <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" class="inline-flex min-h-11 items-center underline">지도 © OpenStreetMap contributors</a>
         </li>

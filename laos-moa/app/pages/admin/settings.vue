@@ -48,7 +48,7 @@ async function save() {
       설정
     </h1>
 
-    <form class="box3d mt-6 max-w-md border border-default bg-white p-6" @submit.prevent="save">
+    <form class="box3d mt-6 max-w-md border border-default bg-default p-6" @submit.prevent="save">
       <h2 class="font-bold text-highlighted">
         관리자 비밀번호 변경
       </h2>
@@ -71,7 +71,7 @@ async function save() {
       <UButton type="submit" label="비밀번호 변경" class="mt-5" block :loading="saving" :disabled="!canSave" />
     </form>
 
-    <section class="box3d mt-6 max-w-md border border-default bg-white p-6" aria-labelledby="slack-title">
+    <section class="box3d mt-6 max-w-md border border-default bg-default p-6" aria-labelledby="slack-title">
       <h2 id="slack-title" class="font-bold text-highlighted">
         Slack 알림
       </h2>

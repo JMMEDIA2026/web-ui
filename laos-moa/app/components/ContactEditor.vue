@@ -32,7 +32,7 @@ function remove(i: number) {
       <li v-for="(c, i) in items" :key="i">
         <div class="flex items-center gap-2">
           <SnsIcon :type="c.type" class="size-8 shrink-0" />
-          <select v-model="c.type" :aria-label="`연락 방법 ${i + 1} 종류`" class="w-28 shrink-0 border border-default bg-white px-2 py-2 text-sm font-bold" @change="push">
+          <select v-model="c.type" :aria-label="`연락 방법 ${i + 1} 종류`" class="w-28 shrink-0 border border-default bg-default px-2 py-2 text-sm font-bold" @change="push">
             <option v-for="t in CONTACT_TYPES" :key="t.key" :value="t.key">
               {{ t.label }}
             </option>
@@ -41,7 +41,7 @@ function remove(i: number) {
             :id="`${idPrefix}-${i}`"
             v-model="c.value"
             :aria-label="`연락 방법 ${i + 1} 아이디 또는 번호`"
-            class="min-w-0 flex-1 border border-default bg-white px-3 py-2 text-sm"
+            class="min-w-0 flex-1 border border-default bg-default px-3 py-2 text-sm"
             :placeholder="contactTypeMap[c.type].placeholder"
             autocomplete="off"
             @input="push"

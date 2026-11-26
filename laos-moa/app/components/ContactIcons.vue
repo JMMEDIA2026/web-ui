@@ -30,8 +30,8 @@ async function copy() {
         v-for="(c, i) in items"
         :key="`${c.type}-${i}`"
         type="button"
-        class="grid size-11 shrink-0 place-items-center rounded-2xl border-2 bg-white transition-colors"
-        :class="i === selected ? 'border-ink' : 'border-transparent bg-fill'"
+        class="grid size-11 shrink-0 place-items-center rounded-2xl border-2 bg-default transition-colors"
+        :class="i === selected ? 'border-inverted' : 'border-transparent bg-muted'"
         :aria-label="contactTypeMap[c.type].label"
         :aria-pressed="i === selected"
         @click="selected = i"
@@ -41,21 +41,21 @@ async function copy() {
     </div>
 
     <!-- 고른 연락처: 아이디와 버튼 -->
-    <div class="mt-3 flex items-center gap-2 rounded-2xl bg-fill p-2 ps-3.5" aria-live="polite">
+    <div class="mt-3 flex items-center gap-2 rounded-2xl bg-muted p-2 ps-3.5" aria-live="polite">
       <div class="min-w-0 flex-1">
-        <p class="text-[0.8125rem] font-semibold text-ink-2">
+        <p class="text-[0.8125rem] font-semibold text-muted">
           {{ info.label }}
         </p>
-        <p class="break-all text-[1.0625rem] font-bold leading-snug text-ink">
+        <p class="break-all text-[1.0625rem] font-bold leading-snug text-highlighted">
           {{ current.value }}
         </p>
       </div>
-      <a v-if="href" :href="href" :target="href.startsWith('tel:') ? undefined : '_blank'" rel="noopener" class="btn btn-outline btn-sm shrink-0" :aria-label="`${info.label} ${current.type === 'phone' ? '전화 걸기' : '열기'}`">
+      <UButton color="neutral" variant="outline" size="md" class="shrink-0" v-if="href" :href="href" :target="href.startsWith('tel:') ? undefined : '_blank'" rel="noopener"  :aria-label="`${info.label} ${current.type === 'phone' ? '전화 걸기' : '열기'}`">
         {{ current.type === 'phone' ? '전화' : '열기' }}
-      </a>
-      <button type="button" class="btn btn-primary btn-sm shrink-0" :aria-label="`${info.label} 아이디 복사`" @click="copy">
+      </UButton>
+      <UButton color="primary" variant="solid" size="md" class="shrink-0" type="button"  :aria-label="`${info.label} 아이디 복사`" @click="copy">
         복사
-      </button>
+      </UButton>
     </div>
   </div>
 </template>

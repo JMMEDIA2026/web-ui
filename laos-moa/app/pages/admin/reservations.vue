@@ -63,7 +63,7 @@ function pick(value: string) {
         size="sm"
         :color="status === t.value ? 'primary' : 'neutral'"
         :variant="status === t.value ? 'solid' : 'outline'"
-        :class="status === t.value ? '' : 'bg-white'"
+        :class="status === t.value ? '' : 'bg-default'"
         @click="pick(t.value)"
       />
       <UButton icon="i-lucide-refresh-cw" size="sm" color="neutral" variant="ghost" label="새로고침" :loading="loading" @click="load" />

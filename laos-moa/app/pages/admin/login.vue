@@ -22,7 +22,7 @@ async function submit() {
 
 <template>
   <UContainer class="flex min-h-[70vh] items-center justify-center py-12">
-    <form class="box3d w-full max-w-sm border border-default bg-white p-7" @submit.prevent="submit">
+    <form class="box3d w-full max-w-sm border border-default bg-default p-7" @submit.prevent="submit">
       <h1 class="text-xl font-extrabold text-highlighted">
         관리자 로그인
       </h1>

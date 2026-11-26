@@ -18,7 +18,7 @@ const PATH = {
   <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
     <!-- 카카오톡: 노란 사각형 + 짙은 말풍선 -->
     <template v-if="type === 'kakao'">
-      <rect x="0.5" y="0.5" width="23" height="23" rx="1.6" fill="#191919" />
+      <rect x="0.5" y="0.5" width="23" height="23" rx="1.2" fill="#191919" />
       <path :d="PATH.kakao" fill="#FEE500" />
     </template>
     <!-- 텔레그램: 파란 원 + 흰 종이비행기 -->
@@ -28,17 +28,17 @@ const PATH = {
     </template>
     <!-- 위챗·왓츠앱·라인: 브랜드 색 사각형 + 흰 로고 -->
     <template v-else-if="type === 'wechat' || type === 'whatsapp' || type === 'line'">
-      <rect width="24" height="24" rx="6" :fill="type === 'wechat' ? '#07C160' : type === 'whatsapp' ? '#25D366' : '#06C755'" />
+      <rect width="24" height="24" rx="3" :fill="type === 'wechat' ? '#07C160' : type === 'whatsapp' ? '#25D366' : '#06C755'" />
       <g transform="translate(4.2 4.2) scale(0.65)"><path :d="PATH[type]" fill="#fff" /></g>
     </template>
     <!-- 전화 -->
     <template v-else-if="type === 'phone'">
-      <rect width="24" height="24" rx="6" fill="#17181C" />
+      <rect width="24" height="24" rx="3" fill="#17181C" />
       <path d="M8.2 6.2l1.6 2.6c.2.4.1.8-.2 1.1l-.9.8c.9 1.7 2.2 3 3.9 3.9l.8-.9c.3-.3.7-.4 1.1-.2l2.6 1.6c.4.2.5.7.3 1.1-.5 1-1.5 1.8-2.7 1.7-4.4-.4-8-4-8.4-8.4-.1-1.2.7-2.2 1.7-2.7.4-.2.8-.1 1.1.3z" fill="none" stroke="#fff" stroke-width="1.5" stroke-linejoin="round" />
     </template>
     <!-- 기타: 링크 -->
     <template v-else>
-      <rect width="24" height="24" rx="6" fill="#656A78" />
+      <rect width="24" height="24" rx="3" fill="#656A78" />
       <path d="M10.2 13.8a3 3 0 0 0 4.2 0l2.4-2.4a3 3 0 0 0-4.2-4.2l-.8.8M13.8 10.2a3 3 0 0 0-4.2 0l-2.4 2.4a3 3 0 0 0 4.2 4.2l.8-.8" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
     </template>
   </svg>

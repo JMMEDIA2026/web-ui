@@ -246,28 +246,20 @@ onBeforeUnmount(() => {
     </h1>
 
     <!-- 검색과 업종 필터 -->
-    <div class="shrink-0 border-b border-line bg-surface px-4 pb-2 pt-3">
+    <div class="shrink-0 border-b border-default bg-default px-4 pb-2 pt-3">
       <form class="relative" role="search" @submit.prevent="submitSearch">
         <label for="biz-search" class="sr-only">업체명이나 업종 검색</label>
-        <input
-          id="biz-search"
-          v-model="searchInput"
-          type="search"
-          enterkeyhint="search"
-          autocomplete="off"
-          placeholder="업체명이나 업종을 검색하세요"
-          class="field pr-[104px]"
-        >
+        <UInput id="biz-search" v-model="searchInput" type="search" enterkeyhint="search" autocomplete="off" placeholder="업체명이나 업종을 검색하세요" size="xl" class="w-full" :ui="{ base: 'pe-[104px]' }" />
         <button
           v-if="searchInput"
           type="button"
-          class="absolute right-12 top-1/2 grid size-11 -translate-y-1/2 place-items-center text-ink-2"
+          class="absolute right-12 top-1/2 grid size-11 -translate-y-1/2 place-items-center text-muted"
           aria-label="검색어 지우기"
           @click="clearSearch"
         >
           <AppIcon name="close" class="size-5" />
         </button>
-        <button type="submit" class="absolute right-1 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-lg text-brand-600" aria-label="검색">
+        <button type="submit" class="absolute right-1 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-lg text-primary" aria-label="검색">
           <AppIcon name="search" class="size-6" />
         </button>
       </form>
@@ -291,7 +283,7 @@ onBeforeUnmount(() => {
 
     <!-- 상단 지도 (목록 크게 보기를 누르면 접힙니다) -->
     <div
-      class="relative shrink-0 overflow-hidden bg-fill transition-[height] duration-200"
+      class="relative shrink-0 overflow-hidden bg-muted transition-[height] duration-200"
       :style="{ height: expanded ? '0px' : 'min(240px, 30dvh)' }"
       :inert="expanded"
     >
@@ -309,53 +301,52 @@ onBeforeUnmount(() => {
           @located="onLocated"
         />
         <template #fallback>
-          <div class="grid h-full place-items-center text-[0.875rem] text-ink-2">
+          <div class="grid h-full place-items-center text-[0.875rem] text-muted">
             지도를 불러오는 중…
           </div>
         </template>
       </ClientOnly>
 
-      <button
+      <UButton color="primary" variant="solid" size="md" class="absolute left-1/2 top-3 z-[500] -translate-x-1/2 shadow-md"
         v-if="moved && !expanded"
         type="button"
-        class="btn btn-primary btn-sm absolute left-1/2 top-3 z-[500] -translate-x-1/2 shadow-md"
-        @click="searchHere"
-      >
+        
+        @click="searchHere">
         이 지역에서 검색
-      </button>
+      </UButton>
 
       <!-- 선택한 업체 요약 -->
       <div
         v-if="selectedBusiness"
-        class="absolute inset-x-3 bottom-7 z-[500] flex items-center gap-2 rounded-lg bg-surface p-3 shadow-md"
+        class="absolute inset-x-3 bottom-7 z-[500] flex items-center gap-2 rounded-lg bg-default p-3 shadow-md"
         role="region"
         aria-label="선택한 업체"
       >
         <div class="min-w-0 flex-1">
-          <p class="truncate text-[1rem] font-bold text-ink">
+          <p class="truncate text-[1rem] font-bold text-highlighted">
             {{ selectedBusiness.name }}
           </p>
-          <p class="truncate text-[0.8125rem] text-ink-2">
+          <p class="truncate text-[0.8125rem] text-muted">
             {{ categoryMap[selectedBusiness.category]?.label }} · {{ selectedBusiness.area || '비엔티안' }}
           </p>
         </div>
-        <NuxtLink :to="`/businesses/${selectedBusiness.slug}`" class="btn btn-primary btn-sm">
+        <UButton color="primary" variant="solid" size="md" :to="`/businesses/${selectedBusiness.slug}`">
           상세 보기
-        </NuxtLink>
-        <button type="button" class="grid size-11 shrink-0 place-items-center rounded-full text-ink-2" aria-label="선택 해제" @click="selected = ''">
+        </UButton>
+        <button type="button" class="grid size-11 shrink-0 place-items-center rounded-md text-muted" aria-label="선택 해제" @click="selected = ''">
           <AppIcon name="close" class="size-5" />
         </button>
       </div>
     </div>
 
     <!-- 결과 수 · 정렬 · 목록 크게 보기 -->
-    <div class="flex shrink-0 items-center justify-between gap-2 border-y border-line bg-surface px-4 py-1.5">
-      <p class="text-[0.9375rem] font-bold text-ink" aria-live="polite">
-        결과 <span class="text-brand-600">{{ filtered.length }}</span>곳
+    <div class="flex shrink-0 items-center justify-between gap-2 border-y border-default bg-default px-4 py-1.5">
+      <p class="text-[0.9375rem] font-bold text-highlighted" aria-live="polite">
+        결과 <span class="text-primary">{{ filtered.length }}</span>곳
       </p>
       <div class="flex items-center gap-2">
         <label for="biz-sort" class="sr-only">정렬</label>
-        <select id="biz-sort" v-model="sort" class="min-h-11 rounded-lg border border-field-border bg-surface px-2 text-[0.875rem] text-ink">
+        <select id="biz-sort" v-model="sort" class="min-h-11 rounded-lg border border-accented bg-default px-2 text-[0.875rem] text-highlighted">
           <option value="default">
             추천순
           </option>
@@ -366,22 +357,22 @@ onBeforeUnmount(() => {
             가까운순
           </option>
         </select>
-        <button type="button" class="btn btn-quiet btn-sm" :aria-pressed="expanded" @click="toggleExpanded">
+        <UButton color="primary" variant="soft" size="md" type="button"  :aria-pressed="expanded" @click="toggleExpanded">
           <AppIcon :name="expanded ? 'map' : 'list'" class="size-5" />
           {{ expanded ? '지도 보기' : '목록 크게 보기' }}
-        </button>
+        </UButton>
       </div>
     </div>
 
-    <div v-if="bounds" class="flex shrink-0 items-center justify-between gap-2 bg-brand-100 px-4 py-1 text-[0.875rem] text-brand-600">
+    <div v-if="bounds" class="flex shrink-0 items-center justify-between gap-2 bg-primary/10 px-4 py-1 text-[0.875rem] text-primary">
       <span class="font-bold">지도 영역 안의 업체만 보고 있어요</span>
-      <button type="button" class="btn btn-sm min-h-11 text-brand-600 underline" @click="clearBounds">
+      <UButton type="button" color="primary" variant="link" size="md" @click="clearBounds">
         해제
-      </button>
+      </UButton>
     </div>
 
     <!-- 하단 업체 목록 -->
-    <div ref="listEl" class="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-surface" @scroll.passive="onScroll">
+    <div ref="listEl" class="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-default" @scroll.passive="onScroll">
       <!-- 불러오는 중 -->
       <ul v-if="pending && !real.length" class="rows" aria-busy="true">
         <li v-for="n in 3" :key="n" class="flex gap-3 px-4 py-3">
@@ -395,48 +386,48 @@ onBeforeUnmount(() => {
 
       <!-- 연결 오류: 검색 조건은 그대로 둡니다. -->
       <div v-else-if="error" class="px-6 py-10 text-center" role="alert">
-        <AppIcon name="warning" class="mx-auto size-8 text-ink-2" />
-        <p class="mt-2 text-[1.0625rem] font-bold text-ink">
+        <AppIcon name="warning" class="mx-auto size-8 text-muted" />
+        <p class="mt-2 text-[1.0625rem] font-bold text-highlighted">
           업체 정보를 불러오지 못했어요
         </p>
-        <p class="mt-1 text-[0.875rem] text-ink-2">
+        <p class="mt-1 text-[0.875rem] text-muted">
           검색 조건은 그대로 두었어요. 연결을 확인하고 다시 시도해 주세요.
         </p>
-        <button type="button" class="btn btn-primary mt-4" @click="refresh()">
+        <UButton color="primary" variant="solid" size="xl" class="mt-4" type="button"  @click="refresh()">
           다시 시도
-        </button>
+        </UButton>
       </div>
 
       <!-- 결과 없음 -->
       <div v-else-if="!filtered.length" class="px-6 py-10 text-center">
-        <AppIcon name="search" class="mx-auto size-8 text-ink-2" />
-        <p class="mt-2 text-[1.125rem] font-bold text-ink">
+        <AppIcon name="search" class="mx-auto size-8 text-muted" />
+        <p class="mt-2 text-[1.125rem] font-bold text-highlighted">
           {{ !real.length ? '아직 등록된 업체가 없어요' : !inRegion.length ? `${region.label}에는 아직 등록된 업체가 없어요` : '검색 결과가 없어요' }}
         </p>
         <ul class="mx-auto mt-3 flex max-w-xs flex-wrap justify-center gap-2 text-[0.875rem]">
-          <li class="rounded-md bg-app-bg px-3 py-1 text-ink-2">
+          <li class="rounded-md bg-default px-3 py-1 text-muted">
             지역 {{ region.label }}
           </li>
-          <li v-if="category" class="rounded-md bg-app-bg px-3 py-1 text-ink-2">
+          <li v-if="category" class="rounded-md bg-default px-3 py-1 text-muted">
             업종 {{ categoryMap[category]?.label }}
           </li>
-          <li v-if="q.trim()" class="rounded-md bg-app-bg px-3 py-1 text-ink-2">
+          <li v-if="q.trim()" class="rounded-md bg-default px-3 py-1 text-muted">
             검색어 “{{ q.trim() }}”
           </li>
-          <li v-if="bounds" class="rounded-md bg-app-bg px-3 py-1 text-ink-2">
+          <li v-if="bounds" class="rounded-md bg-default px-3 py-1 text-muted">
             지도 영역
           </li>
         </ul>
         <div class="mt-5 flex flex-col gap-2">
-          <button v-if="filterActive" type="button" class="btn btn-primary" @click="clearFilters">
+          <UButton color="primary" variant="solid" size="xl" v-if="filterActive" type="button"  @click="clearFilters">
             필터 해제
-          </button>
-          <button type="button" class="btn btn-outline" @click="regionSheet = true">
+          </UButton>
+          <UButton color="neutral" variant="outline" size="xl" type="button"  @click="regionSheet = true">
             지역 변경
-          </button>
-          <NuxtLink to="/advertise" class="btn btn-quiet">
+          </UButton>
+          <UButton color="primary" variant="soft" size="xl" to="/advertise">
             사장님이세요? 업체 등록 문의
-          </NuxtLink>
+          </UButton>
         </div>
       </div>
 

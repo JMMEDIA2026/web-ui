@@ -57,7 +57,8 @@ function needLogin(): boolean {
 async function like() {
   if (needLogin()) return
   const r = await call(() => $fetch<{ liked: boolean, likeCount: number }>(`/api/community/posts/${post.value.id}/like`, { method: 'POST' }))
-  if (r) { data.value!.liked = r.liked; data.value!.post.likeCount = r.likeCount }
+  // useFetch의 data는 안쪽 값이 바뀌어도 화면이 모르므로, 새 객체로 바꿔 줍니다.
+  if (r) data.value = { ...data.value!, liked: r.liked, post: { ...data.value!.post, likeCount: r.likeCount } }
 }
 
 const comment = ref('')
@@ -94,11 +95,11 @@ async function moderate(type: 'post' | 'comment', id: string, action: 'hide' | '
 
 <template>
   <div class="pb-6">
-    <header class="sticky top-0 z-30 flex items-center gap-1 border-b border-line bg-white/95 px-2 backdrop-blur" style="height: calc(56px + env(safe-area-inset-top, 0px)); padding-top: env(safe-area-inset-top, 0px)">
-      <button type="button" class="grid size-11 shrink-0 place-items-center rounded-full text-ink" aria-label="뒤로가기" @click="back">
+    <header class="sticky top-0 z-30 flex items-center gap-1 border-b border-default bg-default/95 px-2 backdrop-blur" style="height: calc(56px + env(safe-area-inset-top, 0px)); padding-top: env(safe-area-inset-top, 0px)">
+      <button type="button" class="grid size-11 shrink-0 place-items-center rounded-md text-highlighted" aria-label="뒤로가기" @click="back">
         <AppIcon name="back" class="size-6" />
       </button>
-      <p class="min-w-0 flex-1 truncate text-[1.0625rem] font-bold text-ink">
+      <p class="min-w-0 flex-1 truncate text-[1.0625rem] font-bold text-highlighted">
         <span aria-hidden="true">{{ board.emoji }}</span> {{ board.label }}
       </p>
     </header>
@@ -107,78 +108,78 @@ async function moderate(type: 'post' | 'comment', id: string, action: 'hide' | '
       <p v-if="post.hidden" class="mb-3 rounded-2xl bg-gold-50 px-3 py-2 text-[0.875rem] font-bold text-gold-700" role="status">
         이 글은 신고가 쌓이거나 운영진이 숨겨서 다른 사람에게는 보이지 않아요.
       </p>
-      <div v-if="post.rating" class="text-[1.125rem] font-bold text-gold-700" :aria-label="`별점 5점 만점에 ${post.rating}점`">
-        <span aria-hidden="true">{{ '★'.repeat(post.rating) }}<span class="text-line">{{ '★'.repeat(5 - post.rating) }}</span></span>
+      <div v-if="post.rating" class="text-[1.125rem] font-bold text-gold-700" :aria-label="`별점 5점 만점에 ${post.rating}점`" role="img">
+        <span aria-hidden="true">{{ '★'.repeat(post.rating) }}<span class="text-dimmed">{{ '★'.repeat(5 - post.rating) }}</span></span>
       </div>
-      <h1 data-page-title tabindex="-1" class="mt-1 break-words text-[1.5rem] font-extrabold leading-snug text-ink">
+      <h1 data-page-title tabindex="-1" class="mt-1 break-words text-[1.5rem] font-extrabold leading-snug text-highlighted">
         {{ post.title }}
       </h1>
-      <NuxtLink v-if="post.businessName" :to="`/businesses/${post.businessId}`" class="mt-2 inline-flex min-h-11 items-center gap-1 rounded-full bg-brand-50 px-3 text-[0.875rem] font-bold text-brand-600">
+      <NuxtLink v-if="post.businessName" :to="`/businesses/${post.businessId}`" class="mt-2 inline-flex min-h-11 items-center gap-1 rounded-md bg-primary/5 px-3 text-[0.875rem] font-bold text-primary">
         <span aria-hidden="true">📍</span>{{ post.businessName }}
       </NuxtLink>
-      <p class="mt-2 text-[0.875rem] text-ink-2">
-        <span class="font-semibold text-ink">{{ post.author }}</span><span v-if="post.authorIsAdmin" class="ms-1 rounded bg-brand-500 px-1 py-px text-[0.6875rem] font-bold text-white">운영진</span>
+      <p class="mt-2 text-[0.875rem] text-muted">
+        <span class="font-semibold text-highlighted">{{ post.author }}</span><span v-if="post.authorIsAdmin" class="ms-1 rounded bg-primary px-1 py-px text-[0.6875rem] font-bold text-white">운영진</span>
         · {{ timeAgo(post.createdAt) }}
       </p>
 
-      <p class="mt-4 whitespace-pre-wrap break-words text-[1rem] leading-relaxed text-ink">
+      <p class="mt-4 whitespace-pre-wrap break-words text-[1rem] leading-relaxed text-highlighted">
         {{ post.body }}
       </p>
 
       <div class="mt-5 flex flex-wrap items-center gap-2">
-        <button type="button" class="btn btn-sm" :class="data!.liked ? 'btn-primary' : 'btn-outline'" :aria-pressed="data!.liked" :disabled="busy" @click="like">
+        <UButton type="button" size="md" :color="data!.liked ? 'primary' : 'neutral'" :variant="data!.liked ? 'solid' : 'outline'" :aria-pressed="data!.liked" :disabled="busy" @click="like">
           <span aria-hidden="true">{{ data!.liked ? '♥' : '♡' }}</span>좋아요 {{ post.likeCount }}
-        </button>
-        <button v-if="!post.mine" type="button" class="btn btn-quiet btn-sm" @click="report('post', post.id)">
+        </UButton>
+        <UButton color="primary" variant="soft" size="md" v-if="!post.mine" type="button"  @click="report('post', post.id)">
           <span aria-hidden="true">🚩</span>신고
-        </button>
-        <button v-if="canDelete" type="button" class="btn btn-quiet btn-sm" :disabled="busy" @click="removePost">
+        </UButton>
+        <UButton color="primary" variant="soft" size="md" v-if="canDelete" type="button"  :disabled="busy" @click="removePost">
           삭제
-        </button>
-        <button v-if="data!.canModerate" type="button" class="btn btn-quiet btn-sm" :disabled="busy" @click="moderate('post', post.id, post.hidden ? 'show' : 'hide')">
+        </UButton>
+        <UButton color="primary" variant="soft" size="md" v-if="data!.canModerate" type="button"  :disabled="busy" @click="moderate('post', post.id, post.hidden ? 'show' : 'hide')">
           {{ post.hidden ? '다시 보이기' : '숨기기' }}
-        </button>
+        </UButton>
       </div>
     </article>
 
     <!-- 댓글 -->
     <section class="mt-6 border-t-8 border-fill px-4 pt-4" aria-labelledby="cm-title">
-      <h2 id="cm-title" class="text-[1.125rem] font-extrabold text-ink">
+      <h2 id="cm-title" class="text-[1.125rem] font-extrabold text-highlighted">
         댓글 {{ data!.comments.filter(c => !c.hidden).length }}
       </h2>
-      <ul v-if="data!.comments.length" class="mt-1 divide-y divide-line">
+      <ul v-if="data!.comments.length" class="mt-1 divide-y divide-default">
         <li v-for="c in data!.comments" :key="c.id" class="py-3" :class="c.hidden ? 'opacity-60' : ''">
-          <p class="text-[0.8125rem] text-ink-2">
-            <span class="font-semibold text-ink">{{ c.author }}</span><span v-if="c.authorIsAdmin" class="ms-1 rounded bg-brand-500 px-1 py-px text-[0.6875rem] font-bold text-white">운영진</span>
+          <p class="text-[0.8125rem] text-muted">
+            <span class="font-semibold text-highlighted">{{ c.author }}</span><span v-if="c.authorIsAdmin" class="ms-1 rounded bg-primary px-1 py-px text-[0.6875rem] font-bold text-white">운영진</span>
             · {{ timeAgo(c.createdAt) }}<span v-if="c.hidden"> · 숨김</span>
           </p>
-          <p class="mt-1 whitespace-pre-wrap break-words text-[0.9375rem] leading-relaxed text-ink">
+          <p class="mt-1 whitespace-pre-wrap break-words text-[0.9375rem] leading-relaxed text-highlighted">
             {{ c.body }}
           </p>
           <div class="mt-1 flex gap-1">
-            <button v-if="!c.mine" type="button" class="inline-flex min-h-11 items-center px-1 text-[0.8125rem] font-semibold text-ink-2 underline underline-offset-2" @click="report('comment', c.id)">
+            <button v-if="!c.mine" type="button" class="inline-flex min-h-11 items-center px-1 text-[0.8125rem] font-semibold text-muted underline underline-offset-2" @click="report('comment', c.id)">
               신고
             </button>
-            <button v-if="c.mine || data!.canModerate" type="button" class="inline-flex min-h-11 items-center px-1 text-[0.8125rem] font-semibold text-ink-2 underline underline-offset-2" @click="removeComment(c.id)">
+            <button v-if="c.mine || data!.canModerate" type="button" class="inline-flex min-h-11 items-center px-1 text-[0.8125rem] font-semibold text-muted underline underline-offset-2" @click="removeComment(c.id)">
               삭제
             </button>
-            <button v-if="data!.canModerate" type="button" class="inline-flex min-h-11 items-center px-1 text-[0.8125rem] font-semibold text-ink-2 underline underline-offset-2" @click="moderate('comment', c.id, c.hidden ? 'show' : 'hide')">
+            <button v-if="data!.canModerate" type="button" class="inline-flex min-h-11 items-center px-1 text-[0.8125rem] font-semibold text-muted underline underline-offset-2" @click="moderate('comment', c.id, c.hidden ? 'show' : 'hide')">
               {{ c.hidden ? '다시 보이기' : '숨기기' }}
             </button>
           </div>
         </li>
       </ul>
-      <p v-else class="mt-2 text-[0.9375rem] text-ink-2">
+      <p v-else class="mt-2 text-[0.9375rem] text-muted">
         아직 댓글이 없어요. 첫 댓글을 남겨 보세요.
       </p>
 
       <form class="mt-3" novalidate @submit.prevent="addComment">
         <label for="c-body" class="sr-only">댓글</label>
-        <textarea id="c-body" v-model="comment" maxlength="500" class="field" style="min-height: 88px" :placeholder="member ? '댓글을 남겨 보세요. (500자까지)' : '로그인하면 댓글을 쓸 수 있어요.'" />
+        <UTextarea id="c-body" v-model="comment" maxlength="500" :placeholder="member ? '댓글을 남겨 보세요. (500자까지)' : '로그인하면 댓글을 쓸 수 있어요.'" size="xl" class="w-full" :rows="4" />
         <div class="hidden" aria-hidden="true"><input v-model="website" type="text" name="website" tabindex="-1" autocomplete="off"></div>
-        <button type="submit" class="btn btn-primary mt-2 w-full" :disabled="busy">
+        <UButton color="primary" variant="solid" size="xl" block class="mt-2" type="submit"  :disabled="busy">
           {{ member ? '댓글 남기기' : '로그인하고 댓글 쓰기' }}
-        </button>
+        </UButton>
       </form>
     </section>
   </div>

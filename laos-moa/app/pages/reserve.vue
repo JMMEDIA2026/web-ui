@@ -97,31 +97,31 @@ function reset() {
 <template>
   <div class="px-4 pt-3 sm:px-5">
     <div class="flex items-center gap-1">
-      <NuxtLink to="/me" class="-ml-2 grid size-11 place-items-center rounded-full text-ink" aria-label="내 정보로">
+      <NuxtLink to="/me" class="-ml-2 grid size-11 place-items-center rounded-md text-highlighted" aria-label="내 정보로">
         <AppIcon name="back" class="size-7" />
       </NuxtLink>
-      <h1 data-page-title tabindex="-1" class="text-[1.5rem] font-bold text-ink">
+      <h1 data-page-title tabindex="-1" class="text-[1.5rem] font-bold text-highlighted">
         예약 요청하기
       </h1>
     </div>
 
-    <p v-if="member && !doneCode" class="mt-3 text-[0.9375rem] text-ink-2">
-      <strong class="text-ink">{{ member.nickname }}</strong>님의 정보로 예약을 요청해요. 연락받을 방법은 전화·카카오톡·위챗·텔레그램·왓츠앱 중에서 고를 수 있어요.
+    <p v-if="member && !doneCode" class="mt-3 text-[0.9375rem] text-muted">
+      <strong class="text-highlighted">{{ member.nickname }}</strong>님의 정보로 예약을 요청해요. 연락받을 방법은 전화·카카오톡·위챗·텔레그램·왓츠앱 중에서 고를 수 있어요.
     </p>
 
     <!-- 접수 완료 -->
     <div v-if="doneCode" class="card mt-4 p-6 text-center">
-      <AppIcon name="check" class="mx-auto size-12 text-brand-500" />
-      <h2 class="mt-3 text-[1.375rem] font-bold text-ink">
+      <AppIcon name="check" class="mx-auto size-12 text-primary" />
+      <h2 class="mt-3 text-[1.375rem] font-bold text-highlighted">
         예약 요청이 접수되었어요
       </h2>
-      <p class="mt-3 text-[0.875rem] text-ink-2">
+      <p class="mt-3 text-[0.875rem] text-muted">
         예약번호
       </p>
-      <p class="font-mono text-[1.875rem] font-extrabold tracking-wider text-brand-600">
+      <p class="font-mono text-[1.875rem] font-extrabold tracking-wider text-primary">
         {{ doneCode }}
       </p>
-      <p class="mt-3 text-[0.9375rem] leading-relaxed text-ink-2">
+      <p class="mt-3 text-[0.9375rem] leading-relaxed text-muted">
         <template v-if="doneDirect">
           아직 확정된 예약이 아니에요. 업체가 확인하면 남겨 주신 연락처로 확정 여부를 알려 드려요. 문의하실 때 예약번호를 알려 주세요.
         </template>
@@ -130,34 +130,34 @@ function reset() {
         </template>
       </p>
       <div class="mt-5 flex flex-col gap-2">
-        <button type="button" class="btn btn-outline" @click="reset">
+        <UButton color="neutral" variant="outline" size="xl" type="button"  @click="reset">
           다른 예약 요청하기
-        </button>
-        <NuxtLink to="/" class="btn btn-primary">
+        </UButton>
+        <UButton color="primary" variant="solid" size="xl" to="/">
           홈으로
-        </NuxtLink>
+        </UButton>
       </div>
     </div>
 
     <!-- 예약을 받는 협력업체가 아직 없을 때 -->
     <div v-else-if="!hasTargets" class="card mt-4 p-6 text-center">
-      <AppIcon name="biz" class="mx-auto size-10 text-ink-2" />
-      <p class="mt-2 text-[1.125rem] font-bold text-ink">
+      <AppIcon name="biz" class="mx-auto size-10 text-muted" />
+      <p class="mt-2 text-[1.125rem] font-bold text-highlighted">
         예약을 받는 업체를 준비하고 있어요
       </p>
-      <p class="mt-1 text-[0.875rem] leading-relaxed text-ink-2">
+      <p class="mt-1 text-[0.875rem] leading-relaxed text-muted">
         지금은 업체 정보를 보고 직접 연락할 수 있어요.
       </p>
       <div class="mt-4 flex flex-col gap-2">
-        <NuxtLink to="/businesses" class="btn btn-primary">
+        <UButton color="primary" variant="solid" size="xl" to="/businesses">
           업체 찾기
-        </NuxtLink>
+        </UButton>
       </div>
     </div>
 
     <form v-else class="mt-4 space-y-4" novalidate @submit.prevent="submit">
       <div>
-        <label for="r-partner" class="text-[0.9375rem] font-bold text-ink">예약할 업체 <span class="text-brand-600">*</span></label>
+        <label for="r-partner" class="text-[0.9375rem] font-bold text-highlighted">예약할 업체 <span class="text-primary">*</span></label>
         <select id="r-partner" v-model="form.target" class="field mt-1.5" required>
           <option value="" disabled>
             업체를 선택하세요
@@ -173,23 +173,23 @@ function reset() {
 
       <div class="grid grid-cols-2 gap-3">
         <div>
-          <label for="r-date" class="text-[0.9375rem] font-bold text-ink">예약 날짜 <span class="text-brand-600">*</span></label>
-          <input id="r-date" v-model="form.date" type="date" :min="today" class="field mt-1.5" required>
+          <label for="r-date" class="text-[0.9375rem] font-bold text-highlighted">예약 날짜 <span class="text-primary">*</span></label>
+          <UInput id="r-date" v-model="form.date" type="date" :min="today" required size="xl" class="mt-1.5 w-full" />
         </div>
         <div>
-          <label for="r-people" class="text-[0.9375rem] font-bold text-ink">인원 <span class="text-brand-600">*</span></label>
-          <input id="r-people" v-model.number="form.people" type="number" min="1" max="100" inputmode="numeric" class="field mt-1.5" required>
+          <label for="r-people" class="text-[0.9375rem] font-bold text-highlighted">인원 <span class="text-primary">*</span></label>
+          <UInput id="r-people" v-model.number="form.people" type="number" min="1" max="100" inputmode="numeric" required size="xl" class="mt-1.5 w-full" />
         </div>
       </div>
 
       <div>
-        <label for="r-service" class="text-[0.9375rem] font-bold text-ink">원하는 서비스 (선택)</label>
-        <input id="r-service" v-model="form.service" class="field mt-1.5" placeholder="예) 18홀 라운딩, 90분 마사지, 오토바이 3일">
+        <label for="r-service" class="text-[0.9375rem] font-bold text-highlighted">원하는 서비스 (선택)</label>
+        <UInput id="r-service" v-model="form.service" placeholder="예) 18홀 라운딩, 90분 마사지, 오토바이 3일" size="xl" class="mt-1.5 w-full" />
       </div>
 
       <div>
-        <label for="r-name" class="text-[0.9375rem] font-bold text-ink">이름 <span class="text-brand-600">*</span></label>
-        <input id="r-name" v-model="form.name" autocomplete="name" class="field mt-1.5" required>
+        <label for="r-name" class="text-[0.9375rem] font-bold text-highlighted">이름 <span class="text-primary">*</span></label>
+        <UInput id="r-name" v-model="form.name" autocomplete="name" required size="xl" class="mt-1.5 w-full" />
       </div>
 
       <div>
@@ -197,8 +197,8 @@ function reset() {
       </div>
 
       <div>
-        <label for="r-note" class="text-[0.9375rem] font-bold text-ink">요청 사항 (선택)</label>
-        <textarea id="r-note" v-model="form.note" maxlength="1000" class="field mt-1.5" placeholder="픽업 장소, 시간, 기타 요청을 적어 주세요." />
+        <label for="r-note" class="text-[0.9375rem] font-bold text-highlighted">요청 사항 (선택)</label>
+        <UTextarea id="r-note" v-model="form.note" maxlength="1000" placeholder="픽업 장소, 시간, 기타 요청을 적어 주세요." size="xl" class="mt-1.5 w-full" :rows="4" />
       </div>
 
       <!-- 스팸 방지용 숨김 필드: 사람은 채우지 않습니다. -->
@@ -210,10 +210,10 @@ function reset() {
         {{ error }}
       </p>
 
-      <button type="submit" class="btn btn-primary w-full" :disabled="loading">
+      <UButton color="primary" variant="solid" size="xl" block type="submit"  :disabled="loading">
         {{ loading ? '보내는 중…' : '예약 요청 보내기' }}
-      </button>
-      <p class="text-center text-[0.8125rem] leading-relaxed text-ink-2">
+      </UButton>
+      <p class="text-center text-[0.8125rem] leading-relaxed text-muted">
         요청을 보내는 것만으로는 예약이 확정되지 않아요. 업체 확인을 거쳐 확정돼요. 협력업체가 아닌 곳은 라자가 업체에 확인해 연락드려요.
       </p>
     </form>

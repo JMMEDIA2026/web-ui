@@ -119,7 +119,7 @@ async function resetCode(p: Partner) {
       :title="`${created.name} 접속 정보 (이 화면에서만 볼 수 있습니다)`"
     >
       <template #description>
-        <pre class="mt-2 whitespace-pre-wrap break-all bg-white p-3 font-mono text-sm text-highlighted">{{ guide }}</pre>
+        <pre class="mt-2 whitespace-pre-wrap break-all bg-default p-3 font-mono text-sm text-highlighted">{{ guide }}</pre>
         <div class="mt-3 flex gap-2">
           <UButton label="안내문 복사" icon="i-lucide-copy" size="sm" @click="copyGuide" />
           <UButton label="닫기" color="neutral" variant="outline" size="sm" @click="created = null" />
@@ -130,7 +130,7 @@ async function resetCode(p: Partner) {
       </template>
     </UAlert>
 
-    <form class="box3d mt-6 grid gap-4 border border-default bg-white p-5 sm:grid-cols-2 lg:grid-cols-5 lg:items-end" @submit.prevent="create">
+    <form class="box3d mt-6 grid gap-4 border border-default bg-default p-5 sm:grid-cols-2 lg:grid-cols-5 lg:items-end" @submit.prevent="create">
       <div>
         <label for="pid" class="text-xs font-bold text-highlighted">로그인 ID (영문 소문자·숫자·-)</label>
         <UInput id="pid" v-model="form.id" placeholder="golf-a" class="mt-1 w-full" />
@@ -164,7 +164,7 @@ async function resetCode(p: Partner) {
     </div>
 
     <div v-if="partners.length" class="mt-4 grid gap-4 md:grid-cols-2">
-      <article v-for="p in shownPartners" :key="p.id" class="border border-default bg-white p-5" :class="p.active ? '' : 'opacity-60'">
+      <article v-for="p in shownPartners" :key="p.id" class="border border-default bg-default p-5" :class="p.active ? '' : 'opacity-60'">
         <div class="flex items-start justify-between gap-3">
           <div>
             <h2 class="font-bold text-highlighted">

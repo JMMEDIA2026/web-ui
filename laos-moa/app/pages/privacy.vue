@@ -13,20 +13,20 @@ const rows = [
 
 <template>
   <div class="px-4 pt-5 sm:px-5">
-    <h1 data-page-title tabindex="-1" class="text-[1.625rem] font-bold text-ink">
+    <h1 data-page-title tabindex="-1" class="text-[1.625rem] font-bold text-highlighted">
       개인정보 처리 안내
     </h1>
-    <dl class="card mt-4 divide-y divide-line overflow-hidden">
+    <dl class="card mt-4 divide-y divide-default overflow-hidden">
       <div v-for="r in rows" :key="r.k" class="p-4">
-        <dt class="text-[0.875rem] font-bold text-brand-600">
+        <dt class="text-[0.875rem] font-bold text-primary">
           {{ r.k }}
         </dt>
-        <dd class="mt-1 text-[0.9375rem] leading-relaxed text-ink">
+        <dd class="mt-1 text-[0.9375rem] leading-relaxed text-highlighted">
           {{ r.v }}
         </dd>
       </div>
     </dl>
-    <NuxtLink to="/terms" class="mt-4 inline-flex min-h-11 items-center text-[0.9375rem] font-bold text-brand-600 underline">
+    <NuxtLink to="/terms" class="mt-4 inline-flex min-h-11 items-center text-[0.9375rem] font-bold text-primary underline">
       이용약관 보기
     </NuxtLink>
   </div>

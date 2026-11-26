@@ -41,8 +41,7 @@ const tabs = [
   { label: '홈', to: '/' },
   { label: '업체', to: '/businesses' },
   { label: '커뮤니티', to: '/community' },
-  { label: '가이드', to: '/guides' },
-  { label: '환율', to: '/exchange' }
+  { label: '가이드', to: '/guides' }
 ]
 
 // 관리자가 등록한 메인 배너(노출 중인 것만)
@@ -72,12 +71,12 @@ const firstGuides = ['visa', 'telecom', 'health', 'banking']
 
 // 바로가기 카드: 사이트에 실제로 있는 기능만 모았습니다.
 const tools = [
-  { label: '환율 변환', desc: '원·킵·달러 바로 계산', emoji: '💱', to: '/exchange', bg: 'bg-[#FFF4DD]' },
-  { label: '업체 지도', desc: '내 주변 한인 업체', emoji: '🗺️', to: '/businesses', bg: 'bg-[#E7F6EC]' },
-  { label: '커뮤니티', desc: '후기·질문·꿀팁', emoji: '💬', to: '/community', bg: 'bg-[#E8EEFF]' },
-  { label: '생활 가이드', desc: '비자·통신·병원', emoji: '🧭', to: '/guides', bg: 'bg-[#FDEBF1]' },
-  { label: '업체 등록', desc: '무료로 올려요', emoji: '🏪', to: '/advertise', bg: 'bg-[#F0EAFE]' },
-  { label: '회원 정보', desc: '등급과 예약 기록', emoji: '👤', to: '/me', bg: 'bg-[#EEF0F4]' }
+  { label: '환율 변환', desc: '원·킵·달러 바로 계산', emoji: '💱', to: '/exchange', bg: 'bg-primary/10' },
+  { label: '업체 지도', desc: '내 주변 한인 업체', emoji: '🗺️', to: '/businesses', bg: 'bg-[#ECFCCB]' },
+  { label: '커뮤니티', desc: '후기·질문·꿀팁', emoji: '💬', to: '/community', bg: 'bg-primary/5' },
+  { label: '생활 가이드', desc: '비자·통신·병원', emoji: '🧭', to: '/guides', bg: 'bg-[#FEF3C7]' },
+  { label: '업체 등록', desc: '무료로 올려요', emoji: '🏪', to: '/advertise', bg: 'bg-[#E7E5E4]' },
+  { label: '회원 정보', desc: '등급과 예약 기록', emoji: '👤', to: '/me', bg: 'bg-[#F5F5F4]' }
 ]
 
 // 맨 위로 버튼: 아래로 내려왔을 때만 보입니다.
@@ -93,10 +92,10 @@ function toTop() {
 <template>
   <div>
     <!-- 상단: 로고 + 파란 테두리 검색창 -->
-    <header class="sticky top-0 z-30 bg-white/95 px-4 pb-2 backdrop-blur" style="padding-top: calc(10px + env(safe-area-inset-top, 0px))">
+    <header class="sticky top-0 z-30 bg-default/95 px-4 pb-2 backdrop-blur" style="padding-top: calc(10px + env(safe-area-inset-top, 0px))">
       <div class="flex items-center gap-2">
         <NuxtLink to="/" class="-ml-1 inline-flex min-h-11 shrink-0 items-center px-1" aria-label="라자 홈">
-          <AppLogo :size="30" color="#3F4FE0" text-class="text-[1.375rem] text-ink" />
+          <AppLogo :size="30" color="#C2410C" text-class="text-[1.375rem] text-highlighted" />
         </NuxtLink>
         <!-- 검색: 키보드의 검색 동작과 아이콘 버튼은 같은 결과를 실행합니다. -->
         <form class="relative min-w-0 flex-1" role="search" @submit.prevent="search">
@@ -108,10 +107,10 @@ function toTop() {
             enterkeyhint="search"
             autocomplete="off"
             placeholder="한식당, 마사지, 환전…"
-            class="h-12 w-full rounded-full border-2 border-brand-500 bg-white pe-10 ps-3 text-[0.8125rem] text-ink placeholder:text-ink-2 focus-visible:outline-offset-2"
+            class="h-12 w-full rounded-md border-2 border-primary bg-default pe-10 ps-3 text-[0.8125rem] text-highlighted placeholder:text-muted focus-visible:outline-offset-2"
           >
-          <button type="submit" class="absolute end-0.5 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-full text-brand-500" aria-label="검색">
-            <svg viewBox="0 0 24 24" class="size-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6.5" /><path d="M16 16l4.5 4.5" /></svg>
+          <button type="submit" class="absolute end-0.5 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-md text-primary" aria-label="검색">
+            <AppIcon name="search" class="size-6" />
           </button>
         </form>
       </div>
@@ -120,22 +119,22 @@ function toTop() {
       <nav class="no-scrollbar -mx-4 mt-2 flex items-center gap-1.5 overflow-x-auto px-4" aria-label="바로가기 탭">
         <button
           type="button"
-          class="inline-flex min-h-11 shrink-0 items-center gap-1 rounded-full bg-fill pe-2 ps-3 text-[0.875rem] font-bold text-ink"
+          class="inline-flex min-h-11 shrink-0 items-center gap-1 rounded-md bg-muted pe-2 ps-3 text-[0.875rem] font-bold text-highlighted"
           aria-haspopup="dialog"
           :aria-label="`지역 선택. 현재 ${region.label}`"
           @click="sheetOpen = true"
         >
           <span aria-hidden="true">📍</span>
-          <span class="max-w-[7rem] truncate">{{ region.label }}</span>
-          <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6" /></svg>
+          <span class="max-w-[5.5rem] truncate">{{ region.label }}</span>
+          <AppIcon name="down" class="size-4" />
         </button>
-        <span class="mx-0.5 h-4 w-px shrink-0 bg-line" aria-hidden="true" />
+        
         <NuxtLink
           v-for="t in tabs"
           :key="t.to"
           :to="t.to"
-          class="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-full px-3.5 text-[0.9375rem] font-bold"
-          :class="t.to === '/' ? 'bg-ink text-white' : 'text-ink-2'"
+          class="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-md px-2.5 text-[0.9375rem] font-bold"
+          :class="t.to === '/' ? 'bg-inverted text-inverted' : 'text-muted'"
           :aria-current="t.to === '/' ? 'page' : undefined"
         >
           {{ t.label }}
@@ -146,19 +145,23 @@ function toTop() {
     <div class="px-4 pt-3">
       <!-- 메인 배너(광고). 배너가 없으면 소개 카드가 대신 보입니다. -->
       <HomeBanner v-if="banners.length" :banners="banners" />
-      <h1 data-page-title tabindex="-1" :class="banners.length ? 'sr-only' : 'relative overflow-hidden rounded-[20px] bg-gradient-to-br from-brand-500 to-brand-700 px-6 py-8 text-[1.75rem] font-extrabold leading-[1.25] text-white'">
-        오늘도 편하게,<br>라오스 생활.
+      <h1 data-page-title tabindex="-1" :class="banners.length ? 'sr-only' : 'border-y border-default py-7'">
         <template v-if="!banners.length">
-          <span class="mt-2 block max-w-[13rem] text-[0.9375rem] font-semibold leading-snug text-white/90">한인 업체·생활 가이드·환율을 한곳에서</span>
-          <span class="pointer-events-none absolute -bottom-3 end-3 text-[5.5rem] leading-none opacity-95" aria-hidden="true">🌴</span>
+          <span class="block text-[0.75rem] font-bold uppercase tracking-[0.22em] text-primary">Laos · Life · Guide</span>
+          <span class="mt-3 block font-serif text-[3.5rem] italic leading-[0.92] tracking-tight text-highlighted">Laos,<br>made easy.</span>
+          <span class="mt-4 block text-[1.125rem] font-bold leading-snug text-highlighted">오늘도 편하게, 라오스 생활.</span>
+          <span class="mt-1 block text-[0.9375rem] font-normal leading-snug text-muted">한인 업체·생활 가이드·환율을 한곳에서</span>
+        </template>
+        <template v-else>
+          오늘도 편하게,<br>라오스 생활.
         </template>
       </h1>
 
       <!-- 안내 줄: 사장님을 위한 무료 등록 -->
-      <NuxtLink to="/advertise" class="mt-3 flex min-h-12 items-center gap-3 rounded-2xl bg-fill px-3 py-2 active:bg-brand-50">
-        <span class="shrink-0 rounded-full bg-brand-500 px-2.5 py-1 text-[0.75rem] font-bold text-white">사장님</span>
-        <span class="min-w-0 flex-1 truncate text-[0.9375rem] font-semibold text-ink">업체 등록은 무료예요</span>
-        <svg viewBox="0 0 24 24" class="size-5 shrink-0 text-ink-2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 5l7 7-7 7" /></svg>
+      <NuxtLink to="/advertise" class="mt-3 flex min-h-12 items-center gap-3 rounded-2xl bg-muted px-3 py-2 active:bg-primary/5">
+        <span class="shrink-0 rounded-md bg-primary px-2.5 py-1 text-[0.75rem] font-bold text-white">사장님</span>
+        <span class="min-w-0 flex-1 truncate text-[0.9375rem] font-semibold text-highlighted">업체 등록은 무료예요</span>
+        <AppIcon name="next" class="size-5 shrink-0 text-muted" />
       </NuxtLink>
 
       <!-- 주요 카테고리 -->
@@ -166,68 +169,69 @@ function toTop() {
         <ul class="grid grid-cols-4 gap-x-2 gap-y-4">
           <li v-for="s in shortcuts" :key="s.label">
             <NuxtLink :to="s.to" class="group flex flex-col items-center gap-1.5 text-center">
-              <span class="grid size-[68px] place-items-center rounded-[22px] border border-line bg-fill transition-transform group-active:scale-95">
+              <span class="grid size-[68px] place-items-center rounded-lg border border-default bg-muted transition-transform group-active:scale-95">
                 <img :src="s.emoji" alt="" width="40" height="40" class="size-10 object-contain" loading="lazy">
               </span>
-              <span class="text-[0.8125rem] font-semibold leading-tight text-ink">{{ s.label }}</span>
+              <span class="text-[0.8125rem] font-semibold leading-tight text-highlighted">{{ s.label }}</span>
             </NuxtLink>
           </li>
         </ul>
       </nav>
 
       <!-- 오늘의 환율: 카드로 작게. 변환은 환율 화면에서 합니다. -->
-      <NuxtLink to="/exchange" class="mt-6 flex min-h-[72px] items-center gap-3 rounded-[20px] border border-line bg-white px-4 py-3 shadow-[0_6px_20px_-10px_rgb(20_20_40/0.25)] active:bg-fill">
-        <span class="grid size-12 shrink-0 place-items-center rounded-2xl bg-[#FFF4DD] text-[1.5rem]" aria-hidden="true">💱</span>
+      <NuxtLink to="/exchange" class="mt-6 flex min-h-[72px] items-center gap-3 rounded-lg border border-default bg-default px-4 py-3 shadow-[0_6px_20px_-10px_rgb(20_20_40/0.25)] active:bg-muted">
+        <span class="grid size-12 shrink-0 place-items-center rounded-2xl bg-primary/10 text-[1.5rem]" aria-hidden="true">💱</span>
         <span class="min-w-0 flex-1">
-          <span class="block text-[0.8125rem] text-ink-2">오늘의 환율</span>
-          <span v-if="rates" class="block text-[1.0625rem] font-extrabold text-ink">1,000원 = {{ fmtNum(1000 * rates.krwLak) }}킵</span>
-          <span v-else class="block text-[1.0625rem] font-extrabold text-ink">환율 변환·환전업체 보기</span>
+          <span class="block text-[0.8125rem] text-muted">오늘의 환율</span>
+          <span v-if="rates" class="block text-[1.0625rem] font-extrabold text-highlighted">1,000원 = {{ fmtNum(1000 * rates.krwLak) }}킵</span>
+          <span v-else class="block text-[1.0625rem] font-extrabold text-highlighted">환율 변환·환전업체 보기</span>
         </span>
-        <span class="inline-flex shrink-0 items-center text-[0.875rem] font-bold text-brand-500">
+        <span class="inline-flex shrink-0 items-center text-[0.875rem] font-bold text-primary">
           변환하기
-          <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 5l7 7-7 7" /></svg>
+          <AppIcon name="next" class="size-4" />
         </span>
       </NuxtLink>
 
       <!-- 추천 업체: 업종 칩 + 가로로 넘기는 카드 -->
       <section class="mt-9" aria-labelledby="biz-title">
-        <h2 id="biz-title" class="text-[1.375rem] font-extrabold text-ink">
+        <p class="text-[0.6875rem] font-bold uppercase tracking-[0.22em] text-primary">Featured</p>
+        <h2 id="biz-title" class="text-[1.375rem] font-extrabold text-highlighted">
           라자 추천 업체
         </h2>
         <template v-if="real.length">
           <div class="no-scrollbar -mx-4 mt-3 flex gap-2 overflow-x-auto px-4" role="group" aria-label="업종 고르기">
-            <button type="button" class="inline-flex min-h-11 shrink-0 items-center rounded-full px-4 text-[0.9375rem] font-bold" :class="bizTab === 'all' ? 'bg-ink text-white' : 'bg-fill text-ink-2'" :aria-pressed="bizTab === 'all'" @click="bizTab = 'all'">
+            <button type="button" class="inline-flex min-h-11 shrink-0 items-center rounded-md px-4 text-[0.9375rem] font-bold" :class="bizTab === 'all' ? 'bg-inverted text-inverted' : 'bg-muted text-muted'" :aria-pressed="bizTab === 'all'" @click="bizTab = 'all'">
               전체
             </button>
-            <button v-for="c in bizTabs" :key="c.key" type="button" class="inline-flex min-h-11 shrink-0 items-center rounded-full px-4 text-[0.9375rem] font-bold" :class="bizTab === c.key ? 'bg-ink text-white' : 'bg-fill text-ink-2'" :aria-pressed="bizTab === c.key" @click="bizTab = c.key">
+            <button v-for="c in bizTabs" :key="c.key" type="button" class="inline-flex min-h-11 shrink-0 items-center rounded-md px-4 text-[0.9375rem] font-bold" :class="bizTab === c.key ? 'bg-inverted text-inverted' : 'bg-muted text-muted'" :aria-pressed="bizTab === c.key" @click="bizTab = c.key">
               {{ c.label }}
             </button>
           </div>
           <ul class="no-scrollbar -mx-4 mt-3 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-1">
             <li v-for="b in bizShown" :key="b.slug" class="w-[210px] shrink-0 snap-start">
               <NuxtLink :to="`/businesses/${b.slug}`" class="block">
-                <span class="relative block aspect-[4/3] overflow-hidden rounded-[18px] bg-fill">
+                <span class="relative block aspect-[4/3] overflow-hidden rounded-lg bg-muted">
                   <img v-if="b.photos?.length" :src="`/api/photos/${b.photos[0]}?size=thumb`" alt="" width="384" height="288" class="size-full object-cover" loading="lazy">
                   <img v-else :src="`/images/categories/${b.category}.jpg`" alt="" width="384" height="216" class="size-full object-cover" loading="lazy">
-                  <span v-if="b.sponsored" class="absolute start-2 top-2 rounded-full bg-white/95 px-2 py-0.5 text-[0.75rem] font-bold text-ink">광고</span>
+                  <span v-if="b.sponsored" class="absolute start-2 top-2 rounded-md bg-default/95 px-2 py-0.5 text-[0.75rem] font-bold text-highlighted">광고</span>
                 </span>
-                <span class="mt-2 block truncate text-[1rem] font-bold text-ink">{{ b.name }}</span>
-                <span class="block truncate text-[0.8125rem] text-ink-2">{{ categoryMap[b.category]?.label }} · {{ b.area || '비엔티안' }}</span>
+                <span class="mt-2 block truncate text-[1rem] font-bold text-highlighted">{{ b.name }}</span>
+                <span class="block truncate text-[0.8125rem] text-muted">{{ categoryMap[b.category]?.label }} · {{ b.area || '비엔티안' }}</span>
               </NuxtLink>
             </li>
           </ul>
-          <NuxtLink :to="{ path: '/businesses', query: { region: regionKey } }" class="mt-3 flex min-h-12 items-center justify-center gap-1 rounded-2xl border border-line text-[0.9375rem] font-bold text-ink active:bg-fill">
+          <NuxtLink :to="{ path: '/businesses', query: { region: regionKey } }" class="mt-3 flex min-h-12 items-center justify-center gap-1 rounded-2xl border border-default text-[0.9375rem] font-bold text-highlighted active:bg-muted">
             <span>업체 전체보기</span>
           </NuxtLink>
         </template>
-        <div v-else class="mt-3 rounded-[20px] bg-fill p-5 text-center">
-          <p class="font-bold text-ink">
+        <div v-else class="mt-3 rounded-lg bg-muted p-5 text-center">
+          <p class="font-bold text-highlighted">
             아직 등록된 업체가 없어요
           </p>
-          <p class="mt-1 text-[0.875rem] text-ink-2">
+          <p class="mt-1 text-[0.875rem] text-muted">
             사장님이라면 무료로 첫 업체를 등록해 보세요.
           </p>
-          <NuxtLink to="/advertise" class="mt-3 inline-flex min-h-11 items-center rounded-full bg-ink px-5 text-[0.9375rem] font-bold text-white">
+          <NuxtLink to="/advertise" class="mt-3 inline-flex min-h-11 items-center rounded-md bg-inverted px-5 text-[0.9375rem] font-bold text-white">
             업체 등록 문의
           </NuxtLink>
         </div>
@@ -235,78 +239,81 @@ function toTop() {
 
       <!-- 커뮤니티 새 글 -->
       <section class="mt-10" aria-labelledby="cm-title">
-        <h2 id="cm-title" class="text-[1.375rem] font-extrabold text-ink">
+        <p class="text-[0.6875rem] font-bold uppercase tracking-[0.22em] text-primary">Community</p>
+        <h2 id="cm-title" class="text-[1.375rem] font-extrabold text-highlighted">
           라자 커뮤니티
         </h2>
-        <p class="mt-0.5 text-[0.875rem] text-ink-2">
+        <p class="mt-0.5 text-[0.875rem] text-muted">
           후기, 질문, 꿀팁을 나눠요
         </p>
-        <ul v-if="latest?.posts.length" class="mt-1 divide-y divide-line">
+        <ul v-if="latest?.posts.length" class="mt-1 divide-y divide-default">
           <li v-for="p in latest.posts" :key="p.id">
             <PostCard :post="p" />
           </li>
         </ul>
-        <div v-else class="mt-3 rounded-[20px] bg-fill p-5 text-center">
-          <p class="font-bold text-ink">
+        <div v-else class="mt-3 rounded-lg bg-muted p-5 text-center">
+          <p class="font-bold text-highlighted">
             <span aria-hidden="true">💬 </span>첫 글을 기다리고 있어요
           </p>
-          <p class="mt-1 text-[0.875rem] text-ink-2">
+          <p class="mt-1 text-[0.875rem] text-muted">
             다녀온 곳 후기나 궁금한 점을 남겨 보세요.
           </p>
         </div>
-        <NuxtLink to="/community" class="mt-3 flex min-h-12 items-center justify-center rounded-2xl border border-line text-[0.9375rem] font-bold text-ink active:bg-fill">
+        <NuxtLink to="/community" class="mt-3 flex min-h-12 items-center justify-center rounded-2xl border border-default text-[0.9375rem] font-bold text-highlighted active:bg-muted">
           커뮤니티 가기
         </NuxtLink>
       </section>
 
       <!-- 처음 오셨나요?: 순서대로 보면 되는 가이드 -->
       <section class="mt-10" aria-labelledby="guide-title">
-        <h2 id="guide-title" class="text-[1.375rem] font-extrabold text-ink">
+        <p class="text-[0.6875rem] font-bold uppercase tracking-[0.22em] text-primary">Start here</p>
+        <h2 id="guide-title" class="text-[1.375rem] font-extrabold text-highlighted">
           처음 오셨나요?
         </h2>
-        <p class="mt-0.5 text-[0.875rem] text-ink-2">
+        <p class="mt-0.5 text-[0.875rem] text-muted">
           도착하면 이 순서로 보면 편해요
         </p>
         <ol class="mt-3">
           <li v-for="(g, i) in firstGuides" :key="g.slug">
             <NuxtLink :to="`/guides/${g.slug}`" class="flex min-h-[96px] items-center gap-4 py-3 active:opacity-70">
-              <span class="w-7 shrink-0 text-center text-[2rem] font-black italic leading-none text-ink" aria-hidden="true">{{ i + 1 }}</span>
+              <span class="w-8 shrink-0 text-center font-serif text-[2.75rem] font-normal italic leading-none text-primary" aria-hidden="true">{{ i + 1 }}</span>
               <span class="min-w-0 flex-1">
-                <span class="block text-[1.0625rem] font-bold text-ink">{{ g.title }}</span>
-                <span class="mt-0.5 block text-[0.875rem] leading-snug text-ink-2">{{ g.summary }}</span>
+                <span class="block text-[1.0625rem] font-bold text-highlighted">{{ g.title }}</span>
+                <span class="mt-0.5 block text-[0.875rem] leading-snug text-muted">{{ g.summary }}</span>
               </span>
-              <span class="grid size-[72px] shrink-0 place-items-center rounded-[18px] bg-fill">
+              <span class="grid size-[72px] shrink-0 place-items-center rounded-lg bg-muted">
                 <img :src="g.emoji" alt="" width="44" height="44" class="size-11 object-contain" loading="lazy">
               </span>
             </NuxtLink>
           </li>
         </ol>
-        <NuxtLink to="/guides" class="mt-1 flex min-h-12 items-center justify-center rounded-2xl border border-line text-[0.9375rem] font-bold text-ink active:bg-fill">
+        <NuxtLink to="/guides" class="mt-1 flex min-h-12 items-center justify-center rounded-2xl border border-default text-[0.9375rem] font-bold text-highlighted active:bg-muted">
           가이드 모두 보기
         </NuxtLink>
       </section>
 
       <!-- 바로가기 모음: 사이트에 실제로 있는 기능 -->
       <section class="mt-10" aria-labelledby="tools-title">
-        <h2 id="tools-title" class="text-[1.375rem] font-extrabold text-ink">
+        <p class="text-[0.6875rem] font-bold uppercase tracking-[0.22em] text-primary">Shortcuts</p>
+        <h2 id="tools-title" class="text-[1.375rem] font-extrabold text-highlighted">
           라자 바로가기
         </h2>
         <ul class="mt-3 grid grid-cols-2 gap-3">
           <li v-for="t in tools" :key="t.label">
-            <NuxtLink :to="t.to" class="flex min-h-[132px] flex-col justify-between rounded-[20px] p-4 active:opacity-80" :class="t.bg">
+            <NuxtLink :to="t.to" class="flex min-h-[132px] flex-col justify-between rounded-lg p-4 active:opacity-80" :class="t.bg">
               <span class="text-[2.25rem] leading-none" aria-hidden="true">{{ t.emoji }}</span>
               <span>
-                <span class="block text-[1.0625rem] font-extrabold text-ink">{{ t.label }}</span>
-                <span class="block text-[0.8125rem] text-ink/70">{{ t.desc }}</span>
+                <span class="block text-[1.0625rem] font-extrabold text-highlighted">{{ t.label }}</span>
+                <span class="block text-[0.8125rem] text-highlighted/70">{{ t.desc }}</span>
               </span>
             </NuxtLink>
           </li>
         </ul>
       </section>
 
-      <p class="mt-8 text-center text-[0.8125rem] text-ink-2">
+      <p class="mt-8 text-center text-[0.8125rem] text-muted">
         업체를 운영하시나요?
-        <NuxtLink to="/advertise" class="inline-flex min-h-11 items-center font-bold text-ink underline underline-offset-2">업체 등록·광고 문의</NuxtLink>
+        <NuxtLink to="/advertise" class="inline-flex min-h-11 items-center font-bold text-highlighted underline underline-offset-2">업체 등록·광고 문의</NuxtLink>
       </p>
     </div>
 
@@ -314,12 +321,12 @@ function toTop() {
     <button
       v-if="showTop"
       type="button"
-      class="fixed end-4 z-30 grid size-12 place-items-center rounded-2xl border border-line bg-white text-ink shadow-[0_6px_18px_-6px_rgb(20_20_40/0.3)]"
+      class="fixed end-4 z-30 grid size-12 place-items-center rounded-2xl border border-default bg-default text-highlighted shadow-[0_6px_18px_-6px_rgb(20_20_40/0.3)]"
       style="bottom: calc(92px + env(safe-area-inset-bottom, 0px))"
       aria-label="맨 위로"
       @click="toTop"
     >
-      <svg viewBox="0 0 24 24" class="size-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 15l6-6 6 6" /></svg>
+      <AppIcon name="up" class="size-6" />
     </button>
   </div>
 </template>

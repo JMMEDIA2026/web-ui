@@ -178,7 +178,7 @@ async function create() {
       사이트의 업체 목록과 지도에 나오는 업체입니다. 사장님 계정(협력업체)을 연결하면 그 업체에 "예약 요청하기" 버튼이 생깁니다.
     </p>
 
-    <details class="box3d mt-6 border border-default bg-white">
+    <details class="box3d mt-6 border border-default bg-default">
       <summary class="cursor-pointer px-5 py-4 font-bold text-highlighted">
         + 새 업체 등록
       </summary>
@@ -234,7 +234,7 @@ async function create() {
     </details>
 
     <div v-if="rows.length" class="mt-6 grid gap-4 md:grid-cols-2">
-      <article v-for="b in rows" :key="b.id" class="border border-default bg-white p-5" :class="b.active ? '' : 'opacity-60'">
+      <article v-for="b in rows" :key="b.id" class="border border-default bg-default p-5" :class="b.active ? '' : 'opacity-60'">
         <div class="flex items-start justify-between gap-3">
           <div class="min-w-0">
             <h2 class="font-bold text-highlighted">
@@ -298,7 +298,7 @@ async function create() {
             <input :id="`photo-${b.id}`" type="file" accept="image/*" multiple class="peer sr-only" :disabled="uploadingId === b.id || photosOf(b).length >= MAX_PHOTOS" @change="uploadPhotos(b, $event)">
             <label
               :for="`photo-${b.id}`"
-              class="inline-flex cursor-pointer items-center gap-1.5 border border-default bg-white px-3 py-2 text-sm font-bold text-highlighted peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+              class="inline-flex cursor-pointer items-center gap-1.5 border border-default bg-default px-3 py-2 text-sm font-bold text-highlighted peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
             >
               <UIcon name="i-lucide-image-plus" class="size-4" />
               {{ uploadingId === b.id ? '올리는 중…' : '사진 올리기 (여러 장 가능)' }}

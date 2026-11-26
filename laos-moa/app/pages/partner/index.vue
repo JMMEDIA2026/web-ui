@@ -75,7 +75,7 @@ async function update(id: string, patch: { status?: StatusKey, partnerMemo?: str
         size="sm"
         :color="tab === t.value ? 'primary' : 'neutral'"
         :variant="tab === t.value ? 'solid' : 'outline'"
-        :class="tab === t.value ? '' : 'bg-white'"
+        :class="tab === t.value ? '' : 'bg-default'"
         @click="tab = t.value"
       />
       <UButton icon="i-lucide-refresh-cw" size="sm" color="neutral" variant="ghost" label="새로고침" :loading="loading" @click="load" />

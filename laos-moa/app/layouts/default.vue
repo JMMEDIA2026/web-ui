@@ -28,13 +28,13 @@ onBeforeUnmount(() => stop?.())
 
 <template>
   <div
-    class="laja-public mx-auto min-h-dvh w-full max-w-[560px] bg-app-bg sm:border-x sm:border-line"
+    class="laja-public mx-auto min-h-dvh w-full max-w-[560px] bg-default sm:border-x sm:border-default"
     :style="{ '--nav-h': navVisible ? '76px' : '0px' }"
   >
     <a href="#main-content" class="skip-link">본문 바로가기</a>
     <header
       v-if="showHeader"
-      class="sticky top-0 z-30 flex items-center justify-between border-b border-line bg-surface px-4"
+      class="sticky top-0 z-30 flex items-center justify-between border-b border-default bg-default px-4"
       style="height: calc(56px + env(safe-area-inset-top, 0px)); padding-top: env(safe-area-inset-top, 0px)"
     >
       <NuxtLink to="/" class="-ml-1 inline-flex min-h-11 shrink-0 items-center px-1" aria-label="라자 홈">
@@ -44,7 +44,7 @@ onBeforeUnmount(() => stop?.())
       <button
         v-if="showRegion"
         type="button"
-        class="inline-flex min-h-11 min-w-0 items-center gap-1 rounded-lg bg-brand-100 pl-3 pr-2 text-[0.9375rem] font-bold text-brand-600"
+        class="inline-flex min-h-11 min-w-0 items-center gap-1 rounded-lg bg-primary/10 pl-3 pr-2 text-[0.9375rem] font-bold text-primary"
         aria-haspopup="dialog"
         :aria-label="`지역 선택. 현재 ${region.label}`"
         @click="sheetOpen = true"

@@ -37,10 +37,10 @@ async function logout() {
 
 <template>
   <div class="min-h-screen bg-slate-50">
-    <header class="border-b border-default bg-white">
+    <header class="border-b border-default bg-default">
       <UContainer class="flex h-16 items-center gap-3">
         <NuxtLink :to="isPartner ? '/partner' : '/admin'" class="flex items-center gap-2 font-extrabold">
-          <AppLogo :size="28" text-class="text-[1.25rem] text-brand-600" />
+          <AppLogo :size="28" text-class="text-[1.25rem] text-primary" />
           <UBadge :color="isPartner ? 'neutral' : 'primary'" variant="solid" class="shrink-0">
             {{ isPartner ? '협력업체' : '관리자' }}<span v-if="!isPartner" class="hidden sm:inline">&nbsp;· 10등급</span>
           </UBadge>

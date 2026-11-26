@@ -140,7 +140,7 @@ async function remove(id: string) {
       메인 화면 맨 위에 슬라이드로 나오는 광고 배너입니다. 이미지는 <b>가로 2 : 세로 1</b> 비율(권장 1200×600)로 준비해 주세요. 다른 비율은 가운데를 기준으로 잘려서 보입니다. 배너가 하나도 없으면 기존 제목이 나옵니다.
     </p>
 
-    <details class="box3d mt-6 border border-default bg-white" open>
+    <details class="box3d mt-6 border border-default bg-default" open>
       <summary class="cursor-pointer px-5 py-4 font-bold text-highlighted">
         + 새 배너 등록
       </summary>
@@ -150,7 +150,7 @@ async function remove(id: string) {
             배너 이미지 (2:1로 자동 잘라서 줄입니다)
           </p>
           <input id="banner-new-image" type="file" accept="image/*" class="peer sr-only" :disabled="picking" @change="pickImage($event)">
-          <label for="banner-new-image" class="mt-1 inline-flex cursor-pointer items-center gap-1.5 border border-default bg-white px-3 py-2 text-sm font-bold text-highlighted peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary peer-disabled:opacity-50">
+          <label for="banner-new-image" class="mt-1 inline-flex cursor-pointer items-center gap-1.5 border border-default bg-default px-3 py-2 text-sm font-bold text-highlighted peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary peer-disabled:opacity-50">
             <UIcon name="i-lucide-image-plus" class="size-4" />
             {{ picking ? '처리 중…' : (preview ? '이미지 다시 고르기' : '이미지 고르기') }}
           </label>
@@ -181,7 +181,7 @@ async function remove(id: string) {
     </details>
 
     <div v-if="rows.length" class="mt-6 grid gap-4 md:grid-cols-2">
-      <article v-for="(b, i) in rows" :key="b.id" class="border border-default bg-white p-5" :class="b.status === 'live' ? '' : 'opacity-80'">
+      <article v-for="(b, i) in rows" :key="b.id" class="border border-default bg-default p-5" :class="b.status === 'live' ? '' : 'opacity-80'">
         <div class="flex items-center justify-between gap-2">
           <div class="flex items-center gap-2">
             <UBadge :label="statusText[b.status].label" :color="statusText[b.status].color" variant="subtle" />
@@ -202,7 +202,7 @@ async function remove(id: string) {
         <img :src="`/api/admin/banners/${b.id}/image?v=${b.v}`" :alt="`${b.title} 배너`" class="mt-2 aspect-[2/1] w-full border border-default object-cover">
         <div class="mt-2">
           <input :id="`bn-img-${b.id}`" type="file" accept="image/*" class="peer sr-only" :disabled="picking" @change="pickImage($event, b.id)">
-          <label :for="`bn-img-${b.id}`" class="inline-flex cursor-pointer items-center gap-1.5 border border-default bg-white px-2.5 py-1.5 text-xs font-bold text-highlighted peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary peer-disabled:opacity-50">
+          <label :for="`bn-img-${b.id}`" class="inline-flex cursor-pointer items-center gap-1.5 border border-default bg-default px-2.5 py-1.5 text-xs font-bold text-highlighted peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary peer-disabled:opacity-50">
             이미지 바꾸기
           </label>
         </div>

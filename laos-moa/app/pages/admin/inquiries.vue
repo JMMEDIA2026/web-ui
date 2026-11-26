@@ -67,7 +67,7 @@ async function copy(text: string) {
     </p>
 
     <div v-if="rows.length" class="mt-6 flex flex-col gap-4">
-      <article v-for="q in rows" :key="q.id" class="border border-default bg-white p-5" :class="q.status === 'new' ? 'border-l-4 border-l-rose-400' : ''">
+      <article v-for="q in rows" :key="q.id" class="border border-default bg-default p-5" :class="q.status === 'new' ? 'border-l-4 border-l-rose-400' : ''">
         <div class="flex flex-wrap items-center gap-2">
           <span class="font-bold text-highlighted">{{ q.company }}</span>
           <UBadge :label="productLabel[q.product] ?? q.product" color="primary" variant="subtle" />

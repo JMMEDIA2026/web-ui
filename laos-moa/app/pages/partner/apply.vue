@@ -28,7 +28,7 @@ async function submit() {
 
 <template>
   <UContainer class="flex min-h-[70vh] items-center justify-center py-12">
-    <div v-if="done" class="box3d w-full max-w-md border border-default bg-white p-7 text-center">
+    <div v-if="done" class="box3d w-full max-w-md border border-default bg-default p-7 text-center">
       <h1 class="text-xl font-extrabold text-highlighted">
         신청이 접수되었어요
       </h1>
@@ -38,7 +38,7 @@ async function submit() {
       <UButton to="/partner/login" label="협력업체 로그인으로" color="primary" class="mt-5" />
     </div>
 
-    <form v-else class="box3d w-full max-w-md border border-default bg-white p-7" @submit.prevent="submit">
+    <form v-else class="box3d w-full max-w-md border border-default bg-default p-7" @submit.prevent="submit">
       <h1 class="text-xl font-extrabold text-highlighted">
         협력업체 가입 신청
       </h1>
@@ -55,7 +55,7 @@ async function submit() {
       <ContactInput id="pa-contact" v-model="form.contact" label="연락받을 방법" required class="mt-4" />
 
       <label for="pa-cat" class="mt-4 block text-sm font-bold text-highlighted">업종 <span class="text-primary">*</span></label>
-      <select id="pa-cat" v-model="form.category" class="mt-2 w-full border border-default bg-white px-3 py-2.5 text-base">
+      <select id="pa-cat" v-model="form.category" class="mt-2 w-full border border-default bg-default px-3 py-2.5 text-base">
         <option value="" disabled>
           업종을 선택하세요
         </option>

@@ -61,16 +61,16 @@ const current = computed(() => (board.value === 'all' ? null : boardMap[board.va
   <div class="px-4 pt-4">
     <div class="flex items-start justify-between gap-3">
       <div class="min-w-0">
-        <h1 data-page-title tabindex="-1" class="text-[1.625rem] font-extrabold text-ink">
+        <h1 data-page-title tabindex="-1" class="text-[1.625rem] font-extrabold text-highlighted">
           커뮤니티
         </h1>
-        <p class="mt-0.5 text-[0.9375rem] text-ink-2">
+        <p class="mt-0.5 text-[0.9375rem] text-muted">
           {{ current ? current.desc : '후기부터 질문까지, 라오스 이야기를 나눠요' }}
         </p>
       </div>
-      <NuxtLink :to="writeLink" class="btn btn-primary btn-sm shrink-0">
+      <UButton color="primary" variant="solid" size="md" class="shrink-0" :to="writeLink">
         <span aria-hidden="true">✏️</span>글쓰기
-      </NuxtLink>
+      </UButton>
     </div>
 
     <!-- 게시판 고르기 -->
@@ -83,44 +83,44 @@ const current = computed(() => (board.value === 'all' ? null : boardMap[board.va
       </button>
     </div>
 
-    <p v-if="business" class="mt-3 rounded-2xl bg-brand-50 px-3 py-2 text-[0.875rem] font-semibold text-brand-600">
+    <p v-if="business" class="mt-3 rounded-2xl bg-primary/5 px-3 py-2 text-[0.875rem] font-semibold text-primary">
       한 업체의 후기만 보고 있어요.
       <NuxtLink to="/community?board=review" class="ms-1 underline">전체 후기 보기</NuxtLink>
     </p>
 
-    <p class="mt-3 text-[0.8125rem] text-ink-2" aria-live="polite">
+    <p class="mt-3 text-[0.8125rem] text-muted" aria-live="polite">
       글 {{ total }}개
     </p>
 
-    <ul v-if="posts.length" class="divide-y divide-line">
+    <ul v-if="posts.length" class="divide-y divide-default">
       <li v-for="p in posts" :key="p.id">
         <PostCard :post="p" :show-board="board === 'all'" />
       </li>
     </ul>
-    <div v-else-if="failed" class="mt-3 rounded-[20px] bg-fill p-5 text-center" role="alert">
-      <p class="font-bold text-ink">
+    <div v-else-if="failed" class="mt-3 rounded-lg bg-muted p-5 text-center" role="alert">
+      <p class="font-bold text-highlighted">
         글을 불러오지 못했어요
       </p>
-      <button type="button" class="btn btn-primary btn-sm mt-3" @click="load(true)">
+      <UButton color="primary" variant="solid" size="md" class="mt-3" type="button"  @click="load(true)">
         다시 불러오기
-      </button>
+      </UButton>
     </div>
-    <div v-else class="mt-3 rounded-[20px] bg-fill p-6 text-center">
+    <div v-else class="mt-3 rounded-lg bg-muted p-6 text-center">
       <p class="text-[2rem]" aria-hidden="true">
         {{ current?.emoji ?? '💬' }}
       </p>
-      <p class="mt-1 font-bold text-ink">
+      <p class="mt-1 font-bold text-highlighted">
         아직 글이 없어요
       </p>
-      <p class="mt-1 text-[0.875rem] text-ink-2">
+      <p class="mt-1 text-[0.875rem] text-muted">
         첫 번째 글을 남겨 보세요.
       </p>
-      <NuxtLink :to="writeLink" class="btn btn-primary btn-sm mt-3">
+      <UButton color="primary" variant="solid" size="md" class="mt-3" :to="writeLink">
         {{ member ? '글쓰기' : '로그인하고 글쓰기' }}
-      </NuxtLink>
+      </UButton>
     </div>
 
-    <button v-if="hasMore" type="button" class="mt-3 flex min-h-12 w-full items-center justify-center rounded-2xl border border-line text-[0.9375rem] font-bold text-ink active:bg-fill" :disabled="loading" @click="load(false)">
+    <button v-if="hasMore" type="button" class="mt-3 flex min-h-12 w-full items-center justify-center rounded-2xl border border-default text-[0.9375rem] font-bold text-highlighted active:bg-muted" :disabled="loading" @click="load(false)">
       {{ loading ? '불러오는 중…' : '더 보기' }}
     </button>
   </div>

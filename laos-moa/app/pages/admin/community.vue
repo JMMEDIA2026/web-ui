@@ -63,7 +63,7 @@ async function remove(type: 'post' | 'comment', id: string) {
         신고된 글이 없어요.
       </p>
       <ul class="mt-2 space-y-2">
-        <li v-for="p in posts" :key="p.id" class="box3d border border-default bg-white p-4">
+        <li v-for="p in posts" :key="p.id" class="box3d border border-default bg-default p-4">
           <div class="flex flex-wrap items-center gap-2 text-xs text-muted">
             <UBadge :label="`신고 ${p.report_count}`" color="error" variant="subtle" />
             <UBadge v-if="p.hidden" label="숨김" color="neutral" variant="solid" />
@@ -90,7 +90,7 @@ async function remove(type: 'post' | 'comment', id: string) {
         신고된 댓글이 없어요.
       </p>
       <ul class="mt-2 space-y-2">
-        <li v-for="c in comments" :key="c.id" class="box3d border border-default bg-white p-4">
+        <li v-for="c in comments" :key="c.id" class="box3d border border-default bg-default p-4">
           <div class="flex flex-wrap items-center gap-2 text-xs text-muted">
             <UBadge :label="`신고 ${c.report_count}`" color="error" variant="subtle" />
             <UBadge v-if="c.hidden" label="숨김" color="neutral" variant="solid" />

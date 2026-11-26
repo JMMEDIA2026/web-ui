@@ -40,14 +40,14 @@ const cards = computed(() => [
     </p>
 
     <div class="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-5">
-      <NuxtLink v-for="c in cards" :key="c.label" :to="c.to" class="box3d lift flex flex-col gap-3 border border-default bg-white p-4">
+      <NuxtLink v-for="c in cards" :key="c.label" :to="c.to" class="box3d lift flex flex-col gap-3 border border-default bg-default p-4">
         <span class="flex size-10 items-center justify-center" :class="c.tone"><UIcon :name="c.icon" class="size-5" /></span>
         <span class="text-3xl font-extrabold tabular-nums text-highlighted">{{ c.value ?? '-' }}</span>
         <span class="text-xs text-muted">{{ c.label }}</span>
       </NuxtLink>
     </div>
 
-    <section class="mt-8 border border-default bg-white">
+    <section class="mt-8 border border-default bg-default">
       <div class="flex items-center justify-between border-b border-default px-5 py-3">
         <h2 class="font-bold text-highlighted">
           최근 예약

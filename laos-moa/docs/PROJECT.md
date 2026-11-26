@@ -12,7 +12,7 @@
 | 만든 방식 | Nuxt 4 + Nuxt UI 4 + Tailwind 4, 모바일 우선 (최대 폭 560px) |
 | 서버 | Cloudflare Workers (이름 `laos-moa`), 정적 파일은 Worker 안에 포함 |
 | 데이터베이스 | Cloudflare D1 `laos-moa` (이미지도 base64로 DB에 저장, R2 없음) |
-| 디자인 | 흰 바탕 + 파랑(`#3F4FE0`) + 검정 글자, 3D 이모지·SNS 로고 아이콘 |
+| 디자인 | Nuxt UI 테마 빌더 설정: 주 색 orange, 중립 stone, 모서리 0.125rem, 글꼴 Bricolage Grotesque + Instrument Serif, 아이콘 Tabler |
 | 알림 | Slack Incoming Webhook (Worker 비밀 값 `INQUIRY_WEBHOOK_URL`) |
 
 ## 2. 화면과 기능
@@ -41,13 +41,16 @@
 
 ## 3. 디자인 규칙
 
-- 색은 토큰으로만 씁니다: `brand-*`(파랑), `ink`/`ink-2`(글자), `line`, `fill`(연한 회색 면), `gold-*`(광고 표시). 정의는 `app/assets/css/main.css`.
-- **홈·전체 공통**: 카드 모서리 16~20px, 선택 칩은 검정 알약, 제목은 굵은 고딕(명조체 없음).
-- **접근성 기준**: 터치 영역 44px 이상, 글자 대비 4.5:1, 입력 테두리 3:1, 화면 전환 시 제목으로 포커스, 본문 건너뛰기 링크, axe 위반 0건 유지.
-- **이모지·아이콘**: Microsoft Fluent Emoji 3D(MIT), SNS 로고 Simple Icons(CC0), 방향 아이콘은 직접 그린 선 아이콘.
-- 하단 메뉴 5개: 홈 / 업체 / **커뮤니티(가운데)** / 가이드 / 내 정보. 화면 아래에 떠 있는 둥근 막대.
-- 버튼은 입력이 비어 있어도 눌립니다. 첫 번째 문제만 한국어로 알려 주고 그 칸으로 커서를 옮깁니다.
-- 문구는 해요체. 서버 오류 문구도 해요체로 통일.
+- **Nuxt UI 스킬 규칙을 따릅니다** (`skills/nuxt-ui`): `UApp`으로 감싸기, **의미 색만 사용**(`text-highlighted`, `text-muted`, `bg-default`, `bg-muted`, `border-default`, `text-primary`, `bg-primary`). 팔레트 색(`text-gray-500`)이나 임의 색상 코드를 새로 쓰지 않습니다.
+- **테마**: `app/app.config.ts`(주 색 orange, 중립 stone, 버튼·입력 최소 높이 44px), `app/assets/css/main.css`(모서리, 글꼴, 색 단계).
+- **접근성을 위한 한 단계 조정**: 주 색은 `oklch(0.515 0.195 38.4)`(orange-700보다 약간 진함), 보조 글자는 stone-600, 입력 테두리는 stone-500. 흰 글자 대비 4.5:1, 테두리 3:1을 지키기 위해서입니다.
+- **컴포넌트**: 버튼은 `UButton`, 입력은 `UInput`·`UTextarea`. 선택 목록은 휴대폰 기본 선택창이 편해서 네이티브 `<select class="field">`를 씁니다.
+- **글꼴**: 영문·숫자는 Bricolage Grotesque, 한글은 Pretendard, 큰 숫자와 영문 제목은 Instrument Serif(이탤릭 포함).
+- **모서리**: 거의 직각(2~4px). 둥근 알약·원 모양을 새로 만들지 않습니다.
+- **접근성 기준**: 터치 영역 44px 이상, 글자 대비 4.5:1, 입력 테두리 3:1, 화면 전환 시 제목으로 포커스, 본문 건너뛰기 링크.
+- **아이콘**: 선 아이콘은 Tabler(`app/utils/tabler.ts`, `AppIcon`), 업종·가이드는 Microsoft Fluent Emoji 3D(MIT), SNS 로고는 Simple Icons(CC0, `SnsIcon`).
+- 하단 메뉴 5개: 홈 / 업체 / **커뮤니티(가운데)** / 가이드 / 내 정보.
+- 버튼은 입력이 비어 있어도 눌립니다. 첫 번째 문제만 한국어로 알려 주고 그 칸으로 커서를 옮깁니다. 문구는 해요체.
 
 ## 4. 데이터 구조 (D1)
 

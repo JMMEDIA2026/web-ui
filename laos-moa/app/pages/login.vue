@@ -37,23 +37,23 @@ async function submit() {
 
 <template>
   <div class="px-4 pt-5 sm:px-5">
-    <h1 data-page-title tabindex="-1" class="text-[1.625rem] font-bold text-ink">
+    <h1 data-page-title tabindex="-1" class="text-[1.625rem] font-bold text-highlighted">
       로그인
     </h1>
-    <p v-if="needLogin" class="mt-2 rounded-lg bg-brand-100 p-3 text-[0.9375rem] font-semibold text-brand-700" role="status">
+    <p v-if="needLogin" class="mt-2 rounded-lg bg-primary/10 p-3 text-[0.9375rem] font-semibold text-primary" role="status">
       {{ needText }}
     </p>
 
     <form class="mt-4 space-y-4" novalidate @submit.prevent="submit">
       <div>
-        <label for="l-email" class="text-[0.9375rem] font-bold text-ink">이메일</label>
-        <input id="l-email" v-model="form.email" type="email" inputmode="email" autocomplete="email" class="field mt-1.5" required>
+        <label for="l-email" class="text-[0.9375rem] font-bold text-highlighted">이메일</label>
+        <UInput id="l-email" v-model="form.email" type="email" inputmode="email" autocomplete="email" required size="xl" class="mt-1.5 w-full" />
       </div>
       <div>
-        <label for="l-pw" class="text-[0.9375rem] font-bold text-ink">비밀번호</label>
-        <input id="l-pw" v-model="form.password" :type="showPw ? 'text' : 'password'" autocomplete="current-password" class="field mt-1.5" required>
-        <label class="mt-1 flex min-h-11 cursor-pointer items-center gap-3 text-[0.9375rem] text-ink">
-          <input v-model="showPw" type="checkbox" class="size-6 shrink-0 accent-brand-500">
+        <label for="l-pw" class="text-[0.9375rem] font-bold text-highlighted">비밀번호</label>
+        <UInput id="l-pw" v-model="form.password" :type="showPw ? 'text' : 'password'" autocomplete="current-password" required size="xl" class="mt-1.5 w-full" />
+        <label class="mt-1 flex min-h-11 cursor-pointer items-center gap-3 text-[0.9375rem] text-highlighted">
+          <input v-model="showPw" type="checkbox" class="size-6 shrink-0 accent-primary">
           비밀번호 보이기
         </label>
       </div>
@@ -62,24 +62,24 @@ async function submit() {
         {{ error }}
       </p>
 
-      <button type="submit" class="btn btn-primary w-full" :disabled="loading">
+      <UButton color="primary" variant="solid" size="xl" block type="submit"  :disabled="loading">
         {{ loading ? '로그인 중…' : '로그인' }}
-      </button>
+      </UButton>
     </form>
 
-    <p class="mt-5 text-center text-[0.9375rem] text-ink-2">
+    <p class="mt-5 text-center text-[0.9375rem] text-muted">
       아직 회원이 아니신가요?
     </p>
-    <NuxtLink :to="{ path: '/signup', query: route.query.next ? { next: route.query.next } : {} }" class="btn btn-outline mt-2 w-full">
+    <UButton color="neutral" variant="outline" size="xl" block class="mt-2" :to="{ path: '/signup', query: route.query.next ? { next: route.query.next } : {} }">
       회원가입
-    </NuxtLink>
+    </UButton>
 
-    <div class="mt-8 border-t border-line pt-2">
+    <div class="mt-8 border-t border-default pt-2">
       <nav class="flex gap-4" aria-label="약관">
-        <NuxtLink to="/terms" class="inline-flex min-h-11 items-center text-[0.8125rem] font-bold text-ink-2 underline">
+        <NuxtLink to="/terms" class="inline-flex min-h-11 items-center text-[0.8125rem] font-bold text-muted underline">
           이용약관
         </NuxtLink>
-        <NuxtLink to="/privacy" class="inline-flex min-h-11 items-center text-[0.8125rem] font-bold text-ink-2 underline">
+        <NuxtLink to="/privacy" class="inline-flex min-h-11 items-center text-[0.8125rem] font-bold text-muted underline">
           개인정보 처리 안내
         </NuxtLink>
       </nav>

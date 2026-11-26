@@ -68,43 +68,43 @@ async function submit() {
 <template>
   <div class="px-4 pt-3 sm:px-5">
     <div class="flex items-center gap-1">
-      <NuxtLink to="/me" class="-ml-2 grid size-11 place-items-center rounded-full text-ink" aria-label="내 정보로">
+      <NuxtLink to="/me" class="-ml-2 grid size-11 place-items-center rounded-md text-highlighted" aria-label="내 정보로">
         <AppIcon name="back" class="size-7" />
       </NuxtLink>
-      <h1 data-page-title tabindex="-1" class="text-[1.5rem] font-bold text-ink">
+      <h1 data-page-title tabindex="-1" class="text-[1.5rem] font-bold text-highlighted">
         업체 등록·광고 문의
       </h1>
     </div>
-    <p class="mt-2 text-[0.9375rem] leading-relaxed text-ink-2">
+    <p class="mt-2 text-[0.9375rem] leading-relaxed text-muted">
       라오스에서 사업장을 운영하신다면 무료로 등록해 보세요. 광고는 항상 “광고”로 표시해서 일반 정보와 구분해요.
     </p>
 
     <ul class="mt-4 space-y-3">
       <li v-for="t in tiers" :key="t.title" class="card p-4">
-        <h2 class="text-[1.125rem] font-bold text-ink">
+        <h2 class="text-[1.125rem] font-bold text-highlighted">
           {{ t.title }}
         </h2>
         <ul class="mt-2 space-y-1.5">
-          <li v-for="i in t.items" :key="i" class="flex items-start gap-2 text-[0.9375rem] text-ink">
-            <AppIcon name="check" class="mt-0.5 size-5 shrink-0 text-brand-500" />
+          <li v-for="i in t.items" :key="i" class="flex items-start gap-2 text-[0.9375rem] text-highlighted">
+            <AppIcon name="check" class="mt-0.5 size-5 shrink-0 text-primary" />
             {{ i }}
           </li>
         </ul>
-        <p class="mt-3 text-[0.875rem] font-semibold text-brand-600">
+        <p class="mt-3 text-[0.875rem] font-semibold text-primary">
           {{ t.price }}
         </p>
       </li>
     </ul>
 
     <section id="inquiry" class="card mt-6 scroll-mt-4 p-4" aria-labelledby="inq-title">
-      <h2 id="inq-title" class="text-[1.25rem] font-bold text-ink">
+      <h2 id="inq-title" class="text-[1.25rem] font-bold text-highlighted">
         문의 남기기
       </h2>
-      <p class="mt-1 text-[0.875rem] text-ink-2">
+      <p class="mt-1 text-[0.875rem] text-muted">
         업체 정보가 달라졌다면 문의 종류에서 “정보 수정 제안”을 골라 주세요.
       </p>
 
-      <div v-if="done" class="mt-4 rounded-lg bg-brand-100 p-4 text-[0.9375rem] leading-relaxed text-brand-600" role="status">
+      <div v-if="done" class="mt-4 rounded-lg bg-primary/10 p-4 text-[0.9375rem] leading-relaxed text-primary" role="status">
         문의가 접수되었어요. 확인 후 남겨 주신 연락처로 연락드릴게요.
         <button type="button" class="mt-3 block min-h-11 font-bold underline" @click="done = false">
           다른 문의 남기기
@@ -113,14 +113,14 @@ async function submit() {
 
       <form v-else class="mt-4 space-y-4" novalidate @submit.prevent="submit">
         <div>
-          <label for="i-company" class="text-[0.9375rem] font-bold text-ink">업체명 <span class="text-brand-600">*</span></label>
-          <input id="i-company" v-model="form.company" class="field mt-1.5" required>
+          <label for="i-company" class="text-[0.9375rem] font-bold text-highlighted">업체명 <span class="text-primary">*</span></label>
+          <UInput id="i-company" v-model="form.company" required size="xl" class="mt-1.5 w-full" />
         </div>
         <div>
           <ContactInput id="i-contact" v-model="form.contact" label="연락받을 방법" required />
         </div>
         <div>
-          <label for="i-product" class="text-[0.9375rem] font-bold text-ink">문의 종류 <span class="text-brand-600">*</span></label>
+          <label for="i-product" class="text-[0.9375rem] font-bold text-highlighted">문의 종류 <span class="text-primary">*</span></label>
           <select id="i-product" v-model="form.product" class="field mt-1.5" required>
             <option value="" disabled>
               선택하세요
@@ -131,8 +131,8 @@ async function submit() {
           </select>
         </div>
         <div>
-          <label for="i-message" class="text-[0.9375rem] font-bold text-ink">문의 내용 (선택)</label>
-          <textarea id="i-message" v-model="form.message" maxlength="2000" class="field mt-1.5" placeholder="업체 소개나 원하시는 내용을 적어 주세요. (정보 수정은 바뀐 내용을 적어 주세요)" />
+          <label for="i-message" class="text-[0.9375rem] font-bold text-highlighted">문의 내용 (선택)</label>
+          <UTextarea id="i-message" v-model="form.message" maxlength="2000" placeholder="업체 소개나 원하시는 내용을 적어 주세요. (정보 수정은 바뀐 내용을 적어 주세요)" size="xl" class="mt-1.5 w-full" :rows="4" />
         </div>
 
         <div class="hidden" aria-hidden="true">
@@ -143,9 +143,9 @@ async function submit() {
           {{ error }}
         </p>
 
-        <button type="submit" class="btn btn-primary w-full" :disabled="loading">
+        <UButton color="primary" variant="solid" size="xl" block type="submit"  :disabled="loading">
           {{ loading ? '보내는 중…' : '문의 보내기' }}
-        </button>
+        </UButton>
       </form>
     </section>
   </div>

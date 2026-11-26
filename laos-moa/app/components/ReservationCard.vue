@@ -47,7 +47,7 @@ async function copy(text: string) {
 </script>
 
 <template>
-  <article class="border border-default bg-white p-5" :class="reservation.status === 'pending' ? 'border-l-4 border-l-amber-400' : ''">
+  <article class="border border-default bg-default p-5" :class="reservation.status === 'pending' ? 'border-l-4 border-l-amber-400' : ''">
     <div class="flex flex-wrap items-center gap-2">
       <span class="font-mono text-sm font-bold text-highlighted">{{ reservation.id }}</span>
       <UBadge :label="meta.label" :color="meta.color" variant="subtle" />

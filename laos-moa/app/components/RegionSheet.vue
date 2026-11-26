@@ -69,14 +69,14 @@ function onKey(e: KeyboardEvent) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="region-sheet-title"
-        class="relative w-full max-w-[560px] rounded-t-xl bg-surface px-4 pt-5"
+        class="relative w-full max-w-[560px] rounded-t-xl bg-default px-4 pt-5"
         style="padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px))"
       >
         <div class="flex items-center justify-between">
-          <h2 id="region-sheet-title" class="text-[1.25rem] font-bold text-ink">
+          <h2 id="region-sheet-title" class="text-[1.25rem] font-bold text-highlighted">
             지역 선택
           </h2>
-          <button type="button" class="grid size-11 place-items-center rounded-full text-ink-2" aria-label="닫기" @click="close">
+          <button type="button" class="grid size-11 place-items-center rounded-md text-muted" aria-label="닫기" @click="close">
             <AppIcon name="close" class="size-6" />
           </button>
         </div>
@@ -85,7 +85,7 @@ function onKey(e: KeyboardEvent) {
             <button
               type="button"
               class="flex min-h-14 w-full items-center justify-between rounded-lg px-3 text-left text-[1.0625rem]"
-              :class="regionKey === r.key ? 'bg-brand-100 font-bold text-brand-600' : 'text-ink'"
+              :class="regionKey === r.key ? 'bg-primary/10 font-bold text-primary' : 'text-highlighted'"
               :aria-pressed="regionKey === r.key"
               @click="pick(r.key)"
             >
@@ -94,7 +94,7 @@ function onKey(e: KeyboardEvent) {
             </button>
           </li>
         </ul>
-        <p class="mt-3 px-1 text-[0.8125rem] leading-snug text-ink-2">
+        <p class="mt-3 px-1 text-[0.8125rem] leading-snug text-muted">
           위치 권한 없이 지역을 직접 고르면 돼요. 아직 등록된 업체가 없는 지역은 결과가 비어 있을 수 있어요.
         </p>
       </div>

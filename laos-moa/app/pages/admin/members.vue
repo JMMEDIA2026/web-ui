@@ -94,7 +94,7 @@ async function copy(text: string, label: string) {
     </p>
 
     <div class="mt-5 grid grid-cols-2 gap-3 sm:max-w-md">
-      <div class="border border-default bg-white p-4">
+      <div class="border border-default bg-default p-4">
         <p class="text-xs text-muted">
           전체 회원
         </p>
@@ -102,7 +102,7 @@ async function copy(text: string, label: string) {
           {{ total.toLocaleString('ko-KR') }}<span class="ml-1 text-sm font-bold text-muted">명</span>
         </p>
       </div>
-      <div class="border border-default bg-white p-4">
+      <div class="border border-default bg-default p-4">
         <p class="text-xs text-muted">
           최근 7일 가입
         </p>
@@ -135,7 +135,7 @@ async function copy(text: string, label: string) {
       </template>
     </p>
 
-    <div v-if="rows.length" class="mt-3 overflow-x-auto border border-default bg-white">
+    <div v-if="rows.length" class="mt-3 overflow-x-auto border border-default bg-default">
       <table class="w-full min-w-[1080px] text-left text-sm">
         <thead class="bg-slate-50 text-xs text-muted">
           <tr>
@@ -190,7 +190,7 @@ async function copy(text: string, label: string) {
       </table>
     </div>
 
-    <p v-else-if="!loading" class="mt-6 border border-default bg-white p-6 text-center text-sm text-muted">
+    <p v-else-if="!loading" class="mt-6 border border-default bg-default p-6 text-center text-sm text-muted">
       {{ q.trim() ? '검색 결과가 없습니다.' : '아직 가입한 회원이 없습니다.' }}
     </p>
   </UContainer>

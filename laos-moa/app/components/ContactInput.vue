@@ -28,7 +28,7 @@ const info = computed(() => contactTypeMap[type.value])
 
 <template>
   <div>
-    <label :for="id" class="text-[0.9375rem] font-bold text-ink">{{ label }} <span v-if="required" class="text-brand-600">*</span></label>
+    <label :for="id" class="text-[0.9375rem] font-bold text-highlighted">{{ label }} <span v-if="required" class="text-primary">*</span></label>
     <div class="mt-1.5 flex items-center gap-2">
       <SnsIcon :type="type" class="size-9 shrink-0" />
       <select v-model="type" :aria-label="`${label} 종류`" class="field !w-[6.75rem] shrink-0 !px-3 font-bold" @change="push">
@@ -36,16 +36,7 @@ const info = computed(() => contactTypeMap[type.value])
           {{ t.label }}
         </option>
       </select>
-      <input
-        :id="id"
-        v-model="value"
-        class="field min-w-0 flex-1"
-        :inputmode="type === 'phone' || type === 'whatsapp' ? 'tel' : 'text'"
-        autocomplete="off"
-        autocapitalize="off"
-        :placeholder="info.placeholder"
-        @input="push"
-      >
+      <UInput :id="id" v-model="value" :inputmode="type === 'phone' || type === 'whatsapp' ? 'tel' : 'text'" autocomplete="off" autocapitalize="off" :placeholder="info.placeholder" size="xl" class="min-w-0 flex-1" @update:model-value="push" />
     </div>
   </div>
 </template>

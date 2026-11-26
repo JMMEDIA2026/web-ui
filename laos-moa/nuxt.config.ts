@@ -27,6 +27,10 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32.png' },
         { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
         { rel: 'preconnect', href: 'https://cdn.jsdelivr.net', crossorigin: '' },
+        // 영문·숫자 글꼴(Bricolage Grotesque)과 큰 숫자용 글꼴(Instrument Serif)
+        { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/@fontsource-variable/bricolage-grotesque@5.3.0/index.css' },
+        { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/@fontsource/instrument-serif@5.3.0/400.css' },
+        { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/@fontsource/instrument-serif@5.3.0/400-italic.css' },
         // 명조체(제목용)는 화면 표시를 막지 않도록 나중에 적용합니다. 글꼴이 오기 전에는 기본 명조체로 보입니다.
         {
           rel: 'stylesheet',
@@ -36,7 +40,7 @@ export default defineNuxtConfig({
       meta: [
         // 모바일 화면 전체(노치·하단 안전영역 포함)를 쓰고, 주소창 색을 브랜드 보라색으로 맞춥니다.
         { name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' },
-        { name: 'theme-color', content: '#FFFFFF' },
+        { name: 'theme-color', content: '#FAFAF9' },
         { name: 'description', content: '라오스 한인을 위한 생활 정보와 한인 업체 디렉토리, 비엔티안 한인 커뮤니티.' },
         { property: 'og:title', content: '라자' },
         { property: 'og:image', content: 'https://laja.joybox.day/og.png' },
