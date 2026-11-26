@@ -31,7 +31,7 @@ export const CONTACT_TYPES: ContactTypeInfo[] = [
 
 export const contactTypeMap = Object.fromEntries(CONTACT_TYPES.map(t => [t.key, t])) as Record<ContactType, ContactTypeInfo>
 
-export const MAX_CONTACTS = 6
+export const MAX_CONTACTS = 5
 const TYPE_KEYS = new Set<string>(CONTACT_TYPES.map(t => t.key))
 const PHONE_RE = /^\+?\d[\d\s\-()]{5,}$/
 const digitsOf = (v: string) => v.replace(/\D/g, '')

@@ -137,19 +137,18 @@ const actionCount = [!!directions, !!contact, true].filter(Boolean).length
               </p>
             </div>
           </li>
-          <li class="flex gap-3 px-4 py-3">
-            <span class="grid size-10 shrink-0 place-items-center rounded-full bg-brand-100 text-[1.25rem]" aria-hidden="true">📞</span>
-            <div class="min-w-0 flex-1">
-              <p class="text-[0.8125rem] text-ink-2">
-                연락처
-              </p>
-              <ContactList v-if="contacts.length" :items="contacts" class="mt-1" />
-              <p v-else class="break-words text-[1rem] text-ink-2">
-                등록된 연락처가 없어요
-              </p>
-            </div>
-          </li>
         </ul>
+      </section>
+
+      <!-- 연락처: 로고 아이콘만 한 줄, 누르면 아이디와 복사 버튼 -->
+      <section class="card mt-3 p-4" aria-labelledby="contact-title">
+        <h2 id="contact-title" class="flex items-center gap-2 text-[1.125rem] font-extrabold text-ink">
+          <span aria-hidden="true">📞</span>연락처
+        </h2>
+        <ContactIcons v-if="contacts.length" :items="contacts" class="mt-3" />
+        <p v-else class="mt-2 text-[1rem] text-ink-2">
+          등록된 연락처가 없어요
+        </p>
       </section>
 
       <section v-if="business.description" class="card mt-3 p-4" aria-labelledby="intro-title">
