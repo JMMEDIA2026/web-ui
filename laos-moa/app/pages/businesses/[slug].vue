@@ -16,6 +16,8 @@ if (!business) {
 }
 
 const category = categoryMap[business.category]
+const EMOJI: Record<string, string> = { food: '🍚', mart: '🛒', exchange: '💱', massage: '💆', hospital: '🏥', school: '🎓', rent: '🏠', job: '💼' }
+const catEmoji = EMOJI[business.category] ?? '🏷️'
 const located = hasCoords(business)
 const directions = directionsUrl(business)
 const contact = contactAction(business.contact)
@@ -86,57 +88,68 @@ const actionCount = [!!directions, !!contact, true].filter(Boolean).length
 
     <div class="px-4 pt-5 sm:px-5">
       <div class="flex flex-wrap items-center gap-2">
-        <span class="rounded-md bg-brand-100 px-2 py-0.5 text-[0.8125rem] font-bold text-brand-600">{{ category?.label }}</span>
-        <span v-if="business.sponsored" class="rounded-md bg-gold-50 px-2 py-0.5 text-[0.8125rem] font-bold text-gold-700">광고</span>
+        <span class="inline-flex items-center gap-1 rounded-full bg-brand-100 px-3 py-1 text-[0.8125rem] font-bold text-brand-600">
+          <span aria-hidden="true">{{ catEmoji }}</span>{{ category?.label }}
+        </span>
+        <span v-if="business.sponsored" class="inline-flex items-center gap-1 rounded-full bg-gold-50 px-3 py-1 text-[0.8125rem] font-bold text-gold-700">
+          <span aria-hidden="true">⭐</span>광고
+        </span>
       </div>
-      <h1 data-page-title tabindex="-1" class="mt-2 text-[1.625rem] font-bold leading-tight text-ink [text-wrap:balance]">
+      <h1 data-page-title tabindex="-1" class="mt-2 text-[1.75rem] font-bold leading-tight text-ink [text-wrap:balance]">
         {{ business.name }}
       </h1>
+      <p class="mt-1.5 flex items-center gap-1 text-[0.9375rem] text-ink-2">
+        <span aria-hidden="true">📍</span>{{ business.area || '비엔티안' }}
+      </p>
 
-      <section class="card mt-5 p-4" aria-labelledby="info-title">
-        <h2 id="info-title" class="text-[1.125rem] font-bold text-ink">
-          업체 정보
+      <section class="card mt-5 overflow-hidden" aria-labelledby="info-title">
+        <h2 id="info-title" class="flex items-center gap-2 px-4 pt-4 text-[1.125rem] font-bold text-ink">
+          <span aria-hidden="true">🧭</span>업체 정보
         </h2>
-        <dl class="mt-3 space-y-3 text-[1rem]">
-          <div>
-            <dt class="text-[0.8125rem] text-ink-2">
-              지역
-            </dt>
-            <dd class="text-ink">
-              {{ business.area || '비엔티안' }}
-            </dd>
-          </div>
-          <div v-if="business.address">
-            <dt class="text-[0.8125rem] text-ink-2">
-              주소
-            </dt>
-            <dd class="break-words text-ink">
-              {{ business.address }}
-            </dd>
-          </div>
+        <ul class="mt-2 divide-y divide-line">
+          <li v-if="business.address" class="flex gap-3 px-4 py-3">
+            <span class="grid size-10 shrink-0 place-items-center rounded-full bg-brand-100 text-[1.25rem]" aria-hidden="true">📍</span>
+            <div class="min-w-0 flex-1">
+              <p class="text-[0.8125rem] text-ink-2">
+                주소
+              </p>
+              <p class="break-words text-[1rem] leading-snug text-ink">
+                {{ business.address }}
+              </p>
+              <button type="button" class="mt-1 inline-flex min-h-11 items-center gap-1 text-[0.875rem] font-bold text-brand-600 underline underline-offset-4" @click="copy(business.address!)">
+                <span aria-hidden="true">📋</span>주소 복사
+              </button>
+            </div>
+          </li>
           <!-- 영업시간은 확인된 업체만 보여 줍니다. 없으면 이 줄 자체를 생략합니다. -->
-          <div v-if="business.hours">
-            <dt class="text-[0.8125rem] text-ink-2">
-              영업시간
-            </dt>
-            <dd class="text-ink">
-              {{ business.hours }}
-            </dd>
-          </div>
-          <div>
-            <dt class="text-[0.8125rem] text-ink-2">
-              연락처
-            </dt>
-            <dd :class="business.contact ? 'text-ink' : 'text-ink-2'" class="break-words">
-              {{ business.contact || '등록된 연락처가 없어요' }}
-            </dd>
-          </div>
-        </dl>
+          <li v-if="business.hours" class="flex gap-3 px-4 py-3">
+            <span class="grid size-10 shrink-0 place-items-center rounded-full bg-brand-100 text-[1.25rem]" aria-hidden="true">🕒</span>
+            <div class="min-w-0 flex-1">
+              <p class="text-[0.8125rem] text-ink-2">
+                영업시간
+              </p>
+              <p class="text-[1rem] text-ink">
+                {{ business.hours }}
+              </p>
+            </div>
+          </li>
+          <li class="flex gap-3 px-4 py-3">
+            <span class="grid size-10 shrink-0 place-items-center rounded-full bg-brand-100 text-[1.25rem]" aria-hidden="true">📞</span>
+            <div class="min-w-0 flex-1">
+              <p class="text-[0.8125rem] text-ink-2">
+                연락처
+              </p>
+              <p :class="business.contact ? 'text-ink' : 'text-ink-2'" class="break-words text-[1rem]">
+                {{ business.contact || '등록된 연락처가 없어요' }}
+              </p>
+            </div>
+          </li>
+        </ul>
       </section>
 
       <section v-if="business.description" class="card mt-3 p-4" aria-labelledby="intro-title">
-        <h2 id="intro-title" class="text-[1.125rem] font-bold text-ink">
-          소개
+        <h2 id="intro-title" class="flex items-center gap-2 text-[1.125rem] font-bold text-ink">
+          <span aria-hidden="true">✨</span>소개
         </h2>
         <p class="mt-2 text-[1rem] leading-relaxed text-ink">
           {{ business.description }}
@@ -144,8 +157,8 @@ const actionCount = [!!directions, !!contact, true].filter(Boolean).length
       </section>
 
       <section v-if="embedUrl" class="card mt-3 overflow-hidden" aria-labelledby="loc-title">
-        <h2 id="loc-title" class="px-4 pt-4 text-[1.125rem] font-bold text-ink">
-          위치 안내
+        <h2 id="loc-title" class="flex items-center gap-2 px-4 pt-4 text-[1.125rem] font-bold text-ink">
+          <span aria-hidden="true">🗺️</span>위치 안내
         </h2>
         <iframe
           :src="embedUrl"
@@ -156,7 +169,7 @@ const actionCount = [!!directions, !!contact, true].filter(Boolean).length
         />
         <div class="flex flex-wrap items-center gap-x-3 px-4 py-3">
           <a v-if="googleOpenUrl" :href="googleOpenUrl" target="_blank" rel="noopener" class="inline-flex min-h-11 items-center gap-1 font-bold text-brand-600 underline underline-offset-2">
-            <AppIcon name="pin" class="size-5" />
+            <span aria-hidden="true">🔎</span>
             구글 지도에서 열기
           </a>
           <p class="text-[0.8125rem] leading-snug text-ink-2">
@@ -167,7 +180,7 @@ const actionCount = [!!directions, !!contact, true].filter(Boolean).length
 
       <!-- 정보 확인일과 수정 제안 -->
       <p class="mt-4 text-[0.8125rem] leading-relaxed text-ink-2">
-        <template v-if="checkedOn">정보 확인일 {{ checkedOn }}. </template>
+        <template v-if="checkedOn"><span aria-hidden="true">🗓️ </span>정보 확인일 {{ checkedOn }}. </template>
         정보가 다르거나 바뀌었나요?
         <NuxtLink :to="{ path: '/advertise', query: { type: 'correction', company: business.name }, hash: '#inquiry' }" class="inline-flex min-h-11 items-center font-bold text-brand-600 underline underline-offset-2">정보 수정 요청하기</NuxtLink>
       </p>
@@ -199,7 +212,7 @@ const actionCount = [!!directions, !!contact, true].filter(Boolean).length
           </button>
         </template>
         <NuxtLink :to="{ path: '/reserve', query: { business: business.slug } }" class="btn btn-primary btn-bar">
-          <AppIcon name="calendar" class="size-5" />
+          <span aria-hidden="true">📅</span>
           예약 요청
         </NuxtLink>
       </div>

@@ -36,10 +36,11 @@ async function copy(text: string) {
     class="border-l-4 px-4 py-3"
     :class="selected ? 'border-brand-500 bg-brand-100' : 'border-transparent bg-surface'"
   >
-    <button
-      type="button"
+    <!-- 사진·이름·정보를 누르면 바로 상세 화면으로 갑니다. -->
+    <NuxtLink
+      :to="`/businesses/${business.slug}`"
       class="flex min-h-[88px] w-full gap-3 rounded-lg text-left"
-      :aria-pressed="selected"
+      :aria-current="selected ? 'true' : undefined"
       @click="emit('select', business.slug)"
     >
       <!-- 실제 업체 사진이 없으면 업종 아이콘만 보여 줍니다. 다른 업체 사진으로 대체하지 않습니다. -->
@@ -60,12 +61,9 @@ async function copy(text: string) {
           위치 확인 중
         </span>
       </span>
-    </button>
+    </NuxtLink>
 
     <div class="mt-2 grid gap-2" style="grid-template-columns: repeat(auto-fit, minmax(4.6rem, 1fr))">
-      <NuxtLink :to="`/businesses/${business.slug}`" class="btn btn-row text-brand-600 underline underline-offset-4">
-        상세 보기
-      </NuxtLink>
       <a v-if="directions" :href="directions" target="_blank" rel="noopener" class="btn btn-outline btn-row">
         <AppIcon name="compass" class="size-4 shrink-0" />
         길찾기
