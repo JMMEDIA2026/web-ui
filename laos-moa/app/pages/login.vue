@@ -5,11 +5,12 @@ const route = useRoute()
 const { member, refresh } = useMember()
 
 const next = safeNext(route.query.next, '/me')
-const needLogin = route.query.need === '1'
-const needText = next.startsWith('/me') ? '내 정보는 로그인한 뒤에 볼 수 있어요.' : '예약·문의는 로그인한 회원만 이용할 수 있어요.'
+const reloginAdmin = route.query.relogin === 'admin'
+const needLogin = route.query.need === '1' || reloginAdmin
+const needText = reloginAdmin ? '관리자 화면은 12시간마다 다시 로그인해야 열려요. 로그인하면 바로 관리자 화면으로 가요.' : next.startsWith('/me') ? '내 정보는 로그인한 뒤에 볼 수 있어요.' : '예약·문의는 로그인한 회원만 이용할 수 있어요.'
 
 // 이미 로그인했다면 바로 이동합니다.
-if (member.value) await navigateTo(next, { replace: true })
+if (member.value && !reloginAdmin) await navigateTo(next, { replace: true })
 
 const form = reactive({ email: '', password: '' })
 const showPw = ref(false)
