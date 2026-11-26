@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { contactProblem, decodeContactLine } from '../../shared/utils/contact'
 definePageMeta({ middleware: 'member' })
 const { member } = useMember()
 
@@ -47,7 +48,8 @@ function stop(selector: string, message: string) {
 async function submit() {
   error.value = ''
   if (!form.company.trim()) return stop('#i-company', '업체명을 입력해 주세요.')
-  if (form.contact.trim().length < 2) return stop('#i-contact', '연락처를 입력해 주세요.')
+  const cp = contactProblem(decodeContactLine(form.contact))
+  if (cp) return stop('#i-contact', cp)
   if (!form.product) return stop('#i-product', '문의 종류를 골라 주세요.')
   loading.value = true
   try {
@@ -115,8 +117,7 @@ async function submit() {
           <input id="i-company" v-model="form.company" class="field mt-1.5" required>
         </div>
         <div>
-          <label for="i-contact" class="text-[0.9375rem] font-bold text-ink">카카오톡 ID, WhatsApp 또는 전화번호 <span class="text-brand-600">*</span></label>
-          <input id="i-contact" v-model="form.contact" class="field mt-1.5" required>
+          <ContactInput id="i-contact" v-model="form.contact" label="연락받을 방법" required />
         </div>
         <div>
           <label for="i-product" class="text-[0.9375rem] font-bold text-ink">문의 종류 <span class="text-brand-600">*</span></label>

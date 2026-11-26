@@ -1,5 +1,7 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+/* shared/ 폴더의 클래스 이름도 Tailwind가 찾도록 */
+@source "../../../shared";
 
 /* 라자 디자인 토큰 — 스파 그린 + 크림
    브랜드 녹색: 500 = 주요 버튼·선택·핀, 600 = 누름 상태·작은 강조 글자, 100 = 선택 배경 */

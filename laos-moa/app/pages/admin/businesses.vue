@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { categories } from '~/data/businesses'
+import { contactProblem, parseContacts } from '../../../shared/utils/contact'
 
 definePageMeta({ layout: 'admin', middleware: 'admin-auth' })
 useSeoMeta({ title: '업체 · 라자 관리자' })
@@ -55,6 +56,17 @@ const partnerItems = computed(() => [
   { label: '연결 안 함', value: NONE },
   ...partners.value.map(p => ({ label: `${p.name} (${p.id})`, value: p.id }))
 ])
+
+// ---- 연락처(전화·카카오톡·위챗·텔레그램·왓츠앱·라인) ----
+const contactDrafts = reactive<Record<string, string>>({})
+const draftOf = (b: Biz) => contactDrafts[b.id] ?? b.contact ?? ''
+async function saveContact(b: Biz) {
+  const draft = draftOf(b)
+  const bad = parseContacts(draft).map(contactProblem).find(Boolean)
+  if (bad) { toast.add({ title: bad, color: 'warning' }); return }
+  await patch(b.id, { contact: draft }, '연락처를 저장했습니다')
+  delete contactDrafts[b.id]
+}
 
 // ---- 업체 사진 ----
 // 사진은 올리기 전에 브라우저에서 줄입니다. (큰 사진 1600px, 작은 사진 480px)
@@ -204,8 +216,10 @@ async function create() {
           <UInput id="b-hours" v-model="form.hours" class="mt-1 w-full" />
         </div>
         <div>
-          <label for="b-contact" class="text-xs font-bold text-highlighted">연락처 (확인된 것만)</label>
-          <UInput id="b-contact" v-model="form.contact" class="mt-1 w-full" />
+          <p class="text-xs font-bold text-highlighted">
+            연락처 (확인된 것만)
+          </p>
+          <ContactEditor v-model="form.contact" id-prefix="b-contact" class="mt-1" />
         </div>
         <div class="sm:col-span-2">
           <label for="b-map" class="text-xs font-bold text-highlighted">지도 주소 (https://…)</label>
@@ -253,6 +267,14 @@ async function create() {
           <p class="mt-1 text-xs text-muted">
             {{ b.partner_id ? '연결됨: 이 업체에 예약 요청 버튼이 보입니다.' : '연결 전: 예약 버튼이 보이지 않습니다. 먼저 "협력업체"에서 사장님 계정을 만드세요.' }}
           </p>
+        </div>
+
+        <div class="mt-4 border-t border-default pt-4">
+          <p class="text-xs font-bold text-highlighted">
+            연락처
+          </p>
+          <ContactEditor :model-value="draftOf(b)" :id-prefix="`contact-${b.id}`" class="mt-1" @update:model-value="(v: string) => (contactDrafts[b.id] = v)" />
+          <UButton label="연락처 저장" size="sm" class="mt-2" :disabled="contactDrafts[b.id] === undefined" @click="saveContact(b)" />
         </div>
 
         <div class="mt-4 border-t border-default pt-4">

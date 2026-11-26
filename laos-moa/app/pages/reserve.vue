@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { contactProblem, decodeContactLine } from '../../shared/utils/contact'
 useSeoMeta({
   title: '예약 요청 · 라자',
   description: '라자에 등록된 업체(골프, 마사지, 오토바이 렌트 등)에 예약을 요청하세요.'
@@ -70,7 +71,8 @@ async function submit() {
   if (form.date < today) return stop('#r-date', '오늘 이후 날짜를 골라 주세요.')
   if (!(form.people >= 1 && form.people <= 100)) return stop('#r-people', '인원은 1~100명으로 입력해 주세요.')
   if (!form.name.trim()) return stop('#r-name', '이름을 입력해 주세요.')
-  if (form.contact.trim().length < 2) return stop('#r-contact', '연락처를 입력해 주세요.')
+  const cp = contactProblem(decodeContactLine(form.contact))
+  if (cp) return stop('#r-contact', cp)
   loading.value = true
   try {
     const { target, ...rest } = form
@@ -104,7 +106,7 @@ function reset() {
     </div>
 
     <p v-if="member && !doneCode" class="mt-3 text-[0.9375rem] text-ink-2">
-      <strong class="text-ink">{{ member.nickname }}</strong>님의 정보로 예약을 요청해요. 연락처는 필요하면 카카오톡 ID나 WhatsApp으로 바꿀 수 있어요.
+      <strong class="text-ink">{{ member.nickname }}</strong>님의 정보로 예약을 요청해요. 연락받을 방법은 전화·카카오톡·위챗·텔레그램·왓츠앱 중에서 고를 수 있어요.
     </p>
 
     <!-- 접수 완료 -->
@@ -191,8 +193,7 @@ function reset() {
       </div>
 
       <div>
-        <label for="r-contact" class="text-[0.9375rem] font-bold text-ink">카카오톡 ID, WhatsApp 또는 전화번호 <span class="text-brand-600">*</span></label>
-        <input id="r-contact" v-model="form.contact" autocomplete="tel" class="field mt-1.5" required>
+        <ContactInput id="r-contact" v-model="form.contact" label="연락받을 방법" required />
       </div>
 
       <div>

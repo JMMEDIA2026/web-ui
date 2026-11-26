@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { isValidContactString } from '../../../shared/utils/contact'
 
 const optionalText = (max: number) => z.string().trim().max(max).default('')
 
@@ -11,7 +12,7 @@ const businessFields = {
   lng: z.number().min(-180).max(180).nullable().optional(),
   description: optionalText(500),
   hours: optionalText(200),
-  contact: optionalText(100),
+  contact: z.string().trim().max(900).refine(isValidContactString, '연락처 형식을 확인하세요').default(''),
   mapUrl: z
     .string()
     .trim()

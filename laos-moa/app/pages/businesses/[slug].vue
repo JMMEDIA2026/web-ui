@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { categoryMap } from '~/data/businesses'
+import { parseContacts } from '../../../shared/utils/contact'
 
 // 상세 화면은 하단 메뉴 대신 하단 행동 바(길찾기·연락하기·예약)를 씁니다.
 definePageMeta({ header: false, nav: false })
@@ -21,6 +22,7 @@ const catEmoji = EMOJI[business.category] ?? '🏷️'
 const located = hasCoords(business)
 const directions = directionsUrl(business)
 const contact = contactAction(business.contact)
+const contacts = parseContacts(business.contact)
 
 // 구글 지도(API 키 없이 쓰는 삽입 지도와 링크)
 const embedUrl = located
@@ -140,8 +142,9 @@ const actionCount = [!!directions, !!contact, true].filter(Boolean).length
               <p class="text-[0.8125rem] text-ink-2">
                 연락처
               </p>
-              <p :class="business.contact ? 'text-ink' : 'text-ink-2'" class="break-words text-[1rem]">
-                {{ business.contact || '등록된 연락처가 없어요' }}
+              <ContactList v-if="contacts.length" :items="contacts" class="mt-1" />
+              <p v-else class="break-words text-[1rem] text-ink-2">
+                등록된 연락처가 없어요
               </p>
             </div>
           </li>

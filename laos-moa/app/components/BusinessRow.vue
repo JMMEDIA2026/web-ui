@@ -18,7 +18,7 @@ const directions = computed(() => directionsUrl(props.business))
 const contact = computed(() => contactAction(props.business.contact))
 
 // 목록 행에서는 좁은 칸에 맞춰 짧은 이름을 씁니다. (상세 화면에서는 "전화하기" 등 전체 이름)
-const shortContactLabel = computed(() => (contact.value?.kind === 'tel' ? '전화' : contact.value?.kind === 'link' ? '연락' : '연락처'))
+const shortContactLabel = computed(() => contact.value?.short ?? '연락처')
 
 async function copy(text: string) {
   try {

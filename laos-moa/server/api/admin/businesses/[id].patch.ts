@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { isValidContactString } from '../../../../shared/utils/contact'
 
 const schema = z.object({
   name: z.string().trim().min(1).max(80).optional(),
@@ -9,7 +10,7 @@ const schema = z.object({
   lng: z.number().min(-180).max(180).nullable().optional(),
   description: z.string().trim().max(500).optional(),
   hours: z.string().trim().max(200).optional(),
-  contact: z.string().trim().max(100).optional(),
+  contact: z.string().trim().max(900).refine(isValidContactString, '연락처 형식을 확인하세요').optional(),
   mapUrl: z.string().trim().max(500).refine(v => v === '' || /^https:\/\//.test(v), '지도 주소는 https:// 로 시작해야 합니다').optional(),
   // 사장님(협력업체) 계정 연결. null이면 연결을 해제합니다.
   partnerId: z.string().trim().max(40).nullable().optional(),
