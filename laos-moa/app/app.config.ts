@@ -8,7 +8,8 @@ export default defineAppConfig({
     },
     button: {
       slots: {
-        base: 'min-h-11 min-w-11 justify-center font-semibold'
+        // 눌렀을 때 살짝 가라앉고, 마우스를 올리면 1px 떠오르며 그림자가 생깁니다. (움직임 줄이기 설정이면 자동으로 멈춤)
+        base: 'min-h-11 min-w-11 justify-center font-semibold transition-[transform,box-shadow,background-color,color,opacity] duration-200 ease-out hover:-translate-y-px active:translate-y-px active:scale-[0.98] hover:shadow-md active:shadow-none'
       }
     },
     input: {

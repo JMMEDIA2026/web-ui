@@ -169,7 +169,7 @@ function toTop() {
         <ul class="grid grid-cols-4 gap-x-2 gap-y-4">
           <li v-for="s in shortcuts" :key="s.label">
             <NuxtLink :to="s.to" class="group flex flex-col items-center gap-1.5 text-center">
-              <span class="grid size-[68px] place-items-center rounded-lg border border-default bg-muted transition-transform group-active:scale-95">
+              <span class="grid size-[68px] place-items-center rounded-lg border border-default bg-muted lift group-hover:-translate-y-0.5 group-active:scale-95">
                 <img :src="s.emoji" alt="" width="40" height="40" class="size-10 object-contain" loading="lazy">
               </span>
               <span class="text-[0.8125rem] font-semibold leading-tight text-highlighted">{{ s.label }}</span>
@@ -179,7 +179,7 @@ function toTop() {
       </nav>
 
       <!-- 오늘의 환율: 카드로 작게. 변환은 환율 화면에서 합니다. -->
-      <NuxtLink to="/exchange" class="mt-6 flex min-h-[72px] items-center gap-3 rounded-lg border border-default bg-default px-4 py-3 shadow-[0_6px_20px_-10px_rgb(20_20_40/0.25)] active:bg-muted">
+      <NuxtLink to="/exchange" class="mt-6 flex min-h-[72px] items-center gap-3 rounded-lg border border-default bg-default px-4 py-3 lift">
         <span class="grid size-12 shrink-0 place-items-center rounded-2xl bg-primary/10 text-[1.5rem]" aria-hidden="true">💱</span>
         <span class="min-w-0 flex-1">
           <span class="block text-[0.8125rem] text-muted">오늘의 환율</span>
@@ -210,7 +210,7 @@ function toTop() {
           <ul class="no-scrollbar -mx-4 mt-3 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-1">
             <li v-for="b in bizShown" :key="b.slug" class="w-[210px] shrink-0 snap-start">
               <NuxtLink :to="`/businesses/${b.slug}`" class="block">
-                <span class="relative block aspect-[4/3] overflow-hidden rounded-lg bg-muted">
+                <span class="relative block aspect-[4/3] overflow-hidden rounded-lg bg-muted lift">
                   <img v-if="b.photos?.length" :src="`/api/photos/${b.photos[0]}?size=thumb`" alt="" width="384" height="288" class="size-full object-cover" loading="lazy">
                   <img v-else :src="`/images/categories/${b.category}.jpg`" alt="" width="384" height="216" class="size-full object-cover" loading="lazy">
                   <span v-if="b.sponsored" class="absolute start-2 top-2 rounded-md bg-default/95 px-2 py-0.5 text-[0.75rem] font-bold text-highlighted">광고</span>
@@ -300,7 +300,7 @@ function toTop() {
         </h2>
         <ul class="mt-3 grid grid-cols-2 gap-3">
           <li v-for="t in tools" :key="t.label">
-            <NuxtLink :to="t.to" class="flex min-h-[132px] flex-col justify-between rounded-lg p-4 active:opacity-80" :class="t.bg">
+            <NuxtLink :to="t.to" class="lift flex min-h-[132px] flex-col justify-between rounded-lg p-4" :class="t.bg">
               <span class="text-[2.25rem] leading-none" aria-hidden="true">{{ t.emoji }}</span>
               <span>
                 <span class="block text-[1.0625rem] font-extrabold text-highlighted">{{ t.label }}</span>

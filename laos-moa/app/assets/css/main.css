@@ -83,11 +83,36 @@ summary:focus-visible,
   outline-offset: 0;
 }
 
-/* 카드: 같은 바탕에 얇은 선 */
+/* 살짝 떠 있는 입체감: 얇은 선 + 따뜻한 회색의 부드러운 그림자 두 겹.
+   위쪽은 아주 작게 맞닿는 그림자, 아래쪽은 넓고 옅게 퍼지는 그림자입니다. */
+:root {
+  --lift-rest: 0 1px 2px rgb(28 25 23 / 0.05), 0 6px 18px -8px rgb(28 25 23 / 0.16);
+  --lift-hover: 0 2px 4px rgb(28 25 23 / 0.06), 0 14px 28px -10px rgb(28 25 23 / 0.22);
+  --lift-press: 0 1px 1px rgb(28 25 23 / 0.06), 0 2px 6px -3px rgb(28 25 23 / 0.2);
+}
+
+/* 카드: 같은 바탕에 얇은 선과 떠 있는 그림자 */
 .card {
   background: var(--ui-bg);
   border: 1px solid var(--ui-border);
   border-radius: 0.25rem;
+  box-shadow: var(--lift-rest);
+}
+
+/* 누를 수 있는 상자(타일·카드 링크): 마우스를 올리면 살짝 떠오르고, 누르면 가라앉습니다. */
+.lift {
+  box-shadow: var(--lift-rest);
+  transition: transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.2s ease;
+}
+@media (hover: hover) {
+  .lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--lift-hover);
+  }
+}
+.lift:active {
+  transform: translateY(1px);
+  box-shadow: var(--lift-press);
 }
 
 /* 목록 행 구분선 */
@@ -97,6 +122,7 @@ summary:focus-visible,
 
 /* 필터 칩 */
 .chip {
+  transition: transform 0.15s ease, background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
   display: inline-flex;
   align-items: center;
   flex: none;
@@ -110,6 +136,9 @@ summary:focus-visible,
   font-weight: 600;
   white-space: nowrap;
   cursor: pointer;
+}
+.chip:active {
+  transform: scale(0.96);
 }
 .chip[aria-pressed='true'] {
   background: var(--ui-bg-inverted);
@@ -253,7 +282,7 @@ main:focus {
 
 /* ---------- 관리자 화면에서 쓰는 상자(그림자 최소화) ---------- */
 .box3d {
-  box-shadow: 0 1px 2px rgb(60 50 20 / 0.06);
+  box-shadow: var(--lift-rest);
 }
 
 @media (prefers-reduced-motion: reduce) {

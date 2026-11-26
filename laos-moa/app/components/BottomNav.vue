@@ -19,11 +19,11 @@ const items = [
     class="fixed left-1/2 z-40 w-[calc(100%-24px)] max-w-[536px] -translate-x-1/2"
     style="bottom: calc(10px + env(safe-area-inset-bottom, 0px))"
   >
-    <ul class="grid h-16 grid-cols-5 gap-0.5 rounded-md border border-default bg-default/95 p-1.5 shadow-[0_6px_24px_-6px_rgb(20_20_40/0.28)] backdrop-blur-xl">
+    <ul class="grid h-16 grid-cols-5 gap-0.5 rounded-md border border-default bg-default/95 p-1.5 shadow-[0_8px_28px_-8px_rgb(28_25_23/0.3)] backdrop-blur-xl">
       <li v-for="item in items" :key="item.to" class="min-w-0">
         <NuxtLink
           :to="item.to"
-          class="flex h-full min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-sm text-[0.6875rem] font-bold transition-colors"
+          class="flex h-full min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-sm text-[0.6875rem] font-bold transition-[background-color,color,transform] duration-150 active:scale-95"
           :class="item.match(route.path) ? 'bg-primary/10 text-primary' : 'text-muted'"
           :aria-current="item.match(route.path) ? 'page' : undefined"
         >
