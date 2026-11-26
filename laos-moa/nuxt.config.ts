@@ -54,6 +54,8 @@ export default defineNuxtConfig({
     '/login': { headers: { 'X-Robots-Tag': 'noindex, nofollow' } },
     '/signup': { headers: { 'X-Robots-Tag': 'noindex, nofollow' } },
     '/api/members/**': { headers: { 'Cache-Control': 'private, no-store' } },
+    '/api/community/**': { headers: { 'Cache-Control': 'private, no-store' } },
+    '/community/write': { headers: { 'X-Robots-Tag': 'noindex, nofollow' } },
     '/api/admin/**': { headers: { 'Cache-Control': 'no-store' } },
     '/api/partner/**': { headers: { 'Cache-Control': 'no-store' } }
   },

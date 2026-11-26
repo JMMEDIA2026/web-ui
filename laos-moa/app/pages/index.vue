@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { guides } from '~/data/guides'
 import { categories, categoryMap } from '~/data/businesses'
+import type { PostListItem } from '~/data/community'
 
 // 홈: 흰 바탕 + 파랑 포인트 화면.
 // 위에서부터 검색 → 탭 → 배너 → 카테고리 → 환율 → 추천 업체 → 처음 오셨나요? → 바로가기
@@ -39,6 +40,7 @@ const shortcuts = computed(() => [
 const tabs = [
   { label: '홈', to: '/' },
   { label: '업체', to: '/businesses' },
+  { label: '커뮤니티', to: '/community' },
   { label: '가이드', to: '/guides' },
   { label: '환율', to: '/exchange' }
 ]
@@ -61,6 +63,9 @@ const bizTabs = computed(() => {
 const bizTab = ref('all')
 const bizShown = computed(() => (bizTab.value === 'all' ? ordered.value : ordered.value.filter(b => b.category === bizTab.value)).slice(0, 10))
 
+// 커뮤니티 새 글 3개
+const { data: latest } = await useFetch<{ posts: PostListItem[] }>('/api/community/posts', { key: 'home-posts', query: { limit: 3 }, default: () => ({ posts: [] }) })
+
 const firstGuides = ['visa', 'telecom', 'health', 'banking']
   .map(slug => guides.find(g => g.slug === slug))
   .filter((g): g is NonNullable<typeof g> => !!g)
@@ -69,7 +74,7 @@ const firstGuides = ['visa', 'telecom', 'health', 'banking']
 const tools = [
   { label: '환율 변환', desc: '원·킵·달러 바로 계산', emoji: '💱', to: '/exchange', bg: 'bg-[#FFF4DD]' },
   { label: '업체 지도', desc: '내 주변 한인 업체', emoji: '🗺️', to: '/businesses', bg: 'bg-[#E7F6EC]' },
-  { label: '예약 요청', desc: '미리 자리 맡기', emoji: '📅', to: '/reserve', bg: 'bg-[#E8EEFF]' },
+  { label: '커뮤니티', desc: '후기·질문·꿀팁', emoji: '💬', to: '/community', bg: 'bg-[#E8EEFF]' },
   { label: '생활 가이드', desc: '비자·통신·병원', emoji: '🧭', to: '/guides', bg: 'bg-[#FDEBF1]' },
   { label: '업체 등록', desc: '무료로 올려요', emoji: '🏪', to: '/advertise', bg: 'bg-[#F0EAFE]' },
   { label: '회원 정보', desc: '등급과 예약 기록', emoji: '👤', to: '/me', bg: 'bg-[#EEF0F4]' }
@@ -226,6 +231,32 @@ function toTop() {
             업체 등록 문의
           </NuxtLink>
         </div>
+      </section>
+
+      <!-- 커뮤니티 새 글 -->
+      <section class="mt-10" aria-labelledby="cm-title">
+        <h2 id="cm-title" class="text-[1.375rem] font-extrabold text-ink">
+          라자 커뮤니티
+        </h2>
+        <p class="mt-0.5 text-[0.875rem] text-ink-2">
+          후기, 질문, 꿀팁을 나눠요
+        </p>
+        <ul v-if="latest?.posts.length" class="mt-1 divide-y divide-line">
+          <li v-for="p in latest.posts" :key="p.id">
+            <PostCard :post="p" />
+          </li>
+        </ul>
+        <div v-else class="mt-3 rounded-[20px] bg-fill p-5 text-center">
+          <p class="font-bold text-ink">
+            <span aria-hidden="true">💬 </span>첫 글을 기다리고 있어요
+          </p>
+          <p class="mt-1 text-[0.875rem] text-ink-2">
+            다녀온 곳 후기나 궁금한 점을 남겨 보세요.
+          </p>
+        </div>
+        <NuxtLink to="/community" class="mt-3 flex min-h-12 items-center justify-center rounded-2xl border border-line text-[0.9375rem] font-bold text-ink active:bg-fill">
+          커뮤니티 가기
+        </NuxtLink>
       </section>
 
       <!-- 처음 오셨나요?: 순서대로 보면 되는 가이드 -->

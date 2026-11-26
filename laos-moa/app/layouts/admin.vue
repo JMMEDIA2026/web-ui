@@ -14,6 +14,7 @@ const adminLinks = [
   { label: '협력업체', to: '/admin/partners', icon: 'i-lucide-handshake' },
   { label: '회원', to: '/admin/members', icon: 'i-lucide-users' },
   { label: '배너', to: '/admin/banners', icon: 'i-lucide-images' },
+  { label: '커뮤니티', to: '/admin/community', icon: 'i-lucide-messages-square' },
   { label: '광고 문의', to: '/admin/inquiries', icon: 'i-lucide-inbox' },
   { label: '설정', to: '/admin/settings', icon: 'i-lucide-settings' }
 ]
@@ -45,7 +46,7 @@ async function logout() {
           </UBadge>
         </NuxtLink>
 
-        <nav v-if="!isLogin" class="ml-4 hidden items-center gap-1 md:flex" aria-label="관리 메뉴">
+        <nav v-if="!isLogin" class="ml-4 hidden items-center gap-1 xl:flex" aria-label="관리 메뉴">
           <NuxtLink
             v-for="l in links"
             :key="l.to"
@@ -64,7 +65,7 @@ async function logout() {
       </UContainer>
 
       <!-- 모바일 메뉴 -->
-      <nav v-if="!isLogin && links.length > 1" class="flex gap-1 overflow-x-auto border-t border-default px-4 py-2 md:hidden" aria-label="관리 메뉴">
+      <nav v-if="!isLogin && links.length > 1" class="flex gap-1 overflow-x-auto border-t border-default px-4 py-2 xl:hidden" aria-label="관리 메뉴">
         <NuxtLink
           v-for="l in links"
           :key="l.to"

@@ -36,6 +36,10 @@ const googleOpenUrl = /^https:\/\//i.test(business.mapUrl ?? '')
       ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(business.address)}`
       : ''
 
+// 이 업체에 달린 후기 개수
+const { data: reviewData } = await useFetch<{ total: number }>('/api/community/posts', { key: `reviews-${business.slug}`, query: { board: 'review', business: business.slug, limit: 1 }, default: () => ({ total: 0 }) })
+const reviewCount = computed(() => reviewData.value?.total ?? 0)
+
 const checkedOn = business.updatedAt
   ? new Date(business.updatedAt).toLocaleDateString('ko-KR', { timeZone: 'Asia/Vientiane', year: 'numeric', month: 'long', day: 'numeric' })
   : ''
@@ -151,6 +155,23 @@ const actionCount = [!!directions, !!contact, true].filter(Boolean).length
         <p class="mt-2 text-[1rem] leading-relaxed text-ink">
           {{ business.description }}
         </p>
+      </section>
+
+      <section class="card mt-3 p-4" aria-labelledby="rv-title">
+        <h2 id="rv-title" class="flex items-center gap-2 text-[1.125rem] font-extrabold text-ink">
+          <span aria-hidden="true">⭐</span>후기
+        </h2>
+        <p class="mt-1 text-[0.9375rem] text-ink-2">
+          {{ reviewCount ? `이용한 분들의 후기가 ${reviewCount}개 있어요.` : '아직 후기가 없어요. 다녀오셨다면 첫 후기를 남겨 주세요.' }}
+        </p>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <NuxtLink v-if="reviewCount" :to="{ path: '/community', query: { board: 'review', business: business.slug } }" class="btn btn-outline btn-sm">
+            후기 보기
+          </NuxtLink>
+          <NuxtLink :to="{ path: '/community/write', query: { board: 'review', business: business.slug } }" class="btn btn-primary btn-sm">
+            <span aria-hidden="true">✏️</span>후기 쓰기
+          </NuxtLink>
+        </div>
       </section>
 
       <section v-if="embedUrl" class="card mt-3 overflow-hidden" aria-labelledby="loc-title">
