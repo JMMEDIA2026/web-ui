@@ -61,7 +61,7 @@ const NuxtLinkComponent = resolveComponent('NuxtLink')
 </script>
 
 <template>
-  <section class="relative overflow-hidden rounded-lg bg-brand-50" aria-roledescription="carousel" aria-label="광고 배너" @mouseenter="hovering = true" @mouseleave="hovering = false" @focusin="hovering = true" @focusout="hovering = false">
+  <section class="relative overflow-hidden rounded-[20px] bg-brand-50" aria-roledescription="carousel" aria-label="광고 배너" @mouseenter="hovering = true" @mouseleave="hovering = false" @focusin="hovering = true" @focusout="hovering = false">
     <div ref="scroller" class="no-scrollbar flex snap-x snap-mandatory overflow-x-auto" @scroll.passive="onScroll" @touchstart.passive="hovering = true" @touchend.passive="hovering = false">
       <div v-for="(b, i) in banners" :key="b.id" class="relative aspect-[2/1] w-full shrink-0 snap-center" :inert="i !== index ? true : null" role="group" aria-roledescription="slide" :aria-label="`${i + 1} / ${count}`">
         <component

@@ -32,6 +32,38 @@
   --color-gold-50: #F1E6CF;
   --color-gold-500: #B08D57;
   --color-gold-700: #7A5A22;
+  /* 연한 회색 면(카테고리 타일·칩 바탕). 홈 화면에서는 차가운 회색으로 바뀝니다. */
+  --color-fill: #F3EEE2;
+}
+
+/* 홈 화면 전용 테마: 흰 바탕 + 파랑 포인트 + 검정 강조.
+   같은 토큰 이름을 바꿔 쓰기 때문에 bg-brand-*, text-ink 같은 클래스가 그대로 파랑·검정으로 보입니다. */
+.theme-nol {
+  --color-brand-50: #F1F3FF;
+  --color-brand-100: #E6E9FF;
+  --color-brand-200: #D0D6FF;
+  --color-brand-300: #B3BCFF;
+  --color-brand-400: #7C8AF5;
+  --color-brand-500: #3F4FE0;
+  --color-brand-600: #3140C8;
+  --color-brand-700: #2633A6;
+  --color-brand-800: #1C2680;
+  --color-app-bg: #FFFFFF;
+  --color-surface: #FFFFFF;
+  --color-line: #ECEDF3;
+  --color-ink: #17181C;
+  --color-ink-2: #656A78;
+  --color-fill: #F4F5F9;
+  --color-field-border: #8A8FA3;
+}
+body:has(.theme-nol) {
+  background: #FFFFFF;
+}
+/* 홈 화면의 제목은 명조 대신 굵은 고딕으로 */
+.laja-public.theme-nol h1,
+.laja-public.theme-nol h2 {
+  font-family: var(--font-sans);
+  letter-spacing: -0.02em;
 }
 
 /* Nuxt UI 기본 모서리: 입력·버튼 12px */

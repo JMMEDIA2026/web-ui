@@ -29,7 +29,8 @@ onBeforeUnmount(() => stop?.())
 <template>
   <div
     class="laja-public mx-auto min-h-dvh w-full max-w-[560px] bg-app-bg sm:border-x sm:border-line"
-    :style="{ '--nav-h': navVisible ? '64px' : '0px' }"
+    :class="route.meta.theme === 'nol' ? 'theme-nol' : ''"
+    :style="{ '--nav-h': navVisible ? '76px' : '0px' }"
   >
     <a href="#main-content" class="skip-link">본문 바로가기</a>
     <header
@@ -58,7 +59,7 @@ onBeforeUnmount(() => stop?.())
     <main
       id="main-content"
       tabindex="-1"
-      :style="isExplorer ? undefined : { paddingBottom: hasNav ? 'calc(64px + env(safe-area-inset-bottom, 0px) + 24px)' : '24px' }"
+      :style="isExplorer ? undefined : { paddingBottom: hasNav ? 'calc(76px + env(safe-area-inset-bottom, 0px) + 24px)' : '24px' }"
     >
       <slot />
     </main>
