@@ -81,10 +81,7 @@ const actionCount = [!!directions, !!contact, true].filter(Boolean).length
 
     <!-- 실제 업체 사진이 아직 없으면 업종 아이콘을 보여 줍니다. -->
     <PhotoGallery v-if="business.photos?.length" :photos="business.photos" :name="business.name" />
-    <div v-else class="grid h-44 place-items-center bg-brand-50 text-brand-600" role="img" :aria-label="`${category?.label} 업종`">
-      <img v-if="category?.emoji" :src="category.emoji" alt="" width="96" height="96" class="size-24 object-contain">
-      <AppIcon v-else name="biz" class="size-24" />
-    </div>
+    <img v-else :src="`/images/categories/${business.category}.jpg`" :alt="`${category?.label} 업종 대표 이미지`" width="1200" height="675" class="aspect-video w-full object-cover">
 
     <div class="px-4 pt-5 sm:px-5">
       <div class="flex flex-wrap items-center gap-2">

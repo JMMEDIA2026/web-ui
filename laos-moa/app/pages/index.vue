@@ -203,9 +203,7 @@ function toTop() {
               <NuxtLink :to="`/businesses/${b.slug}`" class="block">
                 <span class="relative block aspect-[4/3] overflow-hidden rounded-[18px] bg-fill">
                   <img v-if="b.photos?.length" :src="`/api/photos/${b.photos[0]}?size=thumb`" alt="" width="384" height="288" class="size-full object-cover" loading="lazy">
-                  <span v-else class="grid size-full place-items-center">
-                    <img :src="categoryMap[b.category]?.emoji" alt="" width="64" height="64" class="size-16 object-contain" loading="lazy">
-                  </span>
+                  <img v-else :src="`/images/categories/${b.category}.jpg`" alt="" width="384" height="216" class="size-full object-cover" loading="lazy">
                   <span v-if="b.sponsored" class="absolute start-2 top-2 rounded-full bg-white/95 px-2 py-0.5 text-[0.75rem] font-bold text-ink">광고</span>
                 </span>
                 <span class="mt-2 block truncate text-[1rem] font-bold text-ink">{{ b.name }}</span>

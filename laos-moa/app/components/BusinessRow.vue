@@ -46,8 +46,7 @@ async function copy(text: string) {
       <!-- 실제 업체 사진이 없으면 업종 아이콘만 보여 줍니다. 다른 업체 사진으로 대체하지 않습니다. -->
       <span class="grid h-[72px] w-[128px] shrink-0 place-items-center overflow-hidden rounded-lg bg-brand-50 text-brand-600">
         <img v-if="business.photos?.length" :src="`/api/photos/${business.photos[0]}?size=thumb`" alt="" width="128" height="72" class="size-full object-cover" loading="lazy">
-        <img v-else-if="category?.emoji" :src="category.emoji" alt="" width="48" height="48" class="size-12 object-contain" loading="lazy">
-        <AppIcon v-else name="biz" class="size-12" />
+        <img v-else :src="`/images/categories/${business.category}.jpg`" alt="" width="128" height="72" class="size-full object-cover" loading="lazy">
       </span>
       <span class="min-w-0 flex-1">
         <span class="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-[0.8125rem] text-ink-2">
