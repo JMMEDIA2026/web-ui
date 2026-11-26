@@ -54,6 +54,8 @@
 
 ## 4. 데이터 구조 (D1)
 
+> 자세한 표·칸 구조, 두 사이트가 한 DB를 쓰는 방법, **운영 DB에서 발견한 문제**는 [DATABASE.md](DATABASE.md)를 보세요.
+
 테이블: `settings`, `partners`, `reservations`, `inquiries`, `rate_hits`(요청 횟수 제한), `businesses`, `members`, `business_photos`, `banners`, `community_posts`, `community_comments`, `community_likes`, `community_reports`
 - 전체 정의는 `db/schema.sql`, 변경 이력은 `db/migrations/002~007`. **운영 DB에는 002~007 모두 적용됨.**
 - 새 마이그레이션은 파일로 만들고 `wrangler d1 execute laos-moa --remote --yes --file=...`로 적용. **배포 승인과 함께** 실행합니다.
