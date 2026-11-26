@@ -4,7 +4,7 @@ import { categories, categoryMap } from '~/data/businesses'
 
 // 홈: 흰 바탕 + 파랑 포인트 화면.
 // 위에서부터 검색 → 탭 → 배너 → 카테고리 → 환율 → 추천 업체 → 처음 오셨나요? → 바로가기
-definePageMeta({ region: true, header: false, theme: 'nol' })
+definePageMeta({ region: true, header: false })
 
 useSeoMeta({
   title: '라자 · 라오스 자유 여행 생활 정보와 한인 업체',

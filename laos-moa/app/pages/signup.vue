@@ -104,7 +104,7 @@ async function submit() {
           비밀번호가 서로 달라요.
         </p>
         <label class="mt-1 flex min-h-11 cursor-pointer items-center gap-3 text-[0.9375rem] text-ink">
-          <input v-model="showPw" type="checkbox" class="size-6 shrink-0 accent-[#2F4B2C]">
+          <input v-model="showPw" type="checkbox" class="size-6 shrink-0 accent-brand-500">
           비밀번호 보이기
         </label>
       </div>
@@ -147,13 +147,13 @@ async function submit() {
       <!-- 약관 동의 -->
       <div class="card p-3">
         <label class="flex min-h-11 cursor-pointer items-center gap-3 font-bold text-ink">
-          <input v-model="agreeAll" type="checkbox" class="size-6 shrink-0 accent-[#2F4B2C]">
+          <input v-model="agreeAll" type="checkbox" class="size-6 shrink-0 accent-brand-500">
           전체 동의
         </label>
         <div class="mt-1 border-t border-line pt-1">
           <div class="flex items-center">
             <label class="flex min-h-11 flex-1 cursor-pointer items-center gap-3 text-[0.9375rem] text-ink">
-              <input id="s-terms" v-model="form.agreeTerms" type="checkbox" class="size-6 shrink-0 accent-[#2F4B2C]" required>
+              <input id="s-terms" v-model="form.agreeTerms" type="checkbox" class="size-6 shrink-0 accent-brand-500" required>
               (필수) 이용약관 동의
             </label>
             <NuxtLink to="/terms" target="_blank" class="inline-flex min-h-11 items-center px-2 text-[0.875rem] font-bold text-brand-600 underline">
@@ -162,7 +162,7 @@ async function submit() {
           </div>
           <div class="flex items-center">
             <label class="flex min-h-11 flex-1 cursor-pointer items-center gap-3 text-[0.9375rem] text-ink">
-              <input id="s-privacy" v-model="form.agreePrivacy" type="checkbox" class="size-6 shrink-0 accent-[#2F4B2C]" required>
+              <input id="s-privacy" v-model="form.agreePrivacy" type="checkbox" class="size-6 shrink-0 accent-brand-500" required>
               (필수) 개인정보 수집·이용 동의
             </label>
             <NuxtLink to="/privacy" target="_blank" class="inline-flex min-h-11 items-center px-2 text-[0.875rem] font-bold text-brand-600 underline">

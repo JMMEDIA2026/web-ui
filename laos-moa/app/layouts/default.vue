@@ -29,7 +29,6 @@ onBeforeUnmount(() => stop?.())
 <template>
   <div
     class="laja-public mx-auto min-h-dvh w-full max-w-[560px] bg-app-bg sm:border-x sm:border-line"
-    :class="route.meta.theme === 'nol' ? 'theme-nol' : ''"
     :style="{ '--nav-h': navVisible ? '76px' : '0px' }"
   >
     <a href="#main-content" class="skip-link">본문 바로가기</a>

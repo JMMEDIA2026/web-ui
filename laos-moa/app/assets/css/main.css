@@ -6,39 +6,8 @@
 @theme static {
   --font-sans: 'Pretendard Variable', Pretendard, 'Noto Sans KR', system-ui, -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   /* 제목에만 쓰는 명조체 */
-  --font-serif: 'Noto Serif KR', 'Nanum Myeongjo', 'Apple SD Gothic Neo', 'Malgun Gothic', serif;
+  --font-serif: 'Apple SD Gothic Neo', 'Malgun Gothic', serif;
 
-  --color-brand-50: #F3F7EF;
-  --color-brand-100: #E5EDDD;
-  --color-brand-200: #D3E1C9;
-  --color-brand-300: #C5D5BC;
-  --color-brand-400: #8FAA86;
-  --color-brand-500: #2F4B2C;
-  --color-brand-600: #243B22;
-  --color-brand-700: #1B2E1A;
-  --color-brand-800: #142213;
-  --color-brand-900: #0E190D;
-  --color-brand-950: #080F08;
-
-  --color-app-bg: #F2ECDF;
-  /* 카드·입력칸·헤더·하단 메뉴의 바탕: 순백보다 살짝 따뜻한 크림 */
-  --color-surface: #FCF9F3;
-  --color-line: #E3DAC8;
-  /* 입력칸·보조 버튼의 테두리: 카드 표면 대비 3:1 이상 (WCAG 1.4.11) */
-  --color-field-border: #858C7A;
-  --color-ink: #1F2B1D;
-  --color-ink-2: #5E6A57;
-  /* 광고 표시 등 금색 포인트 */
-  --color-gold-50: #F1E6CF;
-  --color-gold-500: #B08D57;
-  --color-gold-700: #7A5A22;
-  /* 연한 회색 면(카테고리 타일·칩 바탕). 홈 화면에서는 차가운 회색으로 바뀝니다. */
-  --color-fill: #F3EEE2;
-}
-
-/* 홈 화면 전용 테마: 흰 바탕 + 파랑 포인트 + 검정 강조.
-   같은 토큰 이름을 바꿔 쓰기 때문에 bg-brand-*, text-ink 같은 클래스가 그대로 파랑·검정으로 보입니다. */
-.theme-nol {
   --color-brand-50: #F1F3FF;
   --color-brand-100: #E6E9FF;
   --color-brand-200: #D0D6FF;
@@ -48,22 +17,23 @@
   --color-brand-600: #3140C8;
   --color-brand-700: #2633A6;
   --color-brand-800: #1C2680;
+  --color-brand-900: #141B5C;
+  --color-brand-950: #0C1040;
+
   --color-app-bg: #FFFFFF;
+  /* 카드·입력칸·헤더·하단 메뉴의 바탕: 순백보다 살짝 따뜻한 크림 */
   --color-surface: #FFFFFF;
   --color-line: #ECEDF3;
+  /* 입력칸·보조 버튼의 테두리: 카드 표면 대비 3:1 이상 (WCAG 1.4.11) */
+  --color-field-border: #8A8FA3;
   --color-ink: #17181C;
   --color-ink-2: #656A78;
+  /* 광고 표시 등 금색 포인트 */
+  --color-gold-50: #F1E6CF;
+  --color-gold-500: #B08D57;
+  --color-gold-700: #7A5A22;
+  /* 연한 회색 면(카테고리 타일·칩 바탕). 홈 화면에서는 차가운 회색으로 바뀝니다. */
   --color-fill: #F4F5F9;
-  --color-field-border: #8A8FA3;
-}
-body:has(.theme-nol) {
-  background: #FFFFFF;
-}
-/* 홈 화면의 제목은 명조 대신 굵은 고딕으로 */
-.laja-public.theme-nol h1,
-.laja-public.theme-nol h2 {
-  font-family: var(--font-sans);
-  letter-spacing: -0.02em;
 }
 
 /* Nuxt UI 기본 모서리: 입력·버튼 12px */
@@ -75,12 +45,12 @@ body:has(.theme-nol) {
 }
 
 html {
-  background: #F2ECDF;
+  background: #FFFFFF;
 }
 
 body {
-  background: #F2ECDF;
-  color: #1F2B1D;
+  background: #FFFFFF;
+  color: var(--color-ink);
   font-size: 1rem;
   line-height: 1.5;
   word-break: keep-all;
@@ -89,7 +59,7 @@ body {
 
 /* ---------- 공통 컴포넌트 ---------- */
 
-/* 버튼: 높이 48px, 모서리 12px, 누름 상태 #243B22 */
+/* 버튼: 높이 48px, 모서리 12px, 누름 상태 진한 파랑 */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -97,7 +67,7 @@ body {
   gap: 8px;
   min-height: 48px;
   padding: 0 20px;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 1rem;
   font-weight: 700;
   line-height: 1.2;
@@ -112,26 +82,26 @@ body {
   cursor: not-allowed;
 }
 .btn-primary {
-  background: #2F4B2C;
+  background: var(--color-brand-500);
   color: #fff;
 }
 .btn-primary:active:not(:disabled) {
-  background: #243B22;
+  background: var(--color-brand-600);
 }
 .btn-outline {
-  background: #FCF9F3;
-  color: #243B22;
-  border: 1px solid #6F8F63;
+  background: #FFFFFF;
+  color: var(--color-brand-600);
+  border: 1px solid var(--color-brand-500);
 }
 .btn-outline:active:not(:disabled) {
-  background: #E5EDDD;
+  background: var(--color-brand-100);
 }
 .btn-quiet {
-  background: #E5EDDD;
-  color: #243B22;
+  background: var(--color-brand-100);
+  color: var(--color-brand-600);
 }
 .btn-quiet:active:not(:disabled) {
-  background: #D3E1C9;
+  background: var(--color-brand-200);
 }
 /* 보조 버튼: 최소 터치 영역 44px */
 .btn-sm {
@@ -165,14 +135,14 @@ body {
   width: 100%;
   min-height: 52px;
   padding: 0 16px;
-  border: 1px solid #858C7A;
-  border-radius: 10px;
-  background: #FCF9F3;
-  color: #1F2B1D;
+  border: 1px solid var(--color-field-border);
+  border-radius: 12px;
+  background: #FFFFFF;
+  color: var(--color-ink);
   font-size: 1rem;
 }
 .field::placeholder {
-  color: #5E6A57;
+  color: var(--color-ink-2);
 }
 textarea.field {
   padding: 12px 16px;
@@ -185,22 +155,22 @@ a:focus-visible,
 button:focus-visible,
 select:focus-visible,
 summary:focus-visible {
-  outline: 3px solid #2F4B2C;
+  outline: 3px solid var(--color-brand-500);
   outline-offset: 2px;
 }
 
 /* 주요 모듈: 모서리 16px, 얇은 선 */
 .card {
-  background: #FCF9F3;
-  border: 1px solid #E3DAC8;
-  border-radius: 10px;
+  background: #FFFFFF;
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
 }
 
 /* 소프트 입체 버튼: 메인 카테고리에만 씁니다.
    밝은 회색 배경 위의 흰 카드. 넓고 부드러운 아래 그림자, 위쪽 가장자리의 은은한 흰색 하이라이트,
    아주 연한 테두리. 누르면 그림자가 줄고 2px 내려갑니다. */
 .soft-btn {
-  background: linear-gradient(180deg, #FFFDF8 0%, #FCF9F3 100%);
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 100%);
   border: 1px solid rgb(60 50 20 / 0.05);
   border-radius: 20px;
   box-shadow:
@@ -221,7 +191,7 @@ summary:focus-visible {
 
 /* 목록 행 구분선 */
 .rows > * + * {
-  border-top: 1px solid #E3DAC8;
+  border-top: 1px solid var(--color-line);
 }
 
 /* 필터 칩 */
@@ -231,18 +201,18 @@ summary:focus-visible {
   flex: none;
   min-height: 44px;
   padding: 0 16px;
-  border-radius: 10px;
-  border: 1px solid #E3DAC8;
-  background: #FCF9F3;
-  color: #1F2B1D;
+  border-radius: 999px;
+  border: 1px solid var(--color-line);
+  background: #FFFFFF;
+  color: var(--color-ink);
   font-size: 0.9375rem;
   font-weight: 600;
   white-space: nowrap;
   cursor: pointer;
 }
 .chip[aria-pressed='true'] {
-  background: #2F4B2C;
-  border-color: #2F4B2C;
+  background: var(--color-ink);
+  border-color: var(--color-ink);
   color: #fff;
 }
 
@@ -265,10 +235,10 @@ summary:focus-visible {
   align-items: center;
   min-height: 44px;
   padding: 0 16px;
-  border: 2px solid #2F4B2C;
+  border: 2px solid var(--color-brand-500);
   border-radius: 8px;
-  background: #FCF9F3;
-  color: #243B22;
+  background: #FFFFFF;
+  color: var(--color-brand-600);
   font-weight: 700;
 }
 .skip-link:focus {
@@ -283,11 +253,10 @@ main:focus {
   filter: hue-rotate(-100deg) saturate(0.6) brightness(0.82);
 }
 
-/* 공개 화면의 제목은 명조체로 고급스럽게. 본문과 버튼은 고딕을 유지합니다. */
+/* 제목은 굵은 고딕으로 */
 .laja-public h1,
 .laja-public h2 {
-  font-family: var(--font-serif);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
 /* 제목으로 포커스를 옮길 때 윤곽선은 보이지 않게 합니다. */
@@ -306,7 +275,7 @@ main:focus {
 /* ---------- 지도(Leaflet) ---------- */
 .leaflet-container {
   font-family: inherit;
-  background: #E6E2D2;
+  background: #E9ECF2;
 }
 .lm-pin {
   background: transparent;
@@ -330,9 +299,9 @@ main:focus {
   max-width: 180px;
   padding: 4px 10px;
   border-radius: 999px;
-  border: 2px solid #2F4B2C;
-  background: #FCF9F3;
-  color: #1F2B1D;
+  border: 2px solid #3F4FE0;
+  background: #FFFFFF;
+  color: var(--color-ink);
   font-size: 0.8125rem;
   font-weight: 700;
   line-height: 1.3;
@@ -348,7 +317,7 @@ main:focus {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: #2F4B2C;
+  background: #3F4FE0;
   border: 3px solid #fff;
   color: #fff;
   display: flex;
@@ -371,9 +340,9 @@ main:focus {
   height: 18px;
   margin: 13px;
   border-radius: 50%;
-  background: #1F2B1D;
+  background: #17181C;
   border: 3px solid #fff;
-  box-shadow: 0 0 0 2px #1F2B1D;
+  box-shadow: 0 0 0 2px #17181C;
 }
 /* 확대·축소 버튼도 44px */
 .leaflet-touch .leaflet-bar a {

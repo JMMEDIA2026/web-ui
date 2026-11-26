@@ -42,7 +42,7 @@ let tileLoads = 0
 let tileErrors = 0
 let noticeTimer: ReturnType<typeof setTimeout> | undefined
 
-const pinSvg = '<svg width="36" height="44" viewBox="0 0 36 44" aria-hidden="true"><path d="M18 2C9.7 2 3 8.6 3 16.8 3 27.6 18 42 18 42s15-14.4 15-25.2C33 8.6 26.3 2 18 2z" fill="#2F4B2C" stroke="#fff" stroke-width="3"/><circle cx="18" cy="17" r="5.5" fill="#fff"/></svg>'
+const pinSvg = '<svg width="36" height="44" viewBox="0 0 36 44" aria-hidden="true"><path d="M18 2C9.7 2 3 8.6 3 16.8 3 27.6 18 42 18 42s15-14.4 15-25.2C33 8.6 26.3 2 18 2z" fill="#3F4FE0" stroke="#fff" stroke-width="3"/><circle cx="18" cy="17" r="5.5" fill="#fff"/></svg>'
 
 const escapeHtml = (s: string) =>
   s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', '\'': '&#39;' }[c] as string))
@@ -271,7 +271,7 @@ defineExpose({ invalidate, getBounds, locate, retry })
     </p>
 
     <!-- 지도 실패: 업체 목록과 연락 기능은 그대로 쓸 수 있습니다. -->
-    <div v-if="failed" class="absolute inset-0 z-[600] grid place-items-center bg-[#E6E2D2] p-6 text-center" role="alert">
+    <div v-if="failed" class="absolute inset-0 z-[600] grid place-items-center bg-fill p-6 text-center" role="alert">
       <div>
         <AppIcon name="map" class="mx-auto size-8 text-ink-2" />
         <p class="mt-2 font-bold text-ink">

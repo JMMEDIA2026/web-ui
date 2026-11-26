@@ -291,7 +291,7 @@ onBeforeUnmount(() => {
 
     <!-- 상단 지도 (목록 크게 보기를 누르면 접힙니다) -->
     <div
-      class="relative shrink-0 overflow-hidden bg-[#E6E2D2] transition-[height] duration-200"
+      class="relative shrink-0 overflow-hidden bg-fill transition-[height] duration-200"
       :style="{ height: expanded ? '0px' : 'min(240px, 30dvh)' }"
       :inert="expanded"
     >
@@ -355,7 +355,7 @@ onBeforeUnmount(() => {
       </p>
       <div class="flex items-center gap-2">
         <label for="biz-sort" class="sr-only">정렬</label>
-        <select id="biz-sort" v-model="sort" class="min-h-11 rounded-lg border border-[#858C7A] bg-surface px-2 text-[0.875rem] text-ink">
+        <select id="biz-sort" v-model="sort" class="min-h-11 rounded-lg border border-field-border bg-surface px-2 text-[0.875rem] text-ink">
           <option value="default">
             추천순
           </option>
