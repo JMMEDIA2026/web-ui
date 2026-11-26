@@ -30,7 +30,8 @@ function remove(i: number) {
   <div>
     <ul class="space-y-2">
       <li v-for="(c, i) in items" :key="i">
-        <div class="flex gap-2">
+        <div class="flex items-center gap-2">
+          <SnsIcon :type="c.type" class="size-8 shrink-0" />
           <select v-model="c.type" :aria-label="`연락 방법 ${i + 1} 종류`" class="w-28 shrink-0 border border-default bg-white px-2 py-2 text-sm font-bold" @change="push">
             <option v-for="t in CONTACT_TYPES" :key="t.key" :value="t.key">
               {{ t.label }}

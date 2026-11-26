@@ -182,6 +182,9 @@ const items = computed(() => [
           <a href="https://www.exchangerate-api.com" target="_blank" rel="noopener" class="inline-flex min-h-11 items-center underline">환율 제공 ExchangeRate-API (국제 기준 환율, 참고용)</a>
         </li>
         <li>
+          <a href="https://simpleicons.org" target="_blank" rel="noopener" class="inline-flex min-h-11 items-center underline">SNS 로고 Simple Icons (CC0)</a>
+        </li>
+        <li>
           <a href="https://github.com/microsoft/fluentui-emoji" target="_blank" rel="noopener" class="inline-flex min-h-11 items-center underline">3D 아이콘 Microsoft Fluent Emoji (MIT)</a>
         </li>
       </ul>

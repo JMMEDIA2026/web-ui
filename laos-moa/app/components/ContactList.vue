@@ -20,8 +20,8 @@ async function copy(item: ContactItem) {
   <ul class="space-y-2">
     <li v-for="(c, i) in items" :key="`${c.type}-${i}`" class="rounded-2xl bg-fill px-3 py-2">
       <div class="flex items-center justify-between gap-2">
-        <span class="inline-flex min-h-8 items-center gap-1 rounded-full px-2.5 text-[0.8125rem] font-bold" :class="contactTypeMap[c.type].chip">
-          <span aria-hidden="true">{{ contactTypeMap[c.type].emoji }}</span>{{ contactTypeMap[c.type].label }}
+        <span class="inline-flex min-h-9 items-center gap-1.5 rounded-full py-1 pe-3 ps-1.5 text-[0.875rem] font-bold" :class="contactTypeMap[c.type].chip">
+          <SnsIcon :type="c.type" class="size-6" />{{ contactTypeMap[c.type].label }}
         </span>
         <span class="flex shrink-0 gap-1.5">
           <a v-if="contactHref(c)" :href="contactHref(c)!" :target="contactHref(c)!.startsWith('tel:') ? undefined : '_blank'" rel="noopener" class="btn btn-outline btn-sm" :aria-label="`${contactTypeMap[c.type].label} ${c.type === 'phone' ? '전화 걸기' : '열기'}`">

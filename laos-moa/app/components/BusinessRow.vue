@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Business } from '~/data/businesses'
 import { categoryMap } from '~/data/businesses'
+import { parseContacts } from '../../shared/utils/contact'
 
 const props = defineProps<{
   business: Business
@@ -19,6 +20,7 @@ const contact = computed(() => contactAction(props.business.contact))
 
 // 목록 행에서는 좁은 칸에 맞춰 짧은 이름을 씁니다. (상세 화면에서는 "전화하기" 등 전체 이름)
 const shortContactLabel = computed(() => contact.value?.short ?? '연락처')
+const firstType = computed(() => parseContacts(props.business.contact)[0]?.type ?? 'etc')
 
 async function copy(text: string) {
   try {
@@ -69,15 +71,15 @@ async function copy(text: string) {
       </a>
       <template v-if="contact">
         <a v-if="contact.kind === 'tel'" :href="contact.href" class="btn btn-outline btn-row">
-          <AppIcon name="phone" class="size-4 shrink-0" />
+          <SnsIcon :type="firstType" class="size-4 shrink-0" />
           {{ shortContactLabel }}
         </a>
         <a v-else-if="contact.kind === 'link'" :href="contact.href" target="_blank" rel="noopener" class="btn btn-outline btn-row">
-          <AppIcon name="phone" class="size-4 shrink-0" />
+          <SnsIcon :type="firstType" class="size-4 shrink-0" />
           {{ shortContactLabel }}
         </a>
         <button v-else type="button" class="btn btn-outline btn-row" @click="copy(contact.text)">
-          <AppIcon name="copy" class="size-4 shrink-0" />
+          <SnsIcon :type="firstType" class="size-4 shrink-0" />
           {{ shortContactLabel }}
         </button>
       </template>

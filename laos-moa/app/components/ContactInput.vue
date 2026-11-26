@@ -29,8 +29,9 @@ const info = computed(() => contactTypeMap[type.value])
 <template>
   <div>
     <label :for="id" class="text-[0.9375rem] font-bold text-ink">{{ label }} <span v-if="required" class="text-brand-600">*</span></label>
-    <div class="mt-1.5 flex gap-2">
-      <select v-model="type" :aria-label="`${label} 종류`" class="field !w-[7.5rem] shrink-0 !px-3 font-bold" @change="push">
+    <div class="mt-1.5 flex items-center gap-2">
+      <SnsIcon :type="type" class="size-9 shrink-0" />
+      <select v-model="type" :aria-label="`${label} 종류`" class="field !w-[6.75rem] shrink-0 !px-3 font-bold" @change="push">
         <option v-for="t in CONTACT_TYPES" :key="t.key" :value="t.key">
           {{ t.label }}
         </option>

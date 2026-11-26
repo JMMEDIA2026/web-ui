@@ -23,6 +23,7 @@ const located = hasCoords(business)
 const directions = directionsUrl(business)
 const contact = contactAction(business.contact)
 const contacts = parseContacts(business.contact)
+const firstType = contacts[0]?.type ?? 'etc'
 
 // 구글 지도(API 키 없이 쓰는 삽입 지도와 링크)
 const embedUrl = located
@@ -220,15 +221,15 @@ const actionCount = [!!directions, !!contact, true].filter(Boolean).length
         </a>
         <template v-if="contact">
           <a v-if="contact.kind === 'tel'" :href="contact.href" class="btn btn-outline btn-bar">
-            <AppIcon name="phone" class="size-5" />
+            <SnsIcon :type="firstType" class="size-5" />
             {{ contact.label }}
           </a>
           <a v-else-if="contact.kind === 'link'" :href="contact.href" target="_blank" rel="noopener" class="btn btn-outline btn-bar">
-            <AppIcon name="phone" class="size-5" />
+            <SnsIcon :type="firstType" class="size-5" />
             {{ contact.label }}
           </a>
           <button v-else type="button" class="btn btn-outline btn-bar" @click="copy(contact.text)">
-            <AppIcon name="copy" class="size-5" />
+            <SnsIcon :type="firstType" class="size-5" />
             {{ contact.label }}
           </button>
         </template>
