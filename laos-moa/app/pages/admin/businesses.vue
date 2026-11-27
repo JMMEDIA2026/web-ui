@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { categories } from '~/data/businesses'
 import { contactProblem, parseContacts } from '../../../shared/utils/contact'
+import { normalizeCategory } from '../../../shared/utils/category'
 
 definePageMeta({ layout: 'admin', middleware: 'admin-auth' })
 useSeoMeta({ title: '업체 · 라자 관리자' })
@@ -42,7 +43,7 @@ async function load() {
   loading.value = true
   try {
     const [b, p] = await Promise.all([api<Biz[]>('/businesses'), api<PartnerOption[]>('/partners')])
-    rows.value = b
+    rows.value = b.map(x => ({ ...x, category: normalizeCategory(x.category) }))
     partners.value = p
   } finally {
     loading.value = false

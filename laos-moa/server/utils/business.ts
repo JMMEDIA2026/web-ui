@@ -1,3 +1,5 @@
+import { normalizeCategory } from '../../shared/utils/category'
+
 // DB 행을 화면에서 쓰는 모양으로 바꿉니다.
 export interface PublicBusiness {
   slug: string
@@ -23,7 +25,7 @@ export function toPublicBusiness(row: Record<string, unknown>): PublicBusiness {
   return {
     slug: String(row.id),
     name: String(row.name),
-    category: String(row.category),
+    category: normalizeCategory(String(row.category)),
     area: String(row.area ?? ''),
     address: String(row.address ?? ''),
     lat: typeof row.lat === 'number' ? row.lat : null,

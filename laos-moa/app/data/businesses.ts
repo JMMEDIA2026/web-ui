@@ -1,6 +1,6 @@
 import type { Tone } from './tones'
 
-export type CategoryKey = 'food' | 'mart' | 'exchange' | 'massage' | 'hospital' | 'school' | 'rent' | 'job'
+export type CategoryKey = 'food' | 'mart' | 'exchange' | 'massage' | 'golf' | 'hospital' | 'school' | 'rent' | 'job'
 
 export interface Category {
   key: CategoryKey
@@ -40,6 +40,7 @@ export const categories: Category[] = [
   { key: 'mart', icon: 'i-lucide-shopping-basket', label: '마트', description: '한인 마트·식료품', emoji: '/emoji/mart.png', tone: 'mint' },
   { key: 'exchange', icon: 'i-lucide-banknote', label: '환전', description: '환전소·환율', emoji: '/emoji/exchange.png', tone: 'sun' },
   { key: 'massage', icon: 'i-lucide-flower-2', label: '마사지', description: '마사지·스파', emoji: '/emoji/massage.png', tone: 'lilac' },
+  { key: 'golf', icon: 'i-lucide-flag', label: '골프', description: '골프장·부킹·픽업', emoji: '/emoji/golf.png', tone: 'mint' },
   { key: 'hospital', icon: 'i-lucide-stethoscope', label: '병원·약국', description: '한국어 진료·약국', emoji: '/emoji/hospital.png', tone: 'pink' },
   { key: 'school', icon: 'i-lucide-book-open', label: '학교·학원', description: '국제학교·학원', emoji: '/emoji/school.png', tone: 'lilac' },
   { key: 'rent', icon: 'i-lucide-house', label: '렌트·부동산', description: '주거·사무실 임대', emoji: '/emoji/house.png', tone: 'sky' },

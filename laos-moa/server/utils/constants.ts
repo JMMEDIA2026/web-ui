@@ -9,7 +9,7 @@ export const PARTNER_CATEGORIES = ['환전', '골프', '마사지', '오토바�
 export const INQUIRY_STATUSES = ['new', 'done'] as const
 
 // 사이트 업체 분류. 화면(app/data/businesses.ts)의 category key와 같게 유지하세요.
-export const BUSINESS_CATEGORIES = ['food', 'mart', 'exchange', 'massage', 'hospital', 'school', 'rent', 'job'] as const
+export const BUSINESS_CATEGORIES = ['food', 'mart', 'exchange', 'massage', 'golf', 'hospital', 'school', 'rent', 'job'] as const
 
 // 공개 API가 돌려주는 업체 필드 (협력업체 로그인 정보는 포함하지 않습니다)
 export const BUSINESS_SELECT = `

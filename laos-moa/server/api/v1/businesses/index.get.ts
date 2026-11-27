@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { rawCategoriesFor } from '../../../../shared/utils/category'
 import { BUSINESS_SELECT } from '../../../utils/constants'
 import { toPublicBusiness } from '../../../utils/business'
 import { pageParams, requireApiClient } from '../../../utils/apiAuth'
@@ -9,8 +10,9 @@ export default defineEventHandler(async (event) => {
   const { limit, offset } = pageParams(event)
   const q = z.object({ category: z.string().max(30).optional(), includeInactive: z.enum(['1', '0']).optional() }).parse(getQuery(event))
   const db = useDB(event)
-  const where = `(? = '' OR b.category = ?) AND (? = '1' OR b.active = 1)`
-  const binds = [q.category ?? '', q.category ?? '', q.includeInactive ?? '0']
+  const raws = q.category ? rawCategoriesFor(q.category) : []
+  const where = `(? = 0 OR b.category IN (${raws.map(() => '?').join(',') || "''"})) AND (? = '1' OR b.active = 1)`
+  const binds = [raws.length ? 1 : 0, ...raws, q.includeInactive ?? '0']
   const total = await db.prepare(`SELECT COUNT(*) AS n FROM businesses b WHERE ${where}`).bind(...binds).first<{ n: number }>()
   const { results } = await db
     .prepare(
