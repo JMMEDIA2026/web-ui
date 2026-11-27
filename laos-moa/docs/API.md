@@ -109,6 +109,9 @@
 | 키 전체 요청 | 분당 `ratePerMin` (기본 120, 10~1200) |
 | 가입 (`/auth/signup`) | 키당 1시간 30명 |
 | 로그인 실패 | 같은 이메일 10분 8번 (어느 사이트에서 틀려도 합산) |
+| 비밀번호 찾기 코드 요청 | 같은 이메일 1시간 3번, 키당 1시간 60번 |
+| 비밀번호 재설정 시도 | 같은 이메일 10분 10번 (코드는 5번 틀리면 폐기) |
+| 비밀번호 변경 | 회원당 10분 5번 |
 | 예약 작성 | 회원당 1시간 10건 |
 | 문의 작성 | 회원당 1시간 5건 |
 | 글 작성 | 회원당 10분 5개 |
@@ -175,6 +178,34 @@
 토큰이 유효한지 확인하고 최신 회원 정보·등급을 `{ "member": {…} }`로 돌려줍니다. 페이지를 열 때마다 호출해도 됩니다.
 
 > 등급은 활동 점수로 자동 계산됩니다(가입 후 7일마다 1점, 예약 요청 10점, 문의 5점, 취소·거절된 예약은 제외). `role: "admin"`이면 10등급(관리자)입니다.
+
+#### 비밀번호 찾기 · 변경 (`auth`)
+
+**1단계 `POST /auth/password/forgot`** — 가입한 이메일로 재설정 코드(8자)를 보냅니다.
+```json
+{ "email": "user@example.com" }
+```
+응답: `{ "ok": true, "message": "가입된 이메일이라면 …", "expiresInMinutes": 30 }`
+- 가입된 이메일이든 아니든 **같은 응답**을 줍니다(가입 여부를 알아내지 못하게). 화면에도 "가입된 이메일이라면 보냈어요"처럼 안내하세요.
+- 코드는 30분 유효, 1회용이며 새로 요청하면 이전 코드는 폐기됩니다.
+- 같은 이메일로 1시간에 3번, 한 키로 1시간에 60번까지. 초과하면 `429`.
+- 이메일 발송이 설정되지 않았으면 `503`입니다. (12번 "이메일 발송 설정" 참고)
+
+**2단계 `POST /auth/password/reset`** — 메일로 받은 코드와 새 비밀번호를 보냅니다.
+```json
+{ "email": "user@example.com", "code": "6DKHM34M", "newPassword": "newpass99" }
+```
+- `code`는 대소문자 구분 없이 8자리, `newPassword`는 가입과 같은 규칙(8~64자, 영문+숫자).
+- 코드가 틀렸거나 만료·사용됨이면 모두 같은 `400`(이유를 구분해 주지 않음). **5번 틀리면 그 코드는 폐기**되고, 같은 이메일로 10분에 10번까지만 시도할 수 있습니다.
+- 성공하면 비밀번호가 바뀌고 모든 코드가 폐기됩니다. 로그인 실패 잠금도 풀립니다.
+
+**`POST /auth/password/change`** (+ `X-Member-Token`) — 로그인한 회원이 비밀번호를 바꿉니다.
+```json
+{ "currentPassword": "newpass99", "newPassword": "third1234" }
+```
+현재 비밀번호가 틀리면 `400`(회원당 10분 5번까지).
+
+> 비밀번호를 바꿔도 **이미 발급된 회원 토큰은 만료일(30일)까지 유효**합니다. 보안상 걱정되면 다른 사이트에서 비밀번호 변경·재설정 직후 토큰 쿠키를 지우고 다시 로그인시키세요.
 
 ### 6.3 회원 목록 (`members:read`)
 - `GET /members?q=검색어&since=2026-01-01T00:00:00Z&limit=50&offset=0`
@@ -357,7 +388,8 @@ async function pullAll(path: string) {
 | v1 엔드포인트 | `server/api/v1/**` |
 | 관리자 키 관리 API | `server/api/admin/api-clients*` |
 | 관리자 화면 | `app/pages/admin/api.vue` |
-| DB | `db/migrations/008-api-clients.sql` (운영 적용 완료), `db/schema.sql` |
+| 이메일 발송 | `server/utils/mail.ts` (Resend) |
+| DB | `db/migrations/008-api-clients.sql` (운영 적용 완료), `009-password-resets.sql` (운영 배포 때 적용), `db/schema.sql` |
 
 새 엔드포인트를 만들 때는 `requireApiClient(event, '권한')`으로 시작하고, 회원 이름으로 하는 작업은 `requireApiMember(event, client)`를 더하세요. 응답에 `password_hash`·base64 이미지가 섞이지 않게 필요한 컬럼만 고르세요.
 
@@ -365,9 +397,27 @@ async function pullAll(path: string) {
 
 ## 11. 아직 없는 것 (필요하면 추가)
 
-- 비밀번호 변경·찾기, 이메일 인증
+- 이메일 인증(가입 시 이메일 소유 확인)
 - 회원 탈퇴 API (사이트에는 있음), 닉네임 변경
 - 좋아요·신고·글 삭제
 - 키 권한 수정 화면 (지금은 새 키 발급으로 대체)
 - 키별 허용 IP 제한, 웹훅(새 가입·예약 알림)
 - 업체 등록·수정 쓰기 API
+
+---
+
+## 12. 이메일 발송 설정 (비밀번호 찾기에 필요)
+
+비밀번호 찾기는 이메일로 코드를 보내므로 발송 서비스 설정이 먼저 필요합니다. 설정 전에는 `forgot`이 `503`을 돌려줍니다.
+라자는 [Resend](https://resend.com)(`https://api.resend.com/emails`)를 쓰도록 만들어져 있습니다.
+
+1. Resend 가입 → **도메인 인증**(예: `joybox.day`의 DNS에 Resend가 알려 주는 레코드 추가) → API 키 발급
+2. Worker 비밀 값 등록 (**키 값은 채팅에 붙여 넣지 말고 본인 터미널에서 직접 입력**)
+   ```bash
+   npx wrangler secret put MAIL_API_KEY --name laos-moa      # Resend API 키 입력
+   npx wrangler secret put MAIL_FROM --name laos-moa         # 예) 라자 <noreply@joybox.day>
+   ```
+3. 확인: 가입한 이메일로 `forgot`을 호출 → 메일에 8자리 코드가 오는지 확인
+4. 스팸함으로 가는지도 확인하세요. 도메인 인증(SPF·DKIM)을 해야 잘 도착합니다.
+
+`MAIL_API_URL`은 시험용(가짜 메일 서버)에만 쓰며 운영에서는 비워 둡니다.

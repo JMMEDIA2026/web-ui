@@ -183,3 +183,15 @@ CREATE TABLE IF NOT EXISTS api_clients (
   last_used_at TEXT NOT NULL DEFAULT '',
   request_count INTEGER NOT NULL DEFAULT 0
 );
+
+-- 비밀번호 재설정 코드 (db/migrations/009-password-resets.sql 과 같은 내용)
+CREATE TABLE IF NOT EXISTS password_resets (
+  id TEXT PRIMARY KEY,
+  member_id TEXT NOT NULL,
+  code_hash TEXT NOT NULL,
+  expires_at INTEGER NOT NULL,
+  attempts INTEGER NOT NULL DEFAULT 0,
+  used INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_password_resets_member ON password_resets (member_id, used, expires_at);
