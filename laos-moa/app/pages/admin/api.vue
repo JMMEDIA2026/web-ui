@@ -119,8 +119,16 @@ const scopeLabel = (k: string) => scopes.value.find(s => s.key === k)?.label ?? 
         <UButton color="neutral" variant="outline" size="sm" type="button" @click="copy(baseUrl, '주소')">복사</UButton>
       </div>
       <p class="mt-2 text-xs text-muted">
-        모든 요청에 <code>Authorization: Bearer 발급받은키</code> 헤더를 넣어요. 사용법은 문서 <code>docs/API.md</code> 를 보세요. 키는 다른 사이트의 <b>서버</b>에만 두고, 브라우저 코드에는 넣지 마세요.
+        모든 요청에 <code>Authorization: Bearer 발급받은키</code> 헤더를 넣어요. 키는 다른 사이트의 <b>서버</b>에만 두고, 브라우저 코드에는 넣지 마세요.
       </p>
+      <div class="mt-3">
+        <UButton color="primary" variant="soft" size="md" icon="i-lucide-download" href="/api/admin/api-docs" download="laja-api-guide.md">
+          API 연동 가이드 내려받기 (.md)
+        </UButton>
+        <p class="mt-1 text-xs text-muted">
+          다른 사이트를 만드는 사람(또는 AI)에게 이 파일을 그대로 전달하세요. 키는 이 파일에 들어 있지 않아요.
+        </p>
+      </div>
     </section>
 
     <!-- 방금 만든 키: 이 화면에서만 볼 수 있어요 -->

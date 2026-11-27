@@ -75,6 +75,8 @@ export default defineNuxtConfig({
     preset: 'cloudflare_module',
     // 정적 파일을 Worker 번들 안에 포함합니다. (별도 에셋 업로드 없이 한 번에 배포)
     serveStatic: 'inline',
+    // docs/ 폴더의 문서를 서버에 포함합니다. (관리자 > API 에서 API 가이드를 내려받을 때 사용)
+    serverAssets: [{ baseName: 'docs', dir: './docs' }],
     cloudflare: {
       deployConfig: true,
       nodeCompat: true,
