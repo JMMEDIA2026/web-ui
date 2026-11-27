@@ -71,12 +71,12 @@ const firstGuides = ['visa', 'telecom', 'health', 'banking']
 
 // 바로가기 카드: 사이트에 실제로 있는 기능만 모았습니다.
 const tools = [
-  { label: '환율 변환', desc: '원·킵·달러 바로 계산', emoji: '💱', to: '/exchange', bg: 'bg-primary/10' },
-  { label: '업체 지도', desc: '내 주변 한인 업체', emoji: '🗺️', to: '/businesses', bg: 'bg-[#ECFCCB]' },
-  { label: '커뮤니티', desc: '후기·질문·꿀팁', emoji: '💬', to: '/community', bg: 'bg-primary/5' },
-  { label: '생활 가이드', desc: '비자·통신·병원', emoji: '🧭', to: '/guides', bg: 'bg-[#FEF3C7]' },
-  { label: '업체 등록', desc: '무료로 올려요', emoji: '🏪', to: '/advertise', bg: 'bg-[#E7E5E4]' },
-  { label: '회원 정보', desc: '등급과 예약 기록', emoji: '👤', to: '/me', bg: 'bg-[#F5F5F4]' }
+  { label: '환율 변환', desc: '원·킵·달러 바로 계산', img: '/images/tiles/exchange.jpg', to: '/exchange', bg: 'bg-primary/10' },
+  { label: '업체 지도', desc: '내 주변 한인 업체', img: '/images/tiles/map.jpg', to: '/businesses', bg: 'bg-[#ECFCCB]' },
+  { label: '커뮤니티', desc: '후기·질문·꿀팁', img: '/images/tiles/community.jpg', to: '/community', bg: 'bg-primary/5' },
+  { label: '생활 가이드', desc: '비자·통신·병원', img: '/images/tiles/guide.jpg', to: '/guides', bg: 'bg-[#FEF3C7]' },
+  { label: '업체 등록', desc: '무료로 올려요', img: '/images/tiles/register.jpg', to: '/advertise', bg: 'bg-[#E7E5E4]' },
+  { label: '회원 정보', desc: '등급과 예약 기록', img: '/images/tiles/me.jpg', to: '/me', bg: 'bg-[#F5F5F4]' }
 ]
 
 // 맨 위로 버튼: 아래로 내려왔을 때만 보입니다.
@@ -300,8 +300,12 @@ function toTop() {
         </h2>
         <ul class="mt-3 grid grid-cols-2 gap-3">
           <li v-for="t in tools" :key="t.label">
-            <NuxtLink :to="t.to" class="lift flex min-h-[132px] flex-col justify-between rounded-lg p-4" :class="t.bg">
-              <span class="text-[2.25rem] leading-none" aria-hidden="true">{{ t.emoji }}</span>
+            <NuxtLink
+              :to="t.to"
+              class="lift flex min-h-[132px] flex-col justify-end rounded-lg bg-cover bg-center p-4"
+              :class="t.bg"
+              :style="{ backgroundImage: `url(${t.img})` }"
+            >
               <span>
                 <span class="block text-[1.0625rem] font-extrabold text-highlighted">{{ t.label }}</span>
                 <span class="block text-[0.8125rem] text-highlighted/70">{{ t.desc }}</span>

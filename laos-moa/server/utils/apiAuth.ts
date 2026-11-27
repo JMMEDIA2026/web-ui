@@ -10,8 +10,10 @@ export const API_SCOPES = {
   'businesses:read': '업체 목록·상세 읽기',
   'reservations:read': '예약 목록 읽기',
   'reservations:write': '회원 대신 예약 요청 만들기',
+  'reservations:manage': '예약 처리: 상태 바꾸기·업체 메모 쓰기',
   'inquiries:read': '광고·정보 문의 목록 읽기',
   'inquiries:write': '회원 대신 문의 남기기',
+  'content:read': '가이드·환율 읽기',
   'community:read': '커뮤니티 글·댓글 읽기',
   'community:write': '회원 대신 글·댓글 쓰기'
 } as const

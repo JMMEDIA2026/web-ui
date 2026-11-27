@@ -62,9 +62,11 @@
 | `businesses:read` | 업체 목록·상세 | 낮음 |
 | `reservations:read` | 예약 목록 (고객 이름·연락처 포함) | 높음 |
 | `reservations:write` | 회원 대신 예약 요청 만들기 | 보통 |
+| `reservations:manage` | 예약 처리: 상태 바꾸기, 업체 메모 읽기·쓰기 | **높음** |
 | `inquiries:read` | 광고·정보 문의 목록 (연락처 포함) | 높음 |
 | `inquiries:write` | 회원 대신 문의 남기기 | 보통 |
-| `community:read` | 글·댓글 읽기 | 낮음 |
+| `content:read` | 가이드·환율 읽기 | 낮음 |
+| `community:read` | 글·댓글 읽기 (댓글 목록 포함) | 낮음 |
 | `community:write` | 회원 대신 글·댓글 쓰기 | 보통 |
 
 권한이 없는 요청은 `403`입니다. 권한은 **관리자 > API**에서 새 키를 만들 때 정하며, 바꾸려면 새 키를 발급하세요.
@@ -236,7 +238,9 @@
 | `active` | 노출 여부 (`includeInactive=1`일 때만 비노출 업체 포함) |
 
 분류(`category`): `food` 식당 · `mart` 마트 · `exchange` 환전 · `massage` 마사지 · `hospital` 병원 · `school` 학교 · `rent` 렌트 · `job` 구인.
-사진 이미지: `https://laja.joybox.day/api/photos/{사진id}`
+사진 이미지: `https://laja.joybox.day/api/photos/{사진id}` (누구나 열림) 또는 키로 받는 `GET /photos/{사진id}` (`businesses:read`)
+
+- `GET /photos/{사진id}` — 사진 원본(최대 1280px). `?size=thumb`이면 작은 사진(480px). 사이트에 보이는 업체의 사진만 받을 수 있어요. 브라우저의 img 태그는 키 헤더를 보낼 수 없으니, 다른 사이트의 서버가 받아서 전달하세요.
 
 ### 6.5 예약
 - `GET /reservations?status=pending&memberId=M…&since=…` (`reservations:read`)
@@ -250,6 +254,19 @@
   - 응답: `{ "ok": true, "id": "R2M6JJNU" }` — 처리는 라자 관리자(또는 연결된 협력업체)가 합니다.
 
 목록 항목: `id, businessId, businessName, partnerId, memberId, customerName, customerContact, service, date, people, note, status, createdAt, updatedAt`
+
+#### 예약 처리 (`reservations:manage`)
+다른 사이트(또는 업체용 도구)에서 예약을 확인·확정·거절할 때 씁니다. 바뀐 상태는 회원의 "내 예약"에 바로 보여요.
+- `GET /reservations/{id}` — 예약 한 건. 목록과 달리 **업체 메모(`memo`)** 가 들어 있어요.
+- `PATCH /reservations/{id}`
+```json
+{ "status": "confirmed", "memo": "6시로 확정, 창가 자리" }
+```
+  - `status`: `pending` 대기 · `confirmed` 확정 · `declined` 거절 · `completed` 완료 · `cancelled` 취소. `memo`(500자 이하)는 업체 내부 메모이며 회원에게는 보이지 않아요.
+  - 둘 중 하나만 보내도 되고, 둘 다 없으면 `400`입니다. 없는 예약은 `404`.
+  - 응답: `{ "ok": true, "reservation": {…, "memo": "…"} }`
+  - 상태가 바뀌면 라자 Slack 알림에 "어느 사이트가 바꿨는지"가 남아요. 취소·거절된 예약은 회원 등급 점수에서 빠집니다.
+  - **이 권한은 예약 전체를 바꿀 수 있어요.** 믿을 수 있는 서버에만 주세요.
 
 ### 6.6 문의
 - `GET /inquiries?status=new&memberId=…&since=…` (`inquiries:read`) — 상태 `new` 새 문의 · `done` 처리 완료
@@ -272,10 +289,17 @@
 { "board": "review", "title": "맛있어요", "body": "정말 맛있었어요, 추천합니다", "businessId": "업체id", "rating": 5 }
 ```
   - 제목 2~80자, 본문 5~3000자. `businessId`·`rating`(0~5)은 `review`에서만 반영됩니다.
+- `GET /community/comments?postId=글id&since=시각&limit=50&offset=0` (`community:read`) — 댓글 목록(최근 순). 숨김 처리된 댓글·글, 회원전용 업체의 글에 달린 댓글은 나오지 않아요. 항목: `id, postId, body, author, authorIsAdmin, createdAt`
 - `POST /community/posts/{id}/comments` → `201` (`community:write` + `X-Member-Token`): `{ "body": "저도요" }` (1~500자)
 
 글 항목: `id, board, title, body, author(닉네임, 탈퇴 회원은 "탈퇴한 회원"), authorIsAdmin, businessId, businessName, rating, likeCount, commentCount, createdAt`
 신고가 3건 쌓여 자동 숨김된 글·댓글, 운영자가 숨긴 글은 나오지 않습니다. 좋아요·신고는 이 API에 아직 없습니다.
+
+### 6.8 가이드·환율 (`content:read`)
+- `GET /guides` — 생활 가이드 목록: `slug, title, summary, coverUrl, iconUrl, checkedOn, url`
+- `GET /guides/{slug}` — 가이드 본문: `keyPoints, sections[{emoji,title,items}], warning, contacts, sources, checkedOn`
+- `GET /rates` — 기준 환율 `{ updatedAt, base: "USD", rates: { USD_KRW, USD_LAK, KRW_LAK } }`. 국제 기준 환율이라 참고용이에요.
+- 가이드 내용은 공식 자료와 공공데이터를 정리한 것이니, 다른 사이트에 보여 줄 때 **`sources`(출처)와 `checkedOn`(확인일)을 함께 표시**하세요.
 
 ---
 
@@ -400,9 +424,9 @@ async function pullAll(path: string) {
 - 이메일 인증(가입 시 이메일 소유 확인)
 - 회원 탈퇴 API (사이트에는 있음), 닉네임 변경
 - 좋아요·신고·글 삭제
+- 업체·협력업체·배너 등록·수정 쓰기 API
 - 키 권한 수정 화면 (지금은 새 키 발급으로 대체)
 - 키별 허용 IP 제한, 웹훅(새 가입·예약 알림)
-- 업체 등록·수정 쓰기 API
 
 ---
 
@@ -421,3 +445,21 @@ async function pullAll(path: string) {
 4. 스팸함으로 가는지도 확인하세요. 도메인 인증(SPF·DKIM)을 해야 잘 도착합니다.
 
 `MAIL_API_URL`은 시험용(가짜 메일 서버)에만 쓰며 운영에서는 비워 둡니다.
+
+---
+
+## 13. 내보내는 자료와 제외한 자료
+
+| 자료 | 읽기 | 쓰기 | 비고 |
+|------|------|------|------|
+| 회원 | `members:read` | 가입·로그인·비밀번호(`auth`) | 비밀번호 해시 제외 |
+| 업체 | `businesses:read` | 없음 | 회원전용 분야 제외 |
+| 업체 사진 | `businesses:read` (`/photos`) | 없음 | 보이는 업체만 |
+| 예약 | `reservations:read` | 요청(`reservations:write`), 처리(`reservations:manage`) | 업체 메모는 manage 에서만 |
+| 문의 | `inquiries:read` | 남기기(`inquiries:write`) | |
+| 커뮤니티 글·댓글 | `community:read` | 글·댓글 쓰기(`community:write`) | 숨김·회원전용 업체 글 제외 |
+| 가이드·환율 | `content:read` | 없음 | |
+| 협력업체, 배너, 신고, 좋아요한 사람, 설정 | **내보내지 않음** | 없음 | 접속 코드 해시·광고주 정보 등 운영 정보 |
+| 회원전용 업체와 그 사진·글 | **내보내지 않음** | 없음 | 라자 로그인 회원에게만 공개 |
+
+- 기존 키는 새 권한이 자동으로 늘지 않아요. 새 권한(`content:read`, `reservations:manage`)이 필요하면 **관리자 > API**에서 새 키를 발급하세요.

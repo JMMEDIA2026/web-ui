@@ -37,6 +37,8 @@ export const reservationView = (r: Record<string, unknown>) => ({
   updatedAt: r.updated_at
 })
 
+export const reservationFullView = (r: Record<string, unknown>) => ({ ...reservationView(r), memo: r.partner_memo || '' })
+
 export const inquiryView = (r: Record<string, unknown>) => ({
   id: r.id,
   company: r.company,
