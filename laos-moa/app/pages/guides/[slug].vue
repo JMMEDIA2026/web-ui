@@ -121,6 +121,10 @@ useSeoMeta({
         관련 업체 찾기
       </UButton>
 
+      <NuxtLink :to="{ path: '/advertise', query: { type: 'correction', company: `가이드: ${guide.title}` }, hash: '#inquiry' }" class="mt-4 inline-flex min-h-11 items-center text-[0.875rem] font-bold text-primary underline underline-offset-2">
+        내용이 달라졌나요? 수정 요청하기
+      </NuxtLink>
+
       <!-- 출처와 확인일 -->
       <section class="mt-6" aria-labelledby="src-title">
         <h2 id="src-title" class="text-[0.9375rem] font-extrabold text-highlighted">
@@ -134,9 +138,6 @@ useSeoMeta({
         <p class="text-[0.8125rem] leading-relaxed text-muted">
           <span aria-hidden="true">🗓️ </span>{{ checked }}에 확인했어요. 제도와 요금은 바뀔 수 있어요.
         </p>
-        <NuxtLink :to="{ path: '/advertise', query: { type: 'correction', company: `가이드: ${guide.title}` }, hash: '#inquiry' }" class="mt-1 inline-flex min-h-11 items-center text-[0.875rem] font-bold text-primary underline underline-offset-2">
-          내용이 달라졌나요? 수정 요청하기
-        </NuxtLink>
       </section>
     </div>
   </div>

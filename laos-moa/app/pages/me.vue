@@ -169,25 +169,5 @@ const items = computed(() => [
         개인정보 처리 안내
       </NuxtLink>
     </nav>
-
-    <section class="mt-4" aria-labelledby="credit-title">
-      <h2 id="credit-title" class="text-[0.9375rem] font-bold text-highlighted">
-        출처 안내
-      </h2>
-      <ul class="mt-1 text-[0.8125rem] leading-relaxed text-muted">
-        <li>
-          <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" class="inline-flex min-h-11 items-center underline">지도 © OpenStreetMap contributors</a>
-        </li>
-        <li>
-          <a href="https://www.exchangerate-api.com" target="_blank" rel="noopener" class="inline-flex min-h-11 items-center underline">환율 제공 ExchangeRate-API (국제 기준 환율, 참고용)</a>
-        </li>
-        <li>
-          <a href="https://simpleicons.org" target="_blank" rel="noopener" class="inline-flex min-h-11 items-center underline">SNS 로고 Simple Icons (CC0)</a>
-        </li>
-        <li>
-          <a href="https://github.com/microsoft/fluentui-emoji" target="_blank" rel="noopener" class="inline-flex min-h-11 items-center underline">3D 아이콘 Microsoft Fluent Emoji (MIT)</a>
-        </li>
-      </ul>
-    </section>
   </div>
 </template>

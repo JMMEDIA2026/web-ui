@@ -181,7 +181,7 @@ const asOf = computed(() => {
       </div>
 
       <p class="mt-3 text-[0.8125rem] leading-snug text-muted">
-        {{ asOf }} 기준 · 출처 ExchangeRate-API
+        {{ asOf }} 기준
         <br>
         국제 기준 환율이며 환전소의 실제 환율과 다를 수 있어요. 환전 전에 업체에 확인해 주세요.
       </p>
