@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { formatDateTime } from '~/data/status'
+
 // 내 정보: 로그인한 회원만 볼 수 있습니다. 비회원은 로그인 화면으로 이동합니다.
 definePageMeta({ middleware: 'member' })
 
@@ -9,6 +11,42 @@ useSeoMeta({
 })
 
 const { member, refresh } = useMember()
+
+// ---- 내 예약 ----
+interface MyReservation {
+  id: string
+  businessId: string
+  businessName: string
+  service: string
+  date: string
+  people: number
+  note: string
+  status: 'pending' | 'confirmed' | 'declined' | 'completed' | 'cancelled'
+  createdAt: string
+}
+const { data: myRes, pending: resPending } = await useFetch<{ reservations: MyReservation[] }>('/api/members/reservations', {
+  key: 'my-reservations',
+  headers: useRequestHeaders(['cookie']),
+  default: () => ({ reservations: [] })
+})
+const reservations = computed(() => myRes.value?.reservations ?? [])
+
+// 상태 표시: 색에만 의존하지 않도록 글자와 기호를 함께 보여 줍니다.
+const RES_STATUS = {
+  pending: { label: '확인 대기', mark: '⏳', cls: 'bg-gold-50 text-gold-700', hint: '업체가 확인하고 있어요. 확정되면 연락드려요.' },
+  confirmed: { label: '예약 확정', mark: '✅', cls: 'bg-green-100 text-green-800', hint: '예약이 확정됐어요. 날짜에 맞춰 방문해 주세요.' },
+  declined: { label: '예약 불가', mark: '⚠️', cls: 'bg-red-100 text-red-800', hint: '이번에는 어려워요. 다른 날짜나 업체로 다시 요청해 보세요.' },
+  completed: { label: '이용 완료', mark: '🙌', cls: 'bg-muted text-highlighted', hint: '이용해 주셔서 고마워요.' },
+  cancelled: { label: '취소됨', mark: '✖️', cls: 'bg-muted text-muted', hint: '취소된 예약이에요.' }
+} as const
+const resMeta = (s: string) => RES_STATUS[s as keyof typeof RES_STATUS] ?? { label: s, mark: '•', cls: 'bg-muted text-highlighted', hint: '' }
+const WEEK = ['일', '월', '화', '수', '목', '금', '토']
+function dateLabel(ymd: string) {
+  const [y, m, d] = ymd.split('-').map(Number)
+  if (!y || !m || !d) return ymd
+  return `${m}월 ${d}일 (${WEEK[new Date(Date.UTC(y, m - 1, d)).getUTCDay()]})`
+}
+const requestedAt = (iso: string) => formatDateTime(iso)
 
 // 등급표는 안내를 펼칠 때만 불러옵니다.
 interface GradeRow { level: number, name: string, min: number | null }
@@ -144,6 +182,44 @@ const items = computed(() => [
           탈퇴하기
         </UButton>
       </form>
+    </section>
+
+    <!-- 내가 요청한 예약 -->
+    <section id="my-reservations" class="card mt-4 p-4" aria-labelledby="myres-title">
+      <div class="flex items-center justify-between gap-2">
+        <h2 id="myres-title" class="text-[1.125rem] font-bold text-highlighted">
+          내 예약
+          <span v-if="reservations.length" class="ms-1 font-sans text-[0.875rem] font-bold text-muted">{{ reservations.length }}건</span>
+        </h2>
+        <NuxtLink to="/reserve" class="inline-flex min-h-11 items-center text-[0.875rem] font-bold text-primary underline underline-offset-2">예약 요청하기</NuxtLink>
+      </div>
+
+      <p v-if="resPending" class="mt-2 text-[0.9375rem] text-muted">불러오는 중이에요…</p>
+      <ul v-else-if="reservations.length" class="mt-2 divide-y divide-default">
+        <li v-for="r in reservations" :key="r.id" class="py-3">
+          <div class="flex items-start justify-between gap-2">
+            <p class="min-w-0 break-words text-[1rem] font-bold text-highlighted">
+              {{ r.businessName || '업체 정보 없음' }}
+            </p>
+            <span class="inline-flex shrink-0 items-center gap-1 rounded-md px-2 py-1 text-[0.8125rem] font-bold" :class="resMeta(r.status).cls">
+              <span aria-hidden="true">{{ resMeta(r.status).mark }}</span>{{ resMeta(r.status).label }}
+            </span>
+          </div>
+          <p class="mt-1 text-[0.9375rem] text-highlighted">
+            {{ dateLabel(r.date) }} · {{ r.people }}명<template v-if="r.service"> · {{ r.service }}</template>
+          </p>
+          <p class="mt-0.5 text-[0.8125rem] leading-relaxed text-muted">
+            {{ resMeta(r.status).hint }}
+          </p>
+          <p class="mt-0.5 text-[0.75rem] text-muted">
+            요청 {{ requestedAt(r.createdAt) }} · 예약번호 {{ r.id }}
+          </p>
+        </li>
+      </ul>
+      <div v-else class="mt-2 text-[0.9375rem] leading-relaxed text-muted">
+        <p>아직 요청한 예약이 없어요.</p>
+        <p>업체를 골라 예약을 요청하면 이곳에서 진행 상태를 볼 수 있어요.</p>
+      </div>
     </section>
 
     <ul class="rows card mt-4 overflow-hidden">
