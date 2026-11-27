@@ -16,6 +16,7 @@ const adminLinks = [
   { label: '배너', to: '/admin/banners', icon: 'i-lucide-images' },
   { label: '커뮤니티', to: '/admin/community', icon: 'i-lucide-messages-square' },
   { label: '광고 문의', to: '/admin/inquiries', icon: 'i-lucide-inbox' },
+  { label: 'API', to: '/admin/api', icon: 'i-lucide-plug' },
   { label: '설정', to: '/admin/settings', icon: 'i-lucide-settings' }
 ]
 const partnerLinks = [

@@ -227,3 +227,32 @@ export async function sendWebhook(event: H3Event, text: string): Promise<{ confi
 export async function notify(event: H3Event, text: string): Promise<void> {
   await sendWebhook(event, text)
 }
+
+// --- 외부 사이트(API)용 회원 토큰 ---
+// 쿠키 세션과 섞이지 않도록 서명 대상에 "api-member:" 접두어를 붙입니다.
+const API_TOKEN_DAYS = 30
+
+export async function signApiMemberToken(event: H3Event, memberId: string, clientId: string): Promise<{ token: string, expiresAt: string }> {
+  const exp = Date.now() + API_TOKEN_DAYS * 86400 * 1000
+  const payload = b64url(enc.encode(JSON.stringify({ mid: memberId, cid: clientId, exp })))
+  const signature = await sign(secretOf(event), `api-member:${payload}`)
+  return { token: `lm1.${payload}.${signature}`, expiresAt: new Date(exp).toISOString() }
+}
+
+export async function readApiMemberToken(event: H3Event, raw: string): Promise<{ memberId: string, clientId: string } | null> {
+  const [prefix, payload, signature] = raw.split('.')
+  if (prefix !== 'lm1' || !payload || !signature) return null
+  const expected = await sign(secretOf(event), `api-member:${payload}`)
+  if (!timingSafeEqual(expected, signature)) return null
+  try {
+    const data = JSON.parse(b64urlDecode(payload)) as { mid?: string, cid?: string, exp?: number }
+    if (!data.mid || !data.cid || !data.exp || data.exp < Date.now()) return null
+    return { memberId: data.mid, clientId: data.cid }
+  } catch {
+    return null
+  }
+}
+
+export async function sha256Hex(text: string): Promise<string> {
+  return toHex(await crypto.subtle.digest('SHA-256', enc.encode(text)))
+}

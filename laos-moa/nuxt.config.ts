@@ -61,6 +61,7 @@ export default defineNuxtConfig({
     '/api/community/**': { headers: { 'Cache-Control': 'private, no-store' } },
     '/community/write': { headers: { 'X-Robots-Tag': 'noindex, nofollow' } },
     '/api/admin/**': { headers: { 'Cache-Control': 'no-store' } },
+    '/api/v1/**': { headers: { 'Cache-Control': 'private, no-store' } },
     '/api/partner/**': { headers: { 'Cache-Control': 'no-store' } }
   },
 

@@ -86,7 +86,8 @@ CREATE TABLE IF NOT EXISTS members (
   privacy_at TEXT NOT NULL,
   created_at TEXT NOT NULL,
   last_login_at TEXT NOT NULL DEFAULT '',
-  role TEXT NOT NULL DEFAULT 'member'      -- member / admin(10등급)
+  role TEXT NOT NULL DEFAULT 'member',     -- member / admin(10등급)
+  signup_client TEXT NOT NULL DEFAULT ''   -- 가입한 외부 사이트(API 키 id), 라자 직접 가입은 빈 값
 );
 CREATE UNIQUE INDEX IF NOT EXISTS idx_members_nickname ON members (lower(nickname));
 
@@ -167,4 +168,18 @@ CREATE TABLE IF NOT EXISTS community_reports (
   reason TEXT NOT NULL DEFAULT '',
   created_at TEXT NOT NULL,
   UNIQUE (target_type, target_id, member_id)
+);
+
+-- 외부 사이트용 API 키 (db/migrations/008-api-clients.sql 과 같은 내용)
+CREATE TABLE IF NOT EXISTS api_clients (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  key_prefix TEXT NOT NULL,
+  key_hash TEXT NOT NULL UNIQUE,
+  scopes TEXT NOT NULL DEFAULT '',
+  rate_per_min INTEGER NOT NULL DEFAULT 120,
+  active INTEGER NOT NULL DEFAULT 1,
+  created_at TEXT NOT NULL,
+  last_used_at TEXT NOT NULL DEFAULT '',
+  request_count INTEGER NOT NULL DEFAULT 0
 );
