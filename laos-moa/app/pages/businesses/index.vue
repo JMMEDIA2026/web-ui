@@ -22,7 +22,8 @@ const { real, pending, error, refresh } = await useBusinessList()
 const store = useExplorerState()
 
 const str = (v: unknown) => (typeof v === 'string' ? v : '')
-const validCategory = (v: string) => (categories.some(c => c.key === v) ? v : '')
+// 회원전용은 따로 전용 화면(/members-only)에서만 보여 줍니다.
+const validCategory = (v: string) => (v !== 'members' && categories.some(c => c.key === v) ? v : '')
 
 // 처음 값은 주소(?q=&category=&region=)에서 읽습니다. (홈에서 넘어온 검색어·업종·지역)
 const q = ref(str(route.query.q))
@@ -278,6 +279,10 @@ onBeforeUnmount(() => {
         >
           {{ c.label }}
         </button>
+        <NuxtLink to="/members-only" class="chip gap-1.5">
+          <UIcon name="i-lucide-lock-keyhole" class="size-4" aria-hidden="true" />
+          회원전용
+        </NuxtLink>
       </div>
     </div>
 

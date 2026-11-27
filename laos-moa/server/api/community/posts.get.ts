@@ -1,3 +1,4 @@
+import { hasMemberAccess, postNotMembersOnlySql } from '../../utils/memberOnly'
 import { BOARD_KEYS } from '../../utils/community'
 
 // 게시글 목록 (누구나 볼 수 있어요). 숨김 처리된 글은 나오지 않습니다.
@@ -15,6 +16,8 @@ export default defineEventHandler(async (event) => {
 
   const db = useDB(event)
   const viewer = await readMemberId(event)
+  // 회원전용 업체에 달린 글은 로그인한 회원에게만 보여 줍니다.
+  if (!(await hasMemberAccess(event))) where.push(postNotMembersOnlySql)
   const { results } = await db
     .prepare(`SELECT ${POST_SELECT} WHERE ${where.join(' AND ')} ORDER BY p.created_at DESC LIMIT ? OFFSET ?`)
     .bind(...args, limit + 1, offset)

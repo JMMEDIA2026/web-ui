@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { notMembersOnlySql } from '../../../utils/memberOnly'
 import { rawCategoriesFor } from '../../../../shared/utils/category'
 import { BUSINESS_SELECT } from '../../../utils/constants'
 import { toPublicBusiness } from '../../../utils/business'
@@ -11,7 +12,7 @@ export default defineEventHandler(async (event) => {
   const q = z.object({ category: z.string().max(30).optional(), includeInactive: z.enum(['1', '0']).optional() }).parse(getQuery(event))
   const db = useDB(event)
   const raws = q.category ? rawCategoriesFor(q.category) : []
-  const where = `(? = 0 OR b.category IN (${raws.map(() => '?').join(',') || "''"})) AND (? = '1' OR b.active = 1)`
+  const where = `(? = 0 OR b.category IN (${raws.map(() => '?').join(',') || "''"})) AND (? = '1' OR b.active = 1) AND ${notMembersOnlySql('b')}`
   const binds = [raws.length ? 1 : 0, ...raws, q.includeInactive ?? '0']
   const total = await db.prepare(`SELECT COUNT(*) AS n FROM businesses b WHERE ${where}`).bind(...binds).first<{ n: number }>()
   const { results } = await db

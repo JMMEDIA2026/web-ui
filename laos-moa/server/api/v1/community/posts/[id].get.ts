@@ -1,12 +1,13 @@
 import { POST_SELECT, authorName, publicPost } from '../../../../utils/community'
 import type { PostRow } from '../../../../utils/community'
+import { postNotMembersOnlySql } from '../../../../utils/memberOnly'
 import { requireApiClient } from '../../../../utils/apiAuth'
 
 export default defineEventHandler(async (event) => {
   await requireApiClient(event, 'community:read')
   const id = getRouterParam(event, 'id') ?? ''
   const db = useDB(event)
-  const row = await db.prepare(`SELECT ${POST_SELECT} WHERE p.id = ? AND p.hidden = 0`).bind(id).first<PostRow>()
+  const row = await db.prepare(`SELECT ${POST_SELECT} WHERE p.id = ? AND p.hidden = 0 AND ${postNotMembersOnlySql}`).bind(id).first<PostRow>()
   if (!row) throw createError({ statusCode: 404, statusMessage: '글을 찾을 수 없어요' })
   const { results } = await db
     .prepare(`SELECT c.id, c.body, c.created_at, m.nickname, m.role AS author_role

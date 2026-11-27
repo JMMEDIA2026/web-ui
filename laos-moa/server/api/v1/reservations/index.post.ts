@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { notMembersOnlySql } from '../../../utils/memberOnly'
 import { requireApiClient, requireApiMember } from '../../../utils/apiAuth'
 
 const schema = z.object({
@@ -29,7 +30,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 429, statusMessage: '예약 요청이 너무 많아요. 잠시 후 다시 시도해 주세요' })
   }
   const business = await db
-    .prepare('SELECT b.id, b.name, p.id AS partner_id FROM businesses b LEFT JOIN partners p ON p.id = b.partner_id AND p.active = 1 WHERE b.id = ? AND b.active = 1')
+    .prepare('SELECT b.id, b.name, p.id AS partner_id FROM businesses b LEFT JOIN partners p ON p.id = b.partner_id AND p.active = 1 WHERE b.id = ? AND b.active = 1 AND ' + notMembersOnlySql('b'))
     .bind(body.businessId)
     .first<{ id: string, name: string, partner_id: string | null }>()
   if (!business) throw createError({ statusCode: 404, statusMessage: '이 업체는 지금 예약을 받지 않아요' })

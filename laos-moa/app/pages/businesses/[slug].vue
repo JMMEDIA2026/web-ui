@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Business } from '~/data/businesses'
 import { categoryMap } from '~/data/businesses'
 import { parseContacts } from '../../../shared/utils/contact'
 
@@ -10,14 +11,18 @@ const router = useRouter()
 const toast = useToast()
 
 const { real } = await useBusinessList()
-const business = real.value.find(b => b.slug === route.params.slug)
+let business = real.value.find(b => b.slug === route.params.slug)
+if (!business) {
+  // 회원전용 업체는 공개 목록에 없고, 로그인한 회원만 불러올 수 있어요.
+  business = await useRequestFetch()<Business>(`/api/members-only/businesses/${encodeURIComponent(String(route.params.slug))}`).catch(() => undefined)
+}
 
 if (!business) {
   throw createError({ statusCode: 404, statusMessage: '업체를 찾을 수 없어요', fatal: true })
 }
 
 const category = categoryMap[business.category]
-const EMOJI: Record<string, string> = { food: '🍚', mart: '🛒', exchange: '💱', massage: '💆', hospital: '🏥', school: '🎓', rent: '🏠', job: '💼' }
+const EMOJI: Record<string, string> = { food: '🍚', mart: '🛒', exchange: '💱', massage: '💆', hospital: '🏥', school: '🎓', rent: '🏠', job: '💼', members: '🔐' }
 const catEmoji = EMOJI[business.category] ?? '🏷️'
 const located = hasCoords(business)
 const directions = directionsUrl(business)
@@ -40,7 +45,7 @@ const googleOpenUrl = /^https:\/\//i.test(business.mapUrl ?? '')
       : ''
 
 // 이 업체에 달린 후기 개수
-const { data: reviewData } = await useFetch<{ total: number }>('/api/community/posts', { key: `reviews-${business.slug}`, query: { board: 'review', business: business.slug, limit: 1 }, default: () => ({ total: 0 }) })
+const { data: reviewData } = await useFetch<{ total: number }>('/api/community/posts', { key: `reviews-${business.slug}`, headers: useRequestHeaders(['cookie']), query: { board: 'review', business: business.slug, limit: 1 }, default: () => ({ total: 0 }) })
 const reviewCount = computed(() => reviewData.value?.total ?? 0)
 
 const checkedOn = business.updatedAt
@@ -65,6 +70,7 @@ async function copy(text: string) {
 useSeoMeta({
   title: `${business.name} · 라자`,
   description: business.description,
+  ...(business.category === 'members' ? { robots: 'noindex' } : {}),
   ...(business.photos?.length ? { ogImage: `https://laja.joybox.day/api/photos/${business.photos[0]}` } : {})
 })
 

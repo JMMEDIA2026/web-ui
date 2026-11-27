@@ -5,7 +5,7 @@ const route = useRoute()
 // 현재 메뉴는 연한 회색 알약 배경과 진한 글자로 표시합니다.
 const items = [
   { label: '홈', to: '/', icon: 'home', match: (p: string) => p === '/' || p.startsWith('/exchange') },
-  { label: '업체', to: '/businesses', icon: 'biz', match: (p: string) => p.startsWith('/businesses') },
+  { label: '업체', to: '/businesses', icon: 'biz', match: (p: string) => p.startsWith('/businesses') || p.startsWith('/members-only') },
   { label: '커뮤니티', to: '/community', icon: 'chat', match: (p: string) => p.startsWith('/community') },
   { label: '가이드', to: '/guides', icon: 'book', match: (p: string) => p.startsWith('/guides') },
   { label: '내 정보', to: '/me', icon: 'me', match: (p: string) => ['/me', '/reserve', '/advertise', '/login', '/signup', '/terms', '/privacy'].some(x => p.startsWith(x)) }

@@ -1,6 +1,6 @@
 import type { Tone } from './tones'
 
-export type CategoryKey = 'food' | 'mart' | 'exchange' | 'massage' | 'golf' | 'hospital' | 'school' | 'rent' | 'job'
+export type CategoryKey = 'food' | 'mart' | 'exchange' | 'massage' | 'golf' | 'hospital' | 'school' | 'rent' | 'job' | 'members'
 
 export interface Category {
   key: CategoryKey
@@ -44,7 +44,8 @@ export const categories: Category[] = [
   { key: 'hospital', icon: 'i-lucide-stethoscope', label: '병원·약국', description: '한국어 진료·약국', emoji: '/emoji/hospital.png', tone: 'pink' },
   { key: 'school', icon: 'i-lucide-book-open', label: '학교·학원', description: '국제학교·학원', emoji: '/emoji/school.png', tone: 'lilac' },
   { key: 'rent', icon: 'i-lucide-house', label: '렌트·부동산', description: '주거·사무실 임대', emoji: '/emoji/house.png', tone: 'sky' },
-  { key: 'job', icon: 'i-lucide-briefcase-business', label: '구인·구직', description: '일자리·인력', emoji: '/emoji/job.png', tone: 'peach' }
+  { key: 'job', icon: 'i-lucide-briefcase-business', label: '구인·구직', description: '일자리·인력', emoji: '/emoji/job.png', tone: 'peach' },
+  { key: 'members', icon: 'i-lucide-lock-keyhole', label: '회원전용', description: '회원만 볼 수 있는 업체', emoji: '/emoji/members.png', tone: 'sky' }
 ]
 
 export const categoryMap = Object.fromEntries(categories.map(c => [c.key, c])) as Record<CategoryKey, Category>

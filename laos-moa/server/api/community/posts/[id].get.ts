@@ -1,3 +1,6 @@
+import { hasMemberAccess } from '../../../utils/memberOnly'
+import { MEMBERS_CATEGORY } from '../../../utils/constants'
+
 // 게시글 한 개와 댓글 (누구나 볼 수 있어요). 숨김 글은 글쓴이와 관리자만 볼 수 있어요.
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id') ?? ''
@@ -8,6 +11,10 @@ export default defineEventHandler(async (event) => {
   const admin = await isAdminRequest(event)
   if (!row || (row.hidden && !admin && row.member_id !== viewer)) {
     throw createError({ statusCode: 404, statusMessage: '글을 찾을 수 없어요' })
+  }
+  if (row.business_id && !(await hasMemberAccess(event))) {
+    const mb = await db.prepare('SELECT category FROM businesses WHERE id = ?').bind(row.business_id).first<{ category: string }>()
+    if (mb?.category === MEMBERS_CATEGORY) throw createError({ statusCode: 404, statusMessage: '글을 찾을 수 없어요' })
   }
 
   const { results } = await db
