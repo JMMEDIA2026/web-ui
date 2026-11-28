@@ -33,7 +33,8 @@ const shortcuts = computed(() => [
   { label: '렌트', emoji: '/emoji/house.png', to: toBusinesses('rent') },
   { label: '마사지', emoji: '/emoji/massage.png', to: toBusinesses('massage') },
   { label: '비자', emoji: '/emoji/visa.png', to: '/guides/visa' },
-  { label: '통신', emoji: '/emoji/phone.png', to: '/guides/telecom' }
+  // 영화관은 다른 사이트라서 새 창으로 열어요.
+  { label: '영화관', emoji: '/emoji/cinema.png', to: 'https://laovod.joybox.day', external: true }
 ])
 
 // 상단 탭: 같은 사이트 안의 큰 화면으로 가는 링크입니다.
@@ -168,7 +169,13 @@ function toTop() {
       <nav class="mt-5" aria-label="주요 카테고리">
         <ul class="grid grid-cols-4 gap-x-2 gap-y-4">
           <li v-for="s in shortcuts" :key="s.label">
-            <NuxtLink :to="s.to" class="group flex flex-col items-center gap-1.5 text-center">
+            <a v-if="'external' in s" :href="s.to as string" target="_blank" rel="noopener noreferrer" class="group flex flex-col items-center gap-1.5 text-center">
+              <span class="grid size-[68px] place-items-center rounded-lg border border-default bg-muted lift group-hover:-translate-y-0.5 group-active:scale-95">
+                <img :src="s.emoji" alt="" width="40" height="40" class="size-10 object-contain" loading="lazy">
+              </span>
+              <span class="text-[0.8125rem] font-semibold leading-tight text-highlighted">{{ s.label }}<span class="sr-only"> (새 창으로 열려요)</span></span>
+            </a>
+            <NuxtLink v-else :to="s.to" class="group flex flex-col items-center gap-1.5 text-center">
               <span class="grid size-[68px] place-items-center rounded-lg border border-default bg-muted lift group-hover:-translate-y-0.5 group-active:scale-95">
                 <img :src="s.emoji" alt="" width="40" height="40" class="size-10 object-contain" loading="lazy">
               </span>
