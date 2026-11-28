@@ -8,7 +8,7 @@ const items = [
   { label: '업체', to: '/businesses', icon: 'biz', match: (p: string) => p.startsWith('/businesses') || p.startsWith('/members-only') },
   { label: '커뮤니티', to: '/community', icon: 'chat', match: (p: string) => p.startsWith('/community') },
   { label: '가이드', to: '/guides', icon: 'book', match: (p: string) => p.startsWith('/guides') },
-  { label: '내 정보', to: '/me', icon: 'me', match: (p: string) => ['/me', '/reserve', '/advertise', '/login', '/signup', '/terms', '/privacy'].some(x => p.startsWith(x)) }
+  { label: '내 정보', to: '/me', icon: 'me', match: (p: string) => ['/me', '/reserve', '/advertise', '/login', '/signup', '/forgot-password', '/terms', '/privacy'].some(x => p.startsWith(x)) }
 ]
 
 </script>

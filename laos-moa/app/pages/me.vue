@@ -34,7 +34,7 @@ const reservations = computed(() => myRes.value?.reservations ?? [])
 // 상태 표시: 색에만 의존하지 않도록 글자와 기호를 함께 보여 줍니다.
 const RES_STATUS = {
   pending: { label: '확인 대기', mark: '⏳', cls: 'bg-gold-50 text-gold-700', hint: '업체가 확인하고 있어요. 확정되면 연락드려요.' },
-  confirmed: { label: '예약 확정', mark: '✅', cls: 'bg-green-100 text-green-800', hint: '예약이 확정됐어요. 날짜에 맞춰 방문해 주세요.' },
+  confirmed: { label: '예약 확정', mark: '✅', cls: 'bg-green-100 text-green-800', hint: '예약이 확정됐어요. 날짜에 맞춰 방문해 주세요. 변경·취소는 업체에 직접 연락해 주세요.' },
   declined: { label: '예약 불가', mark: '⚠️', cls: 'bg-red-100 text-red-800', hint: '이번에는 어려워요. 다른 날짜나 업체로 다시 요청해 보세요.' },
   completed: { label: '이용 완료', mark: '🙌', cls: 'bg-muted text-highlighted', hint: '이용해 주셔서 고마워요.' },
   cancelled: { label: '취소됨', mark: '✖️', cls: 'bg-muted text-muted', hint: '취소된 예약이에요.' }
@@ -47,6 +47,28 @@ function dateLabel(ymd: string) {
   return `${m}월 ${d}일 (${WEEK[new Date(Date.UTC(y, m - 1, d)).getUTCDay()]})`
 }
 const requestedAt = (iso: string) => formatDateTime(iso)
+
+// 확인 대기 중인 예약만 직접 취소할 수 있어요. 실수로 누르지 않도록 한 번 더 눌러야 취소돼요.
+const cancelTarget = ref<string | null>(null)
+const cancelling = ref(false)
+async function cancelReservation(r: MyReservation) {
+  if (cancelTarget.value !== r.id) {
+    cancelTarget.value = r.id
+    setTimeout(() => { if (cancelTarget.value === r.id) cancelTarget.value = null }, 4000)
+    return
+  }
+  cancelTarget.value = null
+  cancelling.value = true
+  try {
+    await $fetch(`/api/members/reservations/${r.id}/cancel`, { method: 'POST' })
+    toast.add({ title: '예약을 취소했어요', color: 'success' })
+  } catch (e) {
+    toast.add({ title: errorMessage(e), color: 'error' })
+  } finally {
+    cancelling.value = false
+    await refreshNuxtData('my-reservations')
+  }
+}
 
 // 등급표는 안내를 펼칠 때만 불러옵니다.
 interface GradeRow { level: number, name: string, min: number | null }
@@ -214,6 +236,11 @@ const items = computed(() => [
           <p class="mt-0.5 text-[0.75rem] text-muted">
             요청 {{ requestedAt(r.createdAt) }} · 예약번호 {{ r.id }}
           </p>
+          <div v-if="r.status === 'pending'" class="mt-2">
+            <UButton color="neutral" variant="outline" size="md" type="button" :disabled="cancelling" @click="cancelReservation(r)">
+              {{ cancelTarget === r.id ? '한 번 더 누르면 취소돼요' : '예약 취소' }}
+            </UButton>
+          </div>
         </li>
       </ul>
       <div v-else class="mt-2 text-[0.9375rem] leading-relaxed text-muted">

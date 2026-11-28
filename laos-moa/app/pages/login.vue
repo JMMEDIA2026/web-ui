@@ -12,6 +12,9 @@ const needText = reloginAdmin ? '관리자 화면은 12시간마다 다시 로�
 // 이미 로그인했다면 바로 이동합니다.
 if (member.value && !reloginAdmin) await navigateTo(next, { replace: true })
 
+// 이메일 발송이 설정돼 있을 때만 "비밀번호 찾기" 링크를 보여 줍니다.
+const { data: resetInfo } = await useFetch<{ available: boolean }>('/api/members/password-reset-available', { key: 'pw-reset-available', default: () => ({ available: false }) })
+
 const form = reactive({ email: '', password: '' })
 const showPw = ref(false)
 const loading = ref(false)
@@ -66,6 +69,10 @@ async function submit() {
         {{ loading ? '로그인 중…' : '로그인' }}
       </UButton>
     </form>
+
+    <p v-if="resetInfo?.available" class="mt-3 text-center">
+      <NuxtLink to="/forgot-password" class="inline-flex min-h-11 items-center text-[0.9375rem] font-bold text-primary underline underline-offset-2">비밀번호를 잊으셨나요?</NuxtLink>
+    </p>
 
     <p class="mt-5 text-center text-[0.9375rem] text-muted">
       아직 회원이 아니신가요?

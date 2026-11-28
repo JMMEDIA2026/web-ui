@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { notifyReservationChange } from '../../../utils/reservationNotify'
 import { RESERVATION_STATUSES } from '../../../utils/constants'
 import { reservationFullView } from '../../../utils/apiViews'
 import { requireApiClient } from '../../../utils/apiAuth'
@@ -23,9 +24,7 @@ export default defineEventHandler(async (event) => {
     .bind(body.status ?? null, body.memo ?? null, nowIso(), id)
     .run()
 
-  if (body.status && body.status !== before.status) {
-    await notify(event, `[${client.name}] 예약 ${id} 상태 변경: ${String(before.status)} → ${body.status}`)
-  }
+  if (body.status) await notifyReservationChange(event, id, String(before.status), body.status, `API ${client.name}`)
   const after = await db.prepare('SELECT * FROM reservations WHERE id = ?').bind(id).first<Record<string, unknown>>()
   return { ok: true, reservation: reservationFullView(after!) }
 })
