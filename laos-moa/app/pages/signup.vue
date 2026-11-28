@@ -1,0 +1,196 @@
+<script setup lang="ts">
+useSeoMeta({ title: '회원가입 · 라자', robots: 'noindex' })
+
+const route = useRoute()
+const { member, refresh } = useMember()
+const next = safeNext(route.query.next, '/me')
+
+if (member.value) await navigateTo(next, { replace: true })
+
+const form = reactive({
+  email: '',
+  password: '',
+  password2: '',
+  nickname: '',
+  realName: '',
+  phone: '',
+  gender: '' as '' | 'M' | 'F' | 'N',
+  agreeTerms: false,
+  agreePrivacy: false,
+  website: ''
+})
+const showPw = ref(false)
+const loading = ref(false)
+const error = ref('')
+
+const genders = [
+  { value: 'M', label: '남성' },
+  { value: 'F', label: '여성' },
+  { value: 'N', label: '선택 안 함' }
+] as const
+
+const agreeAll = computed({
+  get: () => form.agreeTerms && form.agreePrivacy,
+  set: (v: boolean) => { form.agreeTerms = v; form.agreePrivacy = v }
+})
+
+const pwMismatch = computed(() => form.password2.length > 0 && form.password !== form.password2)
+const toast = useToast()
+
+// 빈 칸이 있어도 버튼은 눌려요. 첫 번째 문제를 안내하고 그 칸으로 커서를 옮깁니다.
+function stop(selector: string, message: string) {
+  error.value = message
+  toast.add({ title: message, color: 'warning' })
+  const el = document.querySelector<HTMLElement>(selector)
+  el?.focus()
+  el?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+}
+
+async function submit() {
+  error.value = ''
+  const email = form.email.trim()
+  if (!email) return stop('#s-email', '이메일을 입력해 주세요.')
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return stop('#s-email', '이메일 형식을 확인해 주세요.')
+  if (form.password.length < 8) return stop('#s-pw', '비밀번호는 8자 이상으로 입력해 주세요.')
+  if (form.password !== form.password2) return stop('#s-pw2', '비밀번호가 서로 달라요. 다시 확인해 주세요.')
+  const nick = form.nickname.trim()
+  if (nick.length < 2 || nick.length > 12) return stop('#s-nick', '닉네임은 2~12자로 입력해 주세요.')
+  if (!form.realName.trim()) return stop('#s-name', '실명을 입력해 주세요.')
+  if (!form.phone.trim()) return stop('#s-phone', '휴대폰 번호를 입력해 주세요.')
+  if (!form.gender) return stop('input[name=gender]', '성별을 골라 주세요.')
+  if (!form.agreeTerms) return stop('#s-terms', '이용약관에 동의해 주세요.')
+  if (!form.agreePrivacy) return stop('#s-privacy', '개인정보 수집·이용에 동의해 주세요.')
+  loading.value = true
+  try {
+    const { password2: _unused, ...body } = form
+    await $fetch('/api/members/signup', { method: 'POST', body })
+    await refresh()
+    await refreshNuxtData('member')
+    await navigateTo(next, { replace: true })
+  } catch (e) {
+    error.value = errorMessage(e)
+  } finally {
+    loading.value = false
+  }
+}
+</script>
+
+<template>
+  <div class="px-4 pt-5 sm:px-5">
+    <h1 data-page-title tabindex="-1" class="text-[1.625rem] font-bold text-highlighted">
+      회원가입
+    </h1>
+    <p class="mt-1 text-[0.9375rem] leading-relaxed text-muted">
+      예약과 문의를 보낼 때 필요한 정보예요. 업체 검색, 환율, 가이드는 가입 없이도 볼 수 있어요.
+    </p>
+
+    <form class="mt-4 space-y-4" novalidate @submit.prevent="submit">
+      <div>
+        <label for="s-email" class="text-[0.9375rem] font-bold text-highlighted">이메일 <span class="text-primary">*</span></label>
+        <UInput id="s-email" v-model="form.email" type="email" inputmode="email" autocomplete="email" required size="xl" class="mt-1.5 w-full" />
+      </div>
+
+      <div>
+        <label for="s-pw" class="text-[0.9375rem] font-bold text-highlighted">비밀번호 <span class="text-primary">*</span></label>
+        <UInput id="s-pw" v-model="form.password" :type="showPw ? 'text' : 'password'" autocomplete="new-password" minlength="8" maxlength="64" aria-describedby="s-pw-help" required size="xl" class="mt-1.5 w-full" />
+        <p id="s-pw-help" class="mt-1 text-[0.8125rem] text-muted">
+          8자 이상, 영문과 숫자를 함께 넣어 주세요.
+        </p>
+      </div>
+      <div>
+        <label for="s-pw2" class="text-[0.9375rem] font-bold text-highlighted">비밀번호 확인 <span class="text-primary">*</span></label>
+        <UInput id="s-pw2" v-model="form.password2" :type="showPw ? 'text' : 'password'" autocomplete="new-password" :aria-invalid="pwMismatch" required size="xl" class="mt-1.5 w-full" />
+        <p v-if="pwMismatch" class="mt-1 text-[0.8125rem] font-bold text-red-700" role="alert">
+          비밀번호가 서로 달라요.
+        </p>
+        <label class="mt-1 flex min-h-11 cursor-pointer items-center gap-3 text-[0.9375rem] text-highlighted">
+          <input v-model="showPw" type="checkbox" class="size-6 shrink-0 accent-primary">
+          비밀번호 보이기
+        </label>
+      </div>
+
+      <div>
+        <label for="s-nick" class="text-[0.9375rem] font-bold text-highlighted">닉네임 <span class="text-primary">*</span></label>
+        <UInput id="s-nick" v-model="form.nickname" autocomplete="nickname" minlength="2" maxlength="12" aria-describedby="s-nick-help" required size="xl" class="mt-1.5 w-full" />
+        <p id="s-nick-help" class="mt-1 text-[0.8125rem] text-muted">
+          2~12자, 한글·영문·숫자·_ 만 쓸 수 있어요.
+        </p>
+      </div>
+
+      <div>
+        <label for="s-name" class="text-[0.9375rem] font-bold text-highlighted">실명 <span class="text-primary">*</span></label>
+        <UInput id="s-name" v-model="form.realName" autocomplete="name" maxlength="30" aria-describedby="s-name-help" required size="xl" class="mt-1.5 w-full" />
+        <p id="s-name-help" class="mt-1 text-[0.8125rem] text-muted">
+          예약할 때 업체에 전달되는 이름이에요.
+        </p>
+      </div>
+
+      <div>
+        <label for="s-phone" class="text-[0.9375rem] font-bold text-highlighted">휴대폰 번호 <span class="text-primary">*</span></label>
+        <UInput id="s-phone" v-model="form.phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="010-1234-5678 또는 +856 20…" required size="xl" class="mt-1.5 w-full" />
+      </div>
+
+      <fieldset>
+        <legend class="text-[0.9375rem] font-bold text-highlighted">
+          성별 <span class="text-primary">*</span>
+        </legend>
+        <div class="mt-1.5 grid grid-cols-3 gap-2">
+          <label v-for="g in genders" :key="g.value" class="block">
+            <input v-model="form.gender" type="radio" name="gender" :value="g.value" class="peer sr-only" required>
+            <span class="flex min-h-[52px] cursor-pointer items-center justify-center rounded-lg border border-default bg-default px-1 text-center text-[0.9375rem] font-semibold text-highlighted peer-checked:border-primary peer-checked:bg-primary peer-checked:text-white peer-focus-visible:outline peer-focus-visible:outline-[3px] peer-focus-visible:outline-offset-2 peer-focus-visible:outline-primary">
+              {{ g.label }}
+            </span>
+          </label>
+        </div>
+      </fieldset>
+
+      <!-- 약관 동의 -->
+      <div class="card p-3">
+        <label class="flex min-h-11 cursor-pointer items-center gap-3 font-bold text-highlighted">
+          <input v-model="agreeAll" type="checkbox" class="size-6 shrink-0 accent-primary">
+          전체 동의
+        </label>
+        <div class="mt-1 border-t border-default pt-1">
+          <div class="flex items-center">
+            <label class="flex min-h-11 flex-1 cursor-pointer items-center gap-3 text-[0.9375rem] text-highlighted">
+              <input id="s-terms" v-model="form.agreeTerms" type="checkbox" class="size-6 shrink-0 accent-primary" required>
+              (필수) 이용약관 동의
+            </label>
+            <NuxtLink to="/terms" target="_blank" class="inline-flex min-h-11 min-w-11 items-center justify-center px-2 text-[0.875rem] font-bold text-primary underline">
+              보기
+            </NuxtLink>
+          </div>
+          <div class="flex items-center">
+            <label class="flex min-h-11 flex-1 cursor-pointer items-center gap-3 text-[0.9375rem] text-highlighted">
+              <input id="s-privacy" v-model="form.agreePrivacy" type="checkbox" class="size-6 shrink-0 accent-primary" required>
+              (필수) 개인정보 수집·이용 동의
+            </label>
+            <NuxtLink to="/privacy" target="_blank" class="inline-flex min-h-11 min-w-11 items-center justify-center px-2 text-[0.875rem] font-bold text-primary underline">
+              보기
+            </NuxtLink>
+          </div>
+        </div>
+      </div>
+
+      <!-- 스팸 방지용 숨김 필드: 사람은 채우지 않습니다. -->
+      <div class="hidden" aria-hidden="true">
+        <input v-model="form.website" type="text" name="website" tabindex="-1" autocomplete="off">
+      </div>
+
+      <p v-if="error" class="rounded-lg bg-red-50 p-3 text-[0.9375rem] font-bold text-red-700" role="alert">
+        {{ error }}
+      </p>
+
+      <UButton color="primary" variant="solid" size="xl" block type="submit"  :disabled="loading">
+        {{ loading ? '가입하는 중…' : '가입하기' }}
+      </UButton>
+    </form>
+
+    <p class="mt-5 text-center text-[0.9375rem] text-muted">
+      이미 회원이세요?
+    </p>
+    <UButton color="neutral" variant="outline" size="xl" block class="mt-2" :to="{ path: '/login', query: route.query.next ? { next: route.query.next } : {} }">
+      로그인
+    </UButton>
+  </div>
+</template>

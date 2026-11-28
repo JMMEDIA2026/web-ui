@@ -1,0 +1,296 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+/* shared/ 폴더의 클래스 이름도 Tailwind가 찾도록 */
+@source "../../../shared";
+
+/* 라자 디자인 — Nuxt UI 테마 빌더 설정을 따릅니다.
+   주 색 orange · 중립 stone · 모서리 0.125rem · 글꼴 Bricolage Grotesque + Instrument Serif · 아이콘 Tabler.
+   색은 Nuxt UI의 의미 색(text-highlighted, text-muted, bg-default, bg-muted, border-default, text-primary …)만 씁니다. */
+@theme static {
+  /* 영문·숫자는 Bricolage Grotesque, 한글은 Pretendard가 맡습니다. */
+  --font-sans: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', 'Pretendard Variable', Pretendard, 'Noto Sans KR', system-ui, -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  /* 큰 숫자·영문 제목에 쓰는 Instrument Serif. 한글은 Pretendard로 이어집니다. */
+  --font-serif: 'Instrument Serif', 'Pretendard Variable', Pretendard, 'Apple SD Gothic Neo', 'Malgun Gothic', serif;
+
+  /* 모서리: 거의 직각 (0.125rem ~ 0.25rem) */
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.125rem;
+  --radius-md: 0.125rem;
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.25rem;
+  --radius-2xl: 0.25rem;
+  --radius-3xl: 0.25rem;
+
+  /* 광고 표시용 금색 (의미 색 warning은 글자 대비가 모자라 따로 둡니다) */
+  --color-gold-50: #FEF3C7;
+  --color-gold-500: #D97706;
+  --color-gold-700: #92400E;
+}
+
+:root {
+  /* 테마 빌더의 tokenShades: 바탕 stone-50, 은은한 면 stone-100, 뒤집힌 글자 stone-50 */
+  --ui-radius: 0.125rem;
+  --ui-bg: var(--ui-color-neutral-50);
+  --ui-bg-muted: var(--ui-color-neutral-100);
+  --ui-text-inverted: var(--ui-color-neutral-50);
+  /* 접근성(글자 대비 4.5:1, 입력 테두리 3:1)을 위해 한 단계씩 진하게 */
+  --ui-primary: oklch(0.515 0.195 38.4);
+  --ui-text-muted: var(--ui-color-neutral-600);
+  --ui-border-accented: var(--ui-color-neutral-500);
+  --nav-h: 64px;
+  --header-h: 56px;
+  --shell-max: 560px;
+}
+
+html {
+  background: var(--ui-bg);
+}
+
+body {
+  background: var(--ui-bg);
+  color: var(--ui-text-highlighted);
+  font-size: 1rem;
+  line-height: 1.5;
+  word-break: keep-all;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* ---------- 공통 ---------- */
+
+/* 키보드 포커스 윤곽: 주 색 */
+a:focus-visible,
+button:focus-visible,
+select:focus-visible,
+summary:focus-visible,
+.focus-ring:focus-visible {
+  outline: 3px solid var(--ui-primary);
+  outline-offset: 2px;
+}
+
+/* 네이티브 입력(선택 목록)용: Nuxt UI 입력창과 같은 모양 */
+.field {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0 0.75rem;
+  border-radius: var(--ui-radius);
+  background: var(--ui-bg);
+  color: var(--ui-text-highlighted);
+  box-shadow: inset 0 0 0 1px var(--ui-border-accented);
+  font-size: 1rem;
+}
+.field:focus-visible {
+  outline: 2px solid var(--ui-primary);
+  outline-offset: 0;
+}
+
+/* 살짝 떠 있는 입체감: 얇은 선 + 따뜻한 회색의 부드러운 그림자 두 겹.
+   위쪽은 아주 작게 맞닿는 그림자, 아래쪽은 넓고 옅게 퍼지는 그림자입니다. */
+:root {
+  --lift-rest: 0 1px 2px rgb(28 25 23 / 0.05), 0 6px 18px -8px rgb(28 25 23 / 0.16);
+  --lift-hover: 0 2px 4px rgb(28 25 23 / 0.06), 0 14px 28px -10px rgb(28 25 23 / 0.22);
+  --lift-press: 0 1px 1px rgb(28 25 23 / 0.06), 0 2px 6px -3px rgb(28 25 23 / 0.2);
+}
+
+/* 카드: 같은 바탕에 얇은 선과 떠 있는 그림자 */
+.card {
+  background: var(--ui-bg);
+  border: 1px solid var(--ui-border);
+  border-radius: 0.25rem;
+  box-shadow: var(--lift-rest);
+}
+
+/* 누를 수 있는 상자(타일·카드 링크): 마우스를 올리면 살짝 떠오르고, 누르면 가라앉습니다. */
+.lift {
+  box-shadow: var(--lift-rest);
+  transition: transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.2s ease;
+}
+@media (hover: hover) {
+  .lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--lift-hover);
+  }
+}
+.lift:active {
+  transform: translateY(1px);
+  box-shadow: var(--lift-press);
+}
+
+/* 목록 행 구분선 */
+.rows > * + * {
+  border-top: 1px solid var(--ui-border);
+}
+
+/* 필터 칩 */
+.chip {
+  transition: transform 0.15s ease, background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: var(--ui-radius);
+  border: 1px solid var(--ui-border);
+  background: var(--ui-bg);
+  color: var(--ui-text-highlighted);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.chip:active {
+  transform: scale(0.96);
+}
+.chip[aria-pressed='true'] {
+  background: var(--ui-bg-inverted);
+  border-color: var(--ui-bg-inverted);
+  color: var(--ui-text-inverted);
+}
+
+.sr-only-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* 본문 건너뛰기 링크: 키보드로 처음 Tab을 누르면 나타납니다. */
+.skip-link {
+  position: absolute;
+  left: 8px;
+  top: -100px;
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 2px solid var(--ui-primary);
+  border-radius: var(--ui-radius);
+  background: var(--ui-bg);
+  color: var(--ui-primary);
+  font-weight: 700;
+}
+.skip-link:focus {
+  top: 8px;
+}
+main:focus {
+  outline: none;
+}
+
+/* 제목 글자 간격 */
+.laja-public h1,
+.laja-public h2 {
+  letter-spacing: -0.02em;
+}
+
+/* 제목으로 포커스를 옮길 때 윤곽선은 보이지 않게 합니다. */
+[data-page-title]:focus {
+  outline: none;
+}
+
+/* 가로 스크롤 영역의 스크롤바 숨김 */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ---------- 지도(Leaflet) ---------- */
+.leaflet-container {
+  font-family: inherit;
+  background: #E7E5E4;
+}
+.lm-pin {
+  background: transparent;
+  border: 0;
+}
+.lm-pin svg {
+  display: block;
+  margin: 0 auto;
+  filter: drop-shadow(0 1px 2px rgb(60 50 20 / 0.35));
+  transition: transform 0.15s ease;
+  transform-origin: 50% 100%;
+}
+.lm-pin.is-selected svg {
+  transform: scale(1.3);
+}
+.lm-pin .lm-label {
+  position: absolute;
+  left: 50%;
+  bottom: 56px;
+  transform: translateX(-50%);
+  max-width: 180px;
+  padding: 4px 10px;
+  border-radius: 2px;
+  border: 2px solid #C2410C;
+  background: var(--ui-bg);
+  color: var(--ui-text-highlighted);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lm-cluster {
+  background: transparent;
+  border: 0;
+}
+.lm-cluster div {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #C2410C;
+  border: 3px solid #fff;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgb(60 50 20 / 0.35);
+}
+/* 묶음 숫자는 스타일로 그립니다. (낭독기는 바깥 요소의 이름 "업체 N곳 묶음"을 읽음) */
+.lm-cluster div::after {
+  content: attr(data-n);
+}
+.lm-me {
+  background: transparent;
+  border: 0;
+}
+.lm-me div {
+  width: 18px;
+  height: 18px;
+  margin: 13px;
+  border-radius: 50%;
+  background: #17181C;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 2px #17181C;
+}
+/* 확대·축소 버튼도 44px */
+.leaflet-touch .leaflet-bar a {
+  width: 44px;
+  height: 44px;
+  line-height: 44px;
+  font-size: 1.375rem;
+}
+.leaflet-control-attribution {
+  font-size: 0.6875rem;
+}
+
+/* ---------- 관리자 화면에서 쓰는 상자(그림자 최소화) ---------- */
+.box3d {
+  box-shadow: var(--lift-rest);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
